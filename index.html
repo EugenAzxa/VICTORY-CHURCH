@@ -34,19 +34,27 @@
 <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></symbol>
 <symbol id="i-yt" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.8-.5-5.6a2.9 2.9 0 0 0-2-2C18.7 4 12 4 12 4s-6.7 0-8.5.5a2.9 2.9 0 0 0-2 2C1 8.2 1 12 1 12s0 3.8.5 5.6a2.9 2.9 0 0 0 2 2C5.3 20 12 20 12 20s6.7 0 8.5-.5a2.9 2.9 0 0 0 2-2C23 15.8 23 12 23 12ZM9.8 15.4V8.6l5.9 3.4Z"/></symbol>
 <symbol id="i-fb" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 8h20v4H2zM12 21V8M12 8H7.5a2.5 2.5 0 1 1 0-5C11 3 12 8 12 8ZM12 8h4.5a2.5 2.5 0 1 0 0-5C13 3 12 8 12 8Z"/></symbol>
 <symbol id="i-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><path d="M17.8 6.4h.01"/></symbol>
 </defs></svg>
 
 <!-- ============ loader ============ -->
-<div id="loader" role="status" aria-live="polite" aria-label="Introduction">
-  <div class="ld-grain"></div>
-  <div class="ld-inner">
-    <div class="ld-year" data-ld-year>33 AD</div>
-    <div class="ld-place" data-ld-place>Jerusalem</div>
+<div id="loader" role="status" aria-live="polite" aria-label="A short introduction to the church history">
+  <div class="ld-card">
+    <span class="ld-badge"><svg><use href="#i-book"/></svg> Our history</span>
+    <div class="ld-head">
+      <div class="ld-year" data-ld-year>33 AD</div>
+      <div class="ld-place" data-ld-place>Jerusalem</div>
+    </div>
     <p class="ld-line" data-ld-line></p>
-    <div class="ld-dots" data-ld-dots></div>
+    <div class="ld-segs" data-ld-segs aria-hidden="true"></div>
+    <div class="ld-window" data-ld-media></div>
+    <div class="ld-foot">
+      <button class="ld-enter" data-ld-skip type="button">Enter site <svg><use href="#i-arrow"/></svg></button>
+    </div>
   </div>
-  <button class="ld-skip" data-ld-skip type="button">Skip intro</button>
   <div class="ld-track"><div class="ld-fill" data-ld-fill></div></div>
 </div>
 
@@ -63,6 +71,7 @@
         <a href="#beliefs">Beliefs</a>
         <a href="#team">Leadership</a>
         <a href="#outreach">Outreach</a>
+        <a href="#guide">Free guide</a>
         <a href="#visit">Visit</a>
       </nav>
       <a class="btn btn-gold hdr-cta" href="#visit">Plan your visit</a>
@@ -77,6 +86,7 @@
         <a href="#beliefs">Beliefs</a>
         <a href="#team">Leadership</a>
         <a href="#outreach">Outreach</a>
+        <a href="#guide">Free guide</a>
         <a href="#visit">Visit</a>
         <a class="btn btn-gold" href="#visit">Plan your visit</a>
       </div>
@@ -357,6 +367,69 @@
   </div>
 </section>
 
+<!-- ============ free guide, lead capture ============ -->
+<section class="sec guide" id="guide">
+  <div class="wrap">
+    <div class="guide-grid">
+      <div class="book rv">
+        <div class="book-cover">
+          <span class="book-rule"></span>
+          <h3>Seven Days<br>of Prayer</h3>
+          <p class="book-sub">A free guide</p>
+          <p class="book-foot">Victory Church International<br>North York, Toronto</p>
+        </div>
+      </div>
+      <div class="rv">
+        <span class="eyebrow"><svg style="width:14px;height:14px;vertical-align:-2px;margin-right:6px"><use href="#i-gift"/></svg> A gift for you</span>
+        <h2 class="h-lg">Seven Days of Prayer</h2>
+        <p class="lede">A free guide with one page for every day of the week. Written for people who
+          want to pray but are not sure how to begin. Tell us where to send it and it is yours.</p>
+        <ul class="guide-list">
+          <li><svg><use href="#i-check"/></svg> Seven short readings, one for each day.</li>
+          <li><svg><use href="#i-check"/></svg> A prayer to pray and a line of scripture to hold.</li>
+          <li><svg><use href="#i-check"/></svg> Free, with nothing to pay and nothing to join.</li>
+        </ul>
+
+        <form class="lead-form" id="lead-form" novalidate>
+          <div class="lead-row">
+            <div class="field">
+              <label for="lf-name">First name</label>
+              <input id="lf-name" name="firstName" type="text" autocomplete="given-name" placeholder="Grace" required>
+              <span class="err" hidden></span>
+            </div>
+            <div class="field">
+              <label for="lf-phone">Phone <span class="opt">(optional)</span></label>
+              <input id="lf-phone" name="phone" type="tel" autocomplete="tel" placeholder="416 555 0134">
+              <span class="err" hidden></span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="lf-email">Email</label>
+            <input id="lf-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            <span class="err" hidden></span>
+          </div>
+          <div class="consent">
+            <input id="lf-consent" name="consent" type="checkbox" required>
+            <label for="lf-consent">Yes, send me the prayer guide and occasional news and
+              encouragement from Victory Church International. I can unsubscribe at any time.</label>
+          </div>
+          <span class="err" data-consent-err hidden></span>
+          <div class="form-error" data-form-error role="alert"></div>
+          <button class="btn btn-gold" type="submit" data-submit>Send me the guide <svg><use href="#i-arrow"/></svg></button>
+          <p class="lead-note"><svg><use href="#i-lock"/></svg><span>We will never sell or share your
+            details, and every email we send has a one click unsubscribe.</span></p>
+        </form>
+
+        <div class="lead-done" data-lead-done role="status" aria-live="polite">
+          <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+          <h3 data-done-title>Thank you</h3>
+          <p data-done-body></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ visit ============ -->
 <section class="sec" id="visit">
   <div class="wrap">
@@ -441,6 +514,16 @@
     </div>
   </div>
 </footer>
+
+
+<!-- slide in prompt -->
+<aside class="nudge" data-nudge aria-label="Free prayer guide">
+  <button class="nudge-x" type="button" data-nudge-x aria-label="Dismiss"><svg><use href="#i-x"/></svg></button>
+  <span class="eyebrow">A gift for you</span>
+  <h4>Seven Days of Prayer</h4>
+  <p>A free guide, one page for each day of the week. Tell us where to send it.</p>
+  <a class="btn btn-gold" href="#guide" data-nudge-go>Get the guide <svg><use href="#i-arrow"/></svg></a>
+</aside>
 
 <script src="assets/js/main.js"></script>
 </body>
