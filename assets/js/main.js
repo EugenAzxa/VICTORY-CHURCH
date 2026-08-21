@@ -19,7 +19,7 @@
         line: "The Spirit falls at Pentecost. People speak in languages they never learned. The movement takes its name from this day." },
       { tag: "1856", year: "1856", place: "Weston, Ontario",
         line: "Anglicans raise a red brick church on Weston Road and set a cross on the gable.",
-        img: "assets/img/building-1856.webp", alt: "The 1856 red brick church on Weston Road" },
+        img: "assets/img/ink/building-1856.webp", alt: "The 1856 red brick church on Weston Road" },
       { tag: "1906", year: "1906", place: "Azusa Street, Los Angeles",
         line: "William Seymour, son of formerly enslaved parents, leads the revival that carries Pentecost around the world." },
       { tag: "1925", year: "1925", place: "Southwestern Nigeria",
@@ -28,10 +28,10 @@
         line: "Five people gather in the living room of Pastor Felix Ayomike." },
       { tag: "2016", year: "2016", place: "2125 Weston Road",
         line: "The church built in 1856 becomes theirs. The faith that went out returns home.",
-        img: "assets/img/congregation.webp", alt: "The congregation gathered together" },
+        img: "assets/img/ink/congregation.webp", alt: "The congregation gathered together" },
       { tag: "Today", year: "Today", place: "North York, Toronto",
         line: "Victory Church International. Love God. Love People. Pray.",
-        img: "assets/img/choir.webp", alt: "The choir leading worship" }
+        img: "assets/img/ink/choir.webp", alt: "The choir leading worship" }
     ];
 
     var elYear  = loader.querySelector("[data-ld-year]"),
@@ -347,4 +347,163 @@
   /* ---------------- footer year ---------------- */
   var y = document.querySelector("[data-year]");
   if (y) y.textContent = new Date().getFullYear();
+})();
+
+/* --------------------------------------------------------------------------
+   Ink reveal
+   The congregation plate assembles itself out of ink particles, which is the
+   move the reference footer is built on. It is decoration, so it is skipped
+   entirely on small screens, under prefers-reduced-motion, and any time the
+   canvas cannot be read. The plain <img> underneath is always the fallback.
+
+   The plate is a one bit stipple, so point sampling it returns noise. The
+   density map is built by letting the browser downscale the image instead,
+   which averages the stipple back into real tone, and each cell of that map
+   becomes one particle in one of three ink weights.
+   -------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var host = document.querySelector("[data-ink-reveal]");
+  if (!host) return;
+
+  var img = host.querySelector("img");
+  if (!img || reduce || window.innerWidth < 860) return;
+
+  var DURATION = 1700;      // ms, first particle leaving to last one landing
+  var LIFE = 0.42;          // share of the run any one particle spends in flight
+  var CELL = 7;             // device pixels per particle
+  var ALPHAS = [0.3, 0.62, 1];
+
+  function start() {
+    var w = host.clientWidth, h = host.clientHeight;
+    if (!w || !h) return;
+
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var cv = document.createElement("canvas");
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    var ctx = cv.getContext("2d");
+    if (!ctx) return;
+
+    var cols = Math.max(120, Math.min(240, Math.round(cv.width / CELL)));
+    var rows = Math.max(1, Math.round(cols * cv.height / cv.width));
+
+    var off = document.createElement("canvas");
+    off.width = cols;
+    off.height = rows;
+    var octx = off.getContext("2d", { willReadFrequently: true });
+    if (!octx) return;
+    octx.imageSmoothingEnabled = true;
+    octx.imageSmoothingQuality = "high";
+
+    var d;
+    try {
+      octx.drawImage(img, 0, 0, cols, rows);
+      d = octx.getImageData(0, 0, cols, rows).data;
+    } catch (e) {
+      return; // tainted canvas or a decode failure: keep the plain image
+    }
+
+    var cw = cv.width / cols, ch = cv.height / rows;
+    var buckets = [[], [], []];
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        var i = (r * cols + c) * 4;
+        if (d[i + 3] < 40) continue;
+        var dark = 1 - (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) / 255;
+        if (dark < 0.14) continue;   // paper, nothing to draw
+        buckets[dark < 0.3 ? 0 : dark < 0.55 ? 1 : 2].push(c * cw, r * ch);
+      }
+    }
+    if (!buckets[0].length && !buckets[1].length && !buckets[2].length) return;
+
+    // Freeze the flight path per particle so every frame redraws the same
+    // trajectory rather than jittering.
+    var spread = cv.width * 0.15;
+    var flights = buckets.map(function (pts) {
+      var n = pts.length / 2;
+      var f = {
+        tx: new Float32Array(n), ty: new Float32Array(n),
+        sx: new Float32Array(n), sy: new Float32Array(n),
+        dl: new Float32Array(n), n: n
+      };
+      for (var k = 0; k < n; k++) {
+        var px = pts[k * 2], py = pts[k * 2 + 1];
+        var ang = Math.random() * Math.PI * 2;
+        var rr = spread * (0.25 + Math.random() * 0.75);
+        f.tx[k] = px; f.ty[k] = py;
+        f.sx[k] = px + Math.cos(ang) * rr;
+        f.sy[k] = py + Math.sin(ang) * rr - cv.height * 0.12;
+        // sweep left to right, the way a press lays down a sheet
+        f.dl[k] = (px / cv.width) * (1 - LIFE) * 0.8 + Math.random() * (1 - LIFE) * 0.2;
+      }
+      return f;
+    });
+
+    cv.style.width = "100%";
+    cv.style.height = "100%";
+    host.appendChild(cv);
+    host.classList.add("assembling");
+    ctx.fillStyle = "#14140F";
+
+    var t0 = 0;
+    function frame(now) {
+      if (!t0) t0 = now;
+      var t = Math.min(1, (now - t0) / DURATION);
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      for (var b = 0; b < 3; b++) {
+        var f = flights[b];
+        if (!f.n) continue;
+        ctx.globalAlpha = ALPHAS[b];
+        for (var k = 0; k < f.n; k++) {
+          var local = (t - f.dl[k]) / LIFE;
+          if (local <= 0) continue;
+          if (local >= 1) {
+            ctx.fillRect(f.tx[k], f.ty[k], cw, ch);
+          } else {
+            var e = 1 - Math.pow(1 - local, 3);
+            ctx.fillRect(f.sx[k] + (f.tx[k] - f.sx[k]) * e,
+                         f.sy[k] + (f.ty[k] - f.sy[k]) * e, cw, ch);
+          }
+        }
+      }
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        host.classList.remove("assembling");
+        host.classList.add("assembled");
+        setTimeout(function () { cv.remove(); }, 700);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function watch() {
+    if (!("IntersectionObserver" in window)) { start(); return; }
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { io.disconnect(); start(); }
+    }, { threshold: 0.12 });
+    io.observe(host);
+  }
+
+  // On a first visit the intro sequence covers the page for several seconds.
+  // The hero is technically in the viewport behind it, so without this the
+  // whole reveal would play to nobody.
+  function ready() {
+    var loader = document.getElementById("loader");
+    var covered = loader && !loader.hidden && !loader.classList.contains("done");
+    if (!covered) { watch(); return; }
+    var mo = new MutationObserver(function () {
+      if (loader.hidden || loader.classList.contains("done")) {
+        mo.disconnect();
+        setTimeout(watch, 500);   // let the loader finish fading out
+      }
+    });
+    mo.observe(loader, { attributes: true, attributeFilter: ["class", "hidden"] });
+  }
+
+  if (img.complete && img.naturalWidth) ready();
+  else img.addEventListener("load", ready, { once: true });
 })();

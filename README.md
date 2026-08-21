@@ -5,29 +5,74 @@ North York, Toronto. Founded 2006. Sundays 10:30 a.m.
 
 ## Running locally
 
-    python3 -m http.server 8080
+    npx serve .
 
-Then open http://localhost:8080
-
-No build step. Plain HTML, CSS and JavaScript.
+Then open the address it prints. No build step. Plain HTML, CSS and JavaScript.
 
 ## Structure
 
-    index.html          Home: intro sequence, tabbed frame, heritage, beliefs, team, outreach, visit
-    history.html        Full timeline from Pentecost to today, plus a note on reverse mission
-    assets/css/main.css Single stylesheet
-    assets/js/main.js   Intro sequence, tabs, mobile nav, scroll reveal
-    assets/img/         Web optimised images
-    assets/img/raw/     Originals pulled from victorychurch.ca (gitignored, 151 MB)
-    docs/RESEARCH.md    Research brief this design was built from
+    index.html            Home: intro sequence, tabbed frame, heritage, beliefs, team, outreach, visit
+    history.html          Full timeline from Pentecost to today, plus a note on reverse mission
+    assets/css/main.css   Single stylesheet
+    assets/js/main.js     Intro sequence, tabs, mobile nav, scroll reveal, ink reveal
+    assets/img/           Source photographs, web optimised
+    assets/img/ink/       Two colour ink plates, generated (see below)
+    assets/img/raw/       Originals pulled from victorychurch.ca (gitignored, 151 MB)
+    tools/make-ink.sh     Regenerates every ink plate from the source photographs
+    docs/RESEARCH.md      Research brief this design was built from
 
-## Notes for the build
+## The design
+
+Ink on paper. One warm off white ground, one weight of near black, a single warm gold used
+only for buttons and for the milestones that belong to this church, and a dashed drafting
+grid that runs the full height of every page behind the content.
+
+- **Nothing on the site is a photograph.** Every image is a two colour, error diffused plate
+  that reads as an engraving printed on the sheet. The plates are composited with
+  `mix-blend-mode: multiply`, so the paper shows through the light values instead of each
+  picture sitting on a white rectangle.
+- **Type** is Instrument Sans for everything that is prose, and IBM Plex Mono for labels,
+  numerals, years and section markers. The mono is what makes the page read as a technical
+  drawing rather than a brochure.
+- **One interaction, used everywhere.** Text links do not move on hover. A short dash slides
+  into the margin beside them and the label underlines. Navigation, footer and inline links
+  all behave identically.
+- **The congregation plate** anchors the bottom of the hero and the bottom of the footer.
+  On first sight it assembles itself out of ink particles sweeping left to right, the way a
+  press lays down a sheet. That is decoration and it degrades cleanly: it is skipped under
+  `prefers-reduced-motion`, skipped below 860px, skipped if the canvas cannot be read, and
+  it waits for the intro sequence to clear so it never plays to nobody. The plain image
+  underneath is always the fallback.
+
+### Regenerating the ink plates
+
+    bash tools/make-ink.sh
+
+Needs `ffmpeg` on PATH and the `media-use` dither script (override its location with
+`DITHER=/path/to/dither.mjs`). It reads `assets/img/*.webp` and `assets/img/team/*.webp` and
+writes `assets/img/ink/`.
+
+The church's photographs were taken in a dim hall over about fifteen years and their
+exposures are all over the place. A fixed gamma turned half of them into black rectangles, so
+each plate is levelled to the same mean brightness before it is dithered. That is what makes
+the set look like one printer's run rather than twenty unrelated pictures. Wide scenes get a
+coarser stipple than portraits, because a one pixel stipple does not compress and a
+congregation on a phone should not cost 200 KB. The whole set is about 1.3 MB.
+
+Two plates are not generated and must not be overwritten:
+
+- `assets/img/ink/congregation-skyline.webp` - the drawn congregation and Toronto skyline.
+  This one really is an illustration, not a converted photograph.
+- `assets/img/ink/logo-ink.png` - the church logo flattened to a single ink silhouette.
+
+### Notes for the build
 
 - The intro sequence runs once per browser session and is stored in sessionStorage.
-  It is skippable and is disabled entirely under prefers-reduced-motion.
+  It is skippable, replayable with `?intro`, and disabled entirely under
+  `prefers-reduced-motion`.
 - Copy uses short dashes only. No em dashes, no emoji. Icons are inline SVG.
-- Palette blues are sampled from the church logo. The gold is drawn from the red brick
-  of the 1856 sanctuary.
+- Bump the `?v=` query on the stylesheet and script whenever either changes, or returning
+  visitors will keep the old one.
 
 ## Collecting visitor details
 
@@ -80,3 +125,5 @@ church's legal or privacy questions before the first send.
 2. Ministry leader contacts. The live site shows "For more information contact: ???".
 3. Real service and event dates for an events section.
 4. Whether the donate flow should stay pointed at the existing site or be rebuilt.
+5. The congregation illustration is the face of the site. It is a drawing, not a photograph
+   of these particular people, and the church should be comfortable with that before launch.
