@@ -94,8 +94,11 @@
       else timer = setTimeout(finish, 2000);
     }
 
+    // ?intro in the URL always replays it, which is how to show it to somebody
+    // again without hunting through browser storage.
+    var force = /[?&]intro\b/.test(location.search);
     var seen = false;
-    try { seen = sessionStorage.getItem("vc_intro") === "1"; } catch (e) {}
+    try { seen = !force && sessionStorage.getItem("vc_intro") === "1"; } catch (e) {}
 
     if (seen || reduce) {
       loader.hidden = true;
