@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css?v=5">
+<link rel="stylesheet" href="assets/css/main.css?v=7">
 </head>
 <body>
 
@@ -96,6 +96,7 @@
 
 <main>
 
+<div class="sheet hero-sheet">
 <!-- ============ hero ============ -->
 <section class="hero">
   <div class="wrap hero-in">
@@ -141,7 +142,11 @@
           </ul>
           <a class="btn btn-primary" href="#visit">Plan your visit <svg><use href="#i-arrow"/></svg></a>
         </div>
-        <div class="panel-media"><img src="assets/img/congregation.webp" alt="The Victory Church congregation gathered together" loading="lazy" width="1800" height="1200"></div>
+        <div class="panel-media">
+          <img src="assets/img/congregation.webp" alt="The Victory Church congregation gathered together" loading="lazy" width="1800" height="1200">
+          <span class="chip chip-tl"><svg><use href="#i-clock"/></svg> Next service Sunday, 10:30 a.m.</span>
+          <span class="chip chip-br"><span class="dot"></span> Services on YouTube</span>
+        </div>
       </div>
 
       <div class="panel flip" role="tabpanel" id="p-2" aria-labelledby="t-2" hidden>
@@ -198,8 +203,10 @@
   </div>
 </section>
 
+</div>
+
 <!-- ============ heritage ============ -->
-<section class="sec heritage" id="heritage" style="background:var(--paper);border-block:1px solid var(--line-2)">
+<section class="sec heritage sheet" id="heritage">
   <div class="wrap">
     <div class="her-grid">
       <figure class="her-fig rv" style="margin:0">
@@ -224,7 +231,7 @@
 </section>
 
 <!-- ============ stats ============ -->
-<section class="sec" style="padding-block:clamp(48px,6vw,72px)">
+<section class="sec sheet sheet-bone" style="padding-block:clamp(40px,5vw,62px)">
   <div class="wrap">
     <div class="stats rv">
       <div class="stat"><b>2006</b><span>Founded in a living room with five people</span></div>
@@ -236,7 +243,7 @@
 </section>
 
 <!-- ============ beliefs ============ -->
-<section class="sec sec-dark" id="beliefs">
+<section class="sec sec-dark sheet" id="beliefs">
   <div class="wrap">
     <div class="sec-head mid">
       <span class="eyebrow">What we believe</span>
@@ -298,7 +305,7 @@
 </section>
 
 <!-- ============ leadership ============ -->
-<section class="sec" id="team">
+<section class="sec sheet" id="team">
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">Our team</span>
@@ -326,7 +333,7 @@
 </section>
 
 <!-- ============ outreach ============ -->
-<section class="sec" id="outreach" style="background:var(--paper);border-block:1px solid var(--line-2)">
+<section class="sec sheet" id="outreach">
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">Outreach</span>
@@ -368,7 +375,7 @@
 </section>
 
 <!-- ============ free guide, lead capture ============ -->
-<section class="sec guide" id="guide">
+<section class="sec guide sheet" id="guide">
   <div class="wrap">
     <div class="guide-grid">
       <div class="book rv">
@@ -431,7 +438,7 @@
 </section>
 
 <!-- ============ visit ============ -->
-<section class="sec" id="visit">
+<section class="sec sheet" id="visit">
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">Visit us</span>
@@ -456,9 +463,9 @@
 </section>
 
 <!-- ============ cta band ============ -->
-<section style="padding:0 0 clamp(64px,9vw,110px)">
+<section class="band sheet rv">
   <div class="wrap">
-    <div class="band rv">
+    <div>
       <div class="band-in">
         <span class="eyebrow" style="color:var(--gold-light)">Give</span>
         <h2 class="h-lg" style="margin-top:14px;color:#fff">Every bag of food began as somebody's offering</h2>
@@ -526,6 +533,6 @@
   <a class="btn btn-gold" href="#guide" data-nudge-go>Get the guide <svg><use href="#i-arrow"/></svg></a>
 </aside>
 
-<script src="assets/js/main.js?v=5"></script>
+<script src="assets/js/main.js?v=7"></script>
 </body>
 </html>

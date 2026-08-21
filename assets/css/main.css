@@ -12,6 +12,7 @@
   --gold-light:#E3BE72;
   --bone:#FAF7F1;
   --bone-2:#F1ECE2;
+  --ground:#E9EBE8;
   --paper:#FFFFFF;
   --muted:#5C6B7C;
   --muted-2:#8A97A5;
@@ -31,12 +32,12 @@
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{
-  margin:0;background:var(--bone);color:var(--ink);
+  margin:0;background:var(--ground);color:var(--ink);
   font-family:var(--body);font-size:17px;line-height:1.65;
   font-synthesis-weight:none;-webkit-font-smoothing:antialiased;
   overflow-x:hidden;
 }
-img{max-width:100%;display:block}
+img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 h1,h2,h3,h4{font-family:var(--display);font-weight:600;line-height:1.08;letter-spacing:-.02em;margin:0}
 p{margin:0}
@@ -187,11 +188,11 @@ p{margin:0}
 
 /* ---------- header ---------- */
 .hdr{
-  position:sticky;top:0;z-index:200;background:rgba(250,247,241,.82);
+  position:sticky;top:0;z-index:200;background:rgba(233,235,232,.78);
   backdrop-filter:saturate(150%) blur(14px);-webkit-backdrop-filter:saturate(150%) blur(14px);
   border-bottom:1px solid transparent;transition:border-color .3s,background .3s;
 }
-.hdr.stuck{border-bottom-color:var(--line-2)}
+.hdr.stuck{border-bottom-color:rgba(10,23,37,.09)}
 .hdr-in{display:flex;align-items:center;gap:20px;min-height:74px}
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;margin-right:auto}
 .brand img{height:38px;width:auto}
@@ -437,7 +438,7 @@ p{margin:0}
 /* cta band */
 .band{
   background:linear-gradient(140deg,var(--ink) 0%,var(--ink-2) 55%,#1B3A57 100%);
-  color:#fff;border-radius:var(--r-xl);padding:clamp(38px,6vw,74px) clamp(26px,4vw,58px);
+  color:#fff;border-radius:var(--sheet-r);padding:clamp(46px,7vw,88px) 0;
   text-align:center;position:relative;overflow:hidden;
 }
 .band::after{
@@ -480,7 +481,7 @@ p{margin:0}
 
 
 /* ---------- lead capture: the free prayer guide ---------- */
-.guide{background:var(--paper);border-block:1px solid var(--line-2)}
+.guide{}
 .guide-grid{display:grid;gap:clamp(32px,4.5vw,64px);align-items:center}
 @media (min-width:940px){.guide-grid{grid-template-columns:.85fr 1fr}}
 
@@ -592,3 +593,57 @@ p{margin:0}
 .nudge-x:hover{background:var(--bone-2);color:var(--ink)}
 .nudge-x svg{width:16px;height:16px}
 @media (prefers-reduced-motion:reduce){.nudge{transition:opacity .3s}}
+
+
+/* ---------- sheets ----------
+   The page is a stack of large rounded cards floating on a tinted ground,
+   which is the look of the reference. The sticky header deliberately sits
+   outside them, because position:sticky does not survive a clipped ancestor. */
+:root{--gap:clamp(8px,1vw,14px);--sheet-r:clamp(20px,2.6vw,40px)}
+main{padding:0 var(--gap) var(--gap);display:flex;flex-direction:column;gap:var(--gap)}
+.sheet{
+  background:var(--paper);border-radius:var(--sheet-r);position:relative;
+  box-shadow:0 1px 2px rgba(10,23,37,.04),0 18px 44px -28px rgba(10,23,37,.22);
+}
+.sheet.sec-dark{background:var(--ink)}
+.sheet.sheet-bone{background:var(--bone)}
+/* sections already carry their own vertical rhythm, so drop the stray rules
+   the flat layout needed */
+.sheet.sec{padding-block:clamp(56px,7.5vw,104px)}
+.sheet .hero{padding-top:clamp(44px,6vw,78px)}
+.sheet .frame-sec{padding-bottom:clamp(44px,6vw,74px)}
+.hero-sheet{overflow:hidden}
+
+/* the hero frame sits on the sheet, so soften its own shadow */
+.frame{box-shadow:0 1px 3px rgba(10,23,37,.07),0 26px 60px -30px rgba(10,23,37,.34)}
+.tabs,.ld-segs{background:var(--ground)}
+.tabs-wrap::after{background:linear-gradient(90deg,rgba(255,255,255,0),var(--paper) 78%)}
+
+/* footer becomes the last card in the stack */
+.ftr{border-radius:var(--sheet-r);margin:0 var(--gap) var(--gap)}
+
+/* ---------- floating chips over hero imagery ---------- */
+.chip{
+  position:absolute;z-index:2;display:inline-flex;align-items:center;gap:8px;
+  padding:9px 15px;border-radius:100px;font-size:13px;font-weight:600;
+  background:rgba(255,255,255,.93);color:var(--ink);
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 2px 6px rgba(10,23,37,.14),0 16px 34px -16px rgba(10,23,37,.5);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);white-space:nowrap;
+}
+.chip svg{width:15px;height:15px;color:var(--gold)}
+.chip-tl{left:18px;top:18px}
+.chip-br{right:18px;bottom:18px}
+.chip .dot{
+  width:8px;height:8px;border-radius:50%;background:#E0332F;flex:none;
+  box-shadow:0 0 0 3px rgba(224,51,47,.2);
+}
+@media (max-width:620px){
+  .chip{font-size:12px;padding:8px 13px}
+  .chip-tl{left:12px;top:12px}
+  .chip-br{right:12px;bottom:12px}
+}
+
+/* ---------- hero scale up ---------- */
+.hero h1{letter-spacing:-.033em}
+.h-xl{font-size:clamp(40px,7.8vw,86px)}
