@@ -643,33 +643,63 @@ svg { fill: none; }
 }
 
 /* ----------------------------------------------------------- leadership */
+/* The one place on the site that uses photographs rather than ink plates.
+   They are held to grayscale in the grid so the page still reads as one thing,
+   and the colour is kept back for the panel that opens on click. */
 .people {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   border: 1px solid var(--rule);
 }
-.person {
-  padding: 18px 18px 24px;
-  outline: 1px solid var(--rule);
+.person { outline: 1px solid var(--rule); }
+
+.person-open {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 18px 18px 22px;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
 }
+.person-open:hover { background: var(--paper-d); }
+.person-open:focus-visible { outline: 2px solid var(--blue); outline-offset: -3px; }
+
 .person-img {
-  background: var(--paper);
+  display: block;
   aspect-ratio: 1 / 1;
   overflow: hidden;
   margin-bottom: 16px;
-  position: relative;
+  background: var(--paper-d);
 }
 .person-img img {
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center top;
-  mix-blend-mode: multiply;
-  transition: transform .5s var(--ease);
+  filter: grayscale(1) contrast(1.03);
+  transition: filter .4s var(--ease), transform .5s var(--ease);
 }
-.person:hover .person-img img { transform: scale(1.03); }
-.person h3 { font-size: 16.5px; letter-spacing: -.022em; }
+.person-open:hover .person-img img,
+.person-open:focus-visible .person-img img {
+  filter: grayscale(0) contrast(1);
+  transform: scale(1.03);
+}
+
+.person-name {
+  display: block;
+  font-size: 16.5px;
+  font-weight: 500;
+  letter-spacing: -.022em;
+  line-height: 1.15;
+}
 .person .role {
+  display: block;
   margin: 7px 0 6px;
   font-family: var(--mono);
   font-size: 10.5px;
@@ -677,10 +707,108 @@ svg { fill: none; }
   text-transform: uppercase;
   color: var(--blue);
 }
-.person .job { margin: 0; font-size: 13px; line-height: 1.45; color: var(--mute); }
+.person .job {
+  display: block;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--mute);
+}
+.person-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: auto;
+  padding-top: 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  transition: color .2s var(--ease);
+}
+.person-more svg { width: 13px; height: 13px; }
+.person-open:hover .person-more,
+.person-open:focus-visible .person-more { color: var(--ink); }
 
 @media (max-width: 980px) { .people { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 700px)  { .people { grid-template-columns: repeat(2, 1fr); } }
+
+/* ------------------------------------------------------- leader panel ---- */
+.pdlg {
+  width: min(880px, calc(100vw - 32px));
+  max-height: min(88vh, 720px);
+  padding: 0;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  overflow: visible;
+}
+.pdlg::backdrop { background: rgba(18, 21, 26, .72); }
+
+.pdlg-in {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  max-height: inherit;
+}
+.pdlg-media { background: var(--paper-d); }
+.pdlg-media img {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  object-fit: cover;
+  object-position: center top;
+}
+.pdlg-body {
+  padding: clamp(24px, 3vw, 40px);
+  overflow-y: auto;
+}
+.pdlg-body h2 {
+  margin: 12px 0 8px;
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -.03em;
+}
+.pdlg-job {
+  margin: 0 0 20px;
+  font-size: 14.5px;
+  color: var(--mute);
+}
+.pdlg-text p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin-bottom: 22px;
+}
+.pdlg-note {
+  display: flex;
+  gap: 9px;
+  margin: 18px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--faint);
+}
+.pdlg-note svg { width: 14px; height: 14px; flex: none; margin-top: 2px; }
+
+.pdlg-x {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  z-index: 2;
+}
+.pdlg-x:hover { background: var(--ink); color: var(--paper); }
+.pdlg-x svg { width: 16px; height: 16px; }
+
+@media (max-width: 700px) {
+  .pdlg-in { grid-template-columns: 1fr; }
+  .pdlg-media img { min-height: 0; aspect-ratio: 4 / 3; }
+}
 
 /* -------------------------------------------------------------- outreach */
 .g-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 2.4vw, 34px); }

@@ -73,6 +73,33 @@ seven dates over fifteen seconds, which the page then went on to tell twice
 more. Now it runs about four seconds and hands straight over to a hero already
 holding that same picture, so there is no seam and nothing to re-read.
 
+### The leadership section
+
+The only place on the site that uses photographs rather than ink plates. They are
+held to grayscale in the grid so the page still reads as one thing, and the colour
+is kept back for the panel that opens when a leader is clicked. Each panel carries
+the person's role, their profession, what their ministry does, and a way to get in
+touch.
+
+**Nobody's biography has been written.** Everything in those panels comes from the
+church's own Leadership page or from `docs/RESEARCH.md`. Where the research records
+what a ministry actually does, that description is used. Where it does not, the
+panel shows only the facts we have and reads perfectly well without it. Do not let
+anyone fill these gaps by guessing: these are real people at a real church.
+
+**Contact goes through the office, deliberately.** The church has never published
+contact details for its ministry leaders, and the live site still reads
+"For more information contact: ???" where they should be. Publishing thirteen
+people's personal addresses would not be the right fix even if we had them, so every
+message is addressed to the office with the leader's name already in the subject
+line. The address is `OFFICE` at the top of the leader panel module in
+`assets/js/main.js`. If a leader does want their own address published, that needs
+to be their decision, in writing, not an editorial one.
+
+The panel is a native `<dialog>`, so focus trapping, Escape and the backdrop are the
+browser's job rather than ours. Where `showModal` is missing the cards quietly stop
+being buttons instead of becoming a half working modal.
+
 ### Two things that will bite whoever edits this next
 
 **Do not put `overflow-x` on `html` or `body`.** It silently disables
@@ -186,3 +213,11 @@ church's legal or privacy questions before the first send.
 4. Whether the donate flow should stay pointed at the existing site or be rebuilt.
 5. The congregation illustration is the face of the site. It is a drawing, not a photograph
    of these particular people, and the church should be comfortable with that before launch.
+6. **Three ministries have no description.** Business Growth and Fellowship, Program
+   Coordinator and Events Coordinator. Their panels currently show only role and
+   profession. A sentence or two each from the church would finish them.
+7. **Photo consent.** Thirteen named people now appear as full colour portraits that
+   open on click. Confirm every one of them is content with that.
+8. **Where should leader enquiries land?** They currently go to info@victorychurch.ca
+   with the leader's name in the subject. If the office would rather they went
+   somewhere else, change OFFICE in assets/js/main.js.
