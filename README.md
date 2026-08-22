@@ -75,11 +75,11 @@ holding that same picture, so there is no seam and nothing to re-read.
 
 ### The leadership section
 
-The only place on the site that uses photographs rather than ink plates. They are
-held to grayscale in the grid so the page still reads as one thing, and the colour
-is kept back for the panel that opens when a leader is clicked. Each panel carries
-the person's role, their profession, what their ministry does, and a way to get in
-touch.
+The only place on the site that uses photographs rather than ink plates, and the
+only place with colour in it. That is the point rather than an inconsistency:
+everything else on the page is ink on paper, so thirteen faces in colour are the
+thing your eye goes to. Clicking one opens a panel with their role, their
+profession, what their ministry does, and a way to get in touch.
 
 **Nobody's biography has been written.** Everything in those panels comes from the
 church's own Leadership page or from `docs/RESEARCH.md`. Where the research records

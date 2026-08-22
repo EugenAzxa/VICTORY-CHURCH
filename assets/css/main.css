@@ -643,9 +643,9 @@ svg { fill: none; }
 }
 
 /* ----------------------------------------------------------- leadership */
-/* The one place on the site that uses photographs rather than ink plates.
-   They are held to grayscale in the grid so the page still reads as one thing,
-   and the colour is kept back for the panel that opens on click. */
+/* The one place on the site that uses photographs rather than ink plates, and
+   the only place with colour in it. That is the point: everything else on the
+   page is ink, so thirteen faces in colour are the thing your eye goes to. */
 .people {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -682,14 +682,10 @@ svg { fill: none; }
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  filter: grayscale(1) contrast(1.03);
-  transition: filter .4s var(--ease), transform .5s var(--ease);
+  transition: transform .5s var(--ease);
 }
 .person-open:hover .person-img img,
-.person-open:focus-visible .person-img img {
-  filter: grayscale(0) contrast(1);
-  transform: scale(1.03);
-}
+.person-open:focus-visible .person-img img { transform: scale(1.03); }
 
 .person-name {
   display: block;
