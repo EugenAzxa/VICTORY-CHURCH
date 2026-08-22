@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css?v=10">
+<link rel="stylesheet" href="assets/css/main.css?v=11">
 </head>
 <body>
 
@@ -54,9 +54,6 @@
   </div>
   <div class="ld-track"><div class="ld-fill" data-ld-fill></div></div>
 </div>
-
-<!-- the drafting grid the whole page is set on -->
-<div class="grid-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
 
 <!-- ============ header ============ -->
 <header class="hdr">
@@ -99,7 +96,7 @@
 <!-- ============ hero ============ -->
 <section class="hero">
   <div class="wrap">
-    <div class="hero-top tick">
+    <div class="hero-top">
       <span class="eyebrow"><i class="num">Est. 2006</i> Non denominational and multicultural</span>
       <span class="eyebrow">North York, Toronto</span>
     </div>
@@ -154,7 +151,7 @@
           <a class="btn btn-primary" href="#visit">Plan your visit <svg><use href="#i-arrow"/></svg></a>
         </div>
         <div class="panel-media">
-          <img src="assets/img/ink/congregation.webp" alt="The Victory Church congregation gathered together" loading="lazy" width="1200" height="800">
+          <img src="assets/img/ink/pulpit.webp" alt="The worship team leading singing at Victory Church" loading="lazy" width="1200" height="800">
           <span class="chip chip-tl"><svg><use href="#i-clock"/></svg> Next service Sunday, 10:30 a.m.</span>
           <span class="chip chip-br"><span class="dot"></span> Services on YouTube</span>
         </div>
@@ -192,7 +189,7 @@
           </ul>
           <a class="btn btn-primary" href="#outreach">See the work <svg><use href="#i-arrow"/></svg></a>
         </div>
-        <div class="panel-media"><img src="assets/img/ink/stepup-distribution.webp" alt="Volunteers distributing food in the community" loading="lazy" width="1024" height="768"></div>
+        <div class="panel-media"><img src="assets/img/ink/stepup-meals.webp" alt="Free meals served at a StepUp distribution" loading="lazy" width="1200" height="904"></div>
       </div>
 
       <div class="panel flip" role="tabpanel" id="p-4" aria-labelledby="t-4" hidden>
@@ -214,7 +211,7 @@
   </div>
 </section>
 
-<!-- ============ the history, told as a headcount ============ -->
+<!-- ============ the history, one picture per era ============ -->
 <section class="story sec-rule" id="heritage" data-story>
   <div class="wrap story-head">
     <span class="eyebrow"><i class="num">02</i> Our history</span>
@@ -230,13 +227,16 @@
         <ol class="story-ticks" aria-hidden="true"><li class="story-tick is-on" data-tick>2006</li><li class="story-tick" data-tick>2007</li><li class="story-tick" data-tick>2016</li><li class="story-tick" data-tick>Today</li></ol>
       </div>
       <div class="story-art story-art-pinned" data-story-art aria-hidden="true">
-        <img src="assets/img/ink/congregation-skyline.webp" alt="" width="1900" height="1061">
+        <img class="story-plate is-contained is-on" data-plate="0" src="assets/img/ink/five-2006.webp" alt="">
+        <img class="story-plate" data-plate="1" src="assets/img/ink/gathering-1.webp" alt="" style="object-position:50% 56%">
+        <img class="story-plate" data-plate="2" src="assets/img/ink/building-1856.webp" alt="" loading="lazy" style="object-position:50% 56%">
+        <img class="story-plate" data-plate="3" src="assets/img/ink/congregation-skyline.webp" alt="" loading="lazy" style="object-position:50% 100%">
       </div>
     </div>
 
-      <article class="story-beat is-on" data-beat="0" data-l="35.5" data-r="65.5">
+      <article class="story-beat is-on" data-beat="0">
         <div class="story-art story-art-inline">
-          <img src="assets/img/ink/congregation-skyline.webp" alt="The congregation of Victory Church International drawn in pen and ink before the Toronto skyline" loading="lazy" width="1900" height="1061">
+          <img class="is-contained" src="assets/img/ink/five-2006.webp" alt="Five members of the congregation, drawn in pen and ink" loading="lazy">
         </div>
         <div class="wrap">
           <div class="story-cap">
@@ -249,9 +249,9 @@
         </div>
       </article>
 
-      <article class="story-beat" data-beat="1" data-l="21" data-r="80">
+      <article class="story-beat" data-beat="1">
         <div class="story-art story-art-inline">
-          <img src="assets/img/ink/congregation-skyline.webp" alt="" loading="lazy" width="1900" height="1061" aria-hidden="true">
+          <img class="" style="object-position:50% 56%" src="assets/img/ink/gathering-1.webp" alt="The congregation seated in their first worship centre" loading="lazy">
         </div>
         <div class="wrap">
           <div class="story-cap">
@@ -264,9 +264,9 @@
         </div>
       </article>
 
-      <article class="story-beat" data-beat="2" data-l="6" data-r="95">
+      <article class="story-beat" data-beat="2">
         <div class="story-art story-art-inline">
-          <img src="assets/img/ink/congregation-skyline.webp" alt="" loading="lazy" width="1900" height="1061" aria-hidden="true">
+          <img class="" style="object-position:50% 56%" src="assets/img/ink/building-1856.webp" alt="The red brick church on Weston Road, built in 1856" loading="lazy">
         </div>
         <div class="wrap">
           <div class="story-cap">
@@ -279,9 +279,9 @@
         </div>
       </article>
 
-      <article class="story-beat" data-beat="3" data-l="0" data-r="100">
+      <article class="story-beat" data-beat="3">
         <div class="story-art story-art-inline">
-          <img src="assets/img/ink/congregation-skyline.webp" alt="" loading="lazy" width="1900" height="1061" aria-hidden="true">
+          <img class="" style="object-position:50% 100%" src="assets/img/ink/congregation-skyline.webp" alt="The whole congregation of Victory Church International before the Toronto skyline" loading="lazy">
         </div>
         <div class="wrap">
           <div class="story-cap">
@@ -594,6 +594,6 @@
   <a class="btn btn-primary" href="#guide" data-nudge-go>Get the guide <svg><use href="#i-arrow"/></svg></a>
 </aside>
 
-<script src="assets/js/main.js?v=10"></script>
+<script src="assets/js/main.js?v=11"></script>
 </body>
 </html>

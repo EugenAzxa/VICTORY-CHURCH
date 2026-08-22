@@ -479,18 +479,22 @@ var VC = (function () {
 })();
 
 /* ---------------------------------------------------------------------------
-   The history, told as a headcount
+   The history, one picture per era
 
-   This church's story is a number. Five people in a living room in 2006,
-   thirteen ministry leaders now, a full congregation. So the illustration is
-   not decoration here, it is the chart: figures appear as the years advance,
-   growing outward from Pastor Felix at the centre, and the city widens out
-   around them as it becomes home.
+   Four milestones, four different pictures: a crop of the drawing for the five
+   people in a living room, the first worship centre, the red brick church the
+   Anglicans raised in 1856, and the whole congregation today.
 
-   Desktop holds the drawing still and lets the milestones scroll past it.
-   Phones get the same four beats as ordinary blocks, each with its own crop,
-   because scroll scrubbed canvas on a mid range Android is how you make a
-   site feel broken, and this congregation is overwhelmingly on phones.
+   This used to be one drawing with a mask animated on every scroll frame. It
+   repainted a full bleed image continuously to show a change most people never
+   noticed, and it was the reason scrolling felt heavy. Now the only work on
+   scroll is deciding which plate is lit, and the plates cross fade on opacity
+   alone, which the compositor handles without repainting anything.
+
+   Desktop holds the frame still and changes the era inside it. Phones get the
+   same four beats as ordinary blocks, because scroll pinning on a mid range
+   Android is how a site comes to feel broken, and this congregation is
+   overwhelmingly on phones.
    --------------------------------------------------------------------------- */
 (function () {
   "use strict";
@@ -499,44 +503,26 @@ var VC = (function () {
   if (!story) return;
 
   var rail = story.querySelector(".story-rail"),
-      art = story.querySelector("[data-story-art]"),
       beats = [].slice.call(story.querySelectorAll("[data-beat]")),
+      plates = [].slice.call(story.querySelectorAll("[data-plate]")),
       ticks = [].slice.call(story.querySelectorAll("[data-tick]"));
-  if (!art || !beats.length) return;
-
-  var windows = beats.map(function (b) {
-    return { l: parseFloat(b.getAttribute("data-l")), r: parseFloat(b.getAttribute("data-r")) };
-  });
-
-  // Every beat carries its own window, which is all a phone needs: the inline
-  // plate in each block is already cropped correctly by CSS.
-  beats.forEach(function (b, i) {
-    var w = windows[i];
-    b.style.setProperty("--l", w.l + "%");
-    b.style.setProperty("--r", w.r + "%");
-    // and the same window expressed as a zoom, which is what phones use
-    b.style.setProperty("--cx", ((w.l + w.r) / 2).toFixed(2) + "%");
-    b.style.setProperty("--zoom", (100 / Math.max(1, w.r - w.l)).toFixed(3));
-  });
+  if (!rail || !beats.length) return;
 
   var pinned = false;
   function sync() {
     pinned = window.innerWidth >= 900 &&
              !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     story.classList.toggle("is-pinned", pinned);
-    if (!pinned) {
-      art.style.removeProperty("--l");
-      art.style.removeProperty("--r");
-    }
   }
   sync();
   window.addEventListener("resize", sync);
 
   var active = -1;
   function setActive(i) {
-    if (i === active) return;
+    if (i === active || i < 0 || i >= beats.length) return;
     active = i;
     beats.forEach(function (b, n) { b.classList.toggle("is-on", n === i); });
+    plates.forEach(function (p, n) { p.classList.toggle("is-on", n === i); });
     ticks.forEach(function (t, n) {
       t.classList.toggle("is-on", n === i);
       t.classList.toggle("is-past", n < i);
@@ -546,28 +532,15 @@ var VC = (function () {
 
   var queued = false;
   function onScroll() {
-    if (queued) return;
+    if (queued || !pinned) return;
     queued = true;
     requestAnimationFrame(function () {
       queued = false;
-      if (!pinned) return;
-
-      var rect = (rail || story).getBoundingClientRect();
+      var rect = rail.getBoundingClientRect();
       var travel = rect.height - window.innerHeight;
       if (travel <= 0) return;
       var p = Math.min(1, Math.max(0, -rect.top / travel));
-
-      // spread the four beats across the run, holding on each one briefly
-      var f = p * (windows.length - 1);
-      var i = Math.min(windows.length - 2, Math.floor(f));
-      var t = Math.min(1, Math.max(0, (f - i) * 1.35));   // hold, then move
-      var e = t * t * (3 - 2 * t);
-
-      var l = windows[i].l + (windows[i + 1].l - windows[i].l) * e;
-      var r = windows[i].r + (windows[i + 1].r - windows[i].r) * e;
-      art.style.setProperty("--l", l.toFixed(2) + "%");
-      art.style.setProperty("--r", r.toFixed(2) + "%");
-      setActive(Math.round(f));
+      setActive(Math.min(beats.length - 1, Math.floor(p * beats.length)));
     });
   }
 

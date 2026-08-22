@@ -25,9 +25,6 @@
   --wrap: 1240px;
   --gut: 5vw;
 
-  --dash: repeating-linear-gradient(to bottom, var(--rule) 0 5px, transparent 5px 12px);
-  --dash-h: repeating-linear-gradient(to right, var(--rule) 0 5px, transparent 5px 12px);
-
   --ease: cubic-bezier(.22,.61,.36,1);
 }
 
@@ -70,35 +67,6 @@ a { color: inherit; }
   outline-offset: 3px;
 }
 
-/* ------------------------------------------------------- drafting grid */
-/* Five dashed verticals, pinned to the content measure, fixed so they run
-   past the page as it scrolls. This is the spine of the whole design. */
-.grid-lines {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  width: min(var(--wrap), calc(100vw - var(--gut) * 2));
-  margin-inline: auto;
-}
-.grid-lines i {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background-image: var(--dash);
-  opacity: .85;
-}
-.grid-lines i:nth-child(1) { left: 0; }
-.grid-lines i:nth-child(2) { left: 25%; }
-.grid-lines i:nth-child(3) { left: 50%; }
-.grid-lines i:nth-child(4) { left: 75%; }
-.grid-lines i:nth-child(5) { left: 100%; }
-
-@media (max-width: 760px) {
-  .grid-lines i:nth-child(2), .grid-lines i:nth-child(4) { display: none; }
-}
-
 /* --------------------------------------------------------------- layout */
 .wrap {
   width: min(var(--wrap), calc(100vw - var(--gut) * 2));
@@ -122,21 +90,9 @@ main { position: relative; z-index: 2; }
   transform: translateX(-50%);
   width: min(var(--wrap), calc(100vw - var(--gut) * 2));
   height: 1px;
-  background-image: var(--dash-h);
+  background: var(--rule-2);
   z-index: 3;
 }
-
-.tick { position: relative; }
-.tick::before, .tick::after {
-  content: "+";
-  position: absolute;
-  top: -8px;
-  font: 400 15px/1 var(--mono);
-  color: var(--rule);
-  z-index: 4;
-}
-.tick::before { left: -6px; }
-.tick::after  { right: -6px; }
 
 /* ----------------------------------------------------------- typography */
 h1, h2, h3, h4 { margin: 0; font-weight: 500; letter-spacing: -.03em; line-height: 1.06; }
@@ -259,7 +215,7 @@ svg { fill: none; }
   transform: translateX(-50%);
   width: min(var(--wrap), calc(100vw - var(--gut) * 2));
   height: 1px;
-  background-image: var(--dash-h);
+  background: var(--rule-2);
   opacity: 0;
   transition: opacity .3s var(--ease);
 }
@@ -392,9 +348,7 @@ svg { fill: none; }
 }
 
 .hero-top {
-  background-image: var(--dash-h);
-  background-size: 100% 1px;
-  background-repeat: no-repeat;
+  border-top: 1px solid var(--rule-2);
   padding-top: 16px;
   display: flex;
   align-items: baseline;
@@ -950,7 +904,7 @@ svg { fill: none; }
   transform: translateX(-50%);
   width: min(var(--wrap), calc(100vw - var(--gut) * 2));
   height: 1px;
-  background-image: var(--dash-h);
+  background: var(--rule-2);
 }
 
 .ftr-top {
@@ -1166,23 +1120,14 @@ svg { fill: none; }
 .ld-fill { height: 100%; width: 0; background: var(--ink); }
 
 /* ---------------------------------------------------------------- story */
-/* The history as a headcount. Figures appear as the years advance, growing
-   outward from Pastor Felix at the centre, and the city widens out around them.
-   The whole mechanism is one mask on one image: --l and --r are the edges of a
-   window over the drawing, and everything else is scroll position arithmetic. */
+/* One picture per era, cross faded. This used to be a single drawing with a
+   mask animated on every scroll frame, which meant repainting a full bleed
+   image continuously for a change most people could not see. Four different
+   photographs say the thing the mask was trying to imply, and the only work
+   left on scroll is deciding which one is on. */
 .story-head { max-width: 74ch; margin-bottom: clamp(28px, 4vw, 48px); }
 .story-head .h-lg { margin: 16px 0 18px; }
 
-/* The window defaults live on the section, as high up as they can go. A custom
-   property set on an element beats the one it would inherit, so declaring these
-   any lower would silently shadow the per beat values the script writes. */
-.story {
-  --l: 0%;
-  --r: 100%;
-  --fade: 3.5%;
-  --cx: 50%;
-  --zoom: 1;
-}
 .story-art {
   position: relative;
   overflow: hidden;
@@ -1192,14 +1137,18 @@ svg { fill: none; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 100%;
+  object-position: 50% 42%;
   mix-blend-mode: multiply;
-  -webkit-mask-image: linear-gradient(90deg,
-    transparent calc(var(--l) - var(--fade)), #000 var(--l),
-    #000 var(--r), transparent calc(var(--r) + var(--fade)));
-  mask-image: linear-gradient(90deg,
-    transparent calc(var(--l) - var(--fade)), #000 var(--l),
-    #000 var(--r), transparent calc(var(--r) + var(--fade)));
+}
+
+/* 2006 is five people, and five people at full height is a squarish shape that
+   cannot sit in a wide band without either cropping their heads off or showing
+   nine of them. So this one plate is contained rather than bled: a small
+   drawing standing on the bottom edge of a large sheet, which is closer to what
+   a living room with five people in it should look like anyway. */
+.story-art img.is-contained {
+  object-fit: contain;
+  object-position: 50% 100%;
 }
 
 .story-ticks {
@@ -1254,30 +1203,16 @@ svg { fill: none; }
 }
 
 /* Default shape, which is also what phones and a failed script get: four
-   ordinary blocks, each with its own crop of the drawing. No pinning, no
-   scrubbing, nothing to stutter. */
+   ordinary blocks, each with its own picture. No pinning, nothing to stutter. */
 .story-stage { display: none; }
 .story-art-inline {
   height: clamp(220px, 52vw, 320px);
   margin-bottom: 20px;
 }
-.story-art-inline img {
-  -webkit-mask-image: none;
-  mask-image: none;
-  /* 62% down the box lands on the faces once object-position has shifted
-     the drawing, so zooming in keeps heads in frame instead of cropping to
-     a row of torsos. */
-  transform-origin: var(--cx) 62%;
-  transform: scale(var(--zoom));
-  transition: transform .6s var(--ease);
-}
-
 .story-beat { padding-block: clamp(24px, 4vw, 40px); }
 .story-beat + .story-beat { border-top: 1px solid var(--rule-2); }
 
-/* Desktop, once the script has confirmed there is room for it: the drawing
-   holds still and the milestones scroll through it. Sticky rather than
-   scroll hijacking, because the browser does sticky far better than I can. */
+/* Desktop: the frame holds still and the eras change inside it. */
 .story.is-pinned .story-stage {
   display: flex;
   flex-direction: column;
@@ -1287,17 +1222,15 @@ svg { fill: none; }
   padding-top: 11vh;
   z-index: 1;
 }
-/* margin-top:auto drops the drawing onto the bottom edge of the viewport */
+/* The negative margin has to sit on the beats and not on the stage: a sticky
+   element takes its travel from its own margin box, so a -100vh bottom margin
+   on the stage collapses that travel and it never sticks at all. */
+.story.is-pinned .story-beat[data-beat="0"] { margin-top: -100vh; }
 .story.is-pinned .story-art-pinned {
   margin-top: auto;
   height: clamp(260px, 46vh, 480px);
 }
 .story.is-pinned .story-art-inline { display: none; }
-/* The beats are pulled up over the pinned stage. The negative margin has to
-   sit here and not on the stage itself: a sticky element derives its travel
-   from its own margin box, so a -100vh bottom margin on the stage collapses
-   that travel to nothing and it never sticks at all. */
-.story.is-pinned .story-beat[data-beat="0"] { margin-top: -100vh; }
 .story.is-pinned .story-beat {
   min-height: 100vh;
   display: flex;
@@ -1320,6 +1253,17 @@ svg { fill: none; }
   transition: opacity .45s var(--ease), transform .45s var(--ease);
 }
 .story.is-pinned .story-beat.is-on .story-cap { opacity: 1; transform: none; }
+
+/* The plates are stacked and only one is ever lit. Opacity is the only thing
+   that changes, so the browser can composite it without repainting. */
+.story-art-pinned .story-plate {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity .5s var(--ease);
+  will-change: opacity;
+}
+.story-art-pinned .story-plate.is-on { opacity: 1; }
 
 /* ------------------------------------------------------- history page */
 .tl { position: relative; display: grid; gap: 0; }
@@ -1382,7 +1326,7 @@ svg { fill: none; }
 }
 
 @media print {
-  .grid-lines, .nudge, #loader, .hdr { display: none !important; }
+  .nudge, #loader, .hdr { display: none !important; }
   body::before { display: none; }
   .rv { opacity: 1 !important; transform: none !important; }
 }
@@ -1433,6 +1377,5 @@ svg { fill: none; }
   .her-stamp b { font-size: 22px; }
 
   .book-cover { max-width: 240px; box-shadow: 10px 10px 0 var(--rule-2); }
-  .story-art-inline img { object-position: 50% 100%; }
   .band h2 { max-width: none; }
 }

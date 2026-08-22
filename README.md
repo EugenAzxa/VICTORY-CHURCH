@@ -26,8 +26,14 @@ Then open the address it prints. No build step. Plain HTML, CSS and JavaScript.
 
 Ink on paper. A cool near white ground, one weight of blue black, and a single
 accent drawn from the church's own logo blue, deepened until it holds against the
-paper at 6.8:1. A dashed drafting grid runs the full height of every page behind
-the content.
+paper at 6.8:1. Sections are divided by plain hairlines.
+
+An earlier version ran a dashed drafting grid down the full height of every page,
+which is the signature of the reference this was drawn from. It was removed at the
+client's request: on a real page, behind real content, it read as ruled notebook
+paper rather than as a technical drawing. If it ever comes back, note that
+`overflow-x` and `position: sticky` do not coexist, and the history section
+depends on sticky.
 
 - **Nothing on the site is a photograph.** Every image is a two colour, error
   diffused plate that reads as an engraving printed on the sheet. The plates are
@@ -40,27 +46,32 @@ the content.
   dash slides into the margin beside them and the label underlines. Navigation,
   footer and inline links all behave identically.
 
-### The congregation plate
+### The history section
 
-One drawing does three jobs, and the whole site is built around it.
+Four milestones, four different pictures: five people cut out of the drawing,
+the first worship centre, the red brick church the Anglicans raised in 1856, and
+the whole congregation today.
 
-**The intro** is that drawing assembling itself out of ink particles, and nothing
-else. It used to narrate seven dates over fifteen seconds, which the page then went
-on to tell twice more. Now it runs about four seconds and hands straight over to a
-hero that is already holding the same picture, so there is no seam and nothing to
-re-read. The dates moved into the scroll, where they do actual work.
+It began as one drawing with a mask animated on every scroll frame, growing a
+window outward from Pastor Felix. That was clever and wrong. It repainted a full
+bleed image continuously to show a change most people never noticed, so scrolling
+felt heavy and the picture looked the same at every year. Four actual photographs
+say the thing the mask was trying to imply, and the only work left on scroll is
+deciding which plate is lit. The plates cross fade on opacity alone, which the
+compositor handles without repainting.
 
-**The history section** tells the story as a headcount, because that is what this
-church's story is. Five people in a living room in 2006, thirteen ministry leaders
-now, a full congregation. Figures appear as the years advance, growing outward from
-Pastor Felix at the centre, and the city widens out around them as it becomes home.
+The 2006 plate is the one exception to the full bleed treatment. Five people at
+full height is a squarish shape that cannot sit in a wide band without either
+cropping their heads off or showing nine of them, so it is shown contained: a
+small drawing standing on the bottom edge of a large sheet. `make-ink.sh` cuts
+it out of the illustration.
 
-The whole mechanism is one mask over one image. `--l` and `--r` are the edges of a
-window over the drawing and everything else is scroll arithmetic. The four windows
-are hand set to land on whole figures rather than slicing a face in half, and they
-live on the `data-l` / `data-r` attributes of each beat in `index.html`.
+### The intro
 
-**The footer** carries it a third time, cropped to the waterline.
+The congregation assembling out of ink, and nothing else. It used to narrate
+seven dates over fifteen seconds, which the page then went on to tell twice
+more. Now it runs about four seconds and hands straight over to a hero already
+holding that same picture, so there is no seam and nothing to re-read.
 
 ### Two things that will bite whoever edits this next
 
