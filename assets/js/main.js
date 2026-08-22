@@ -1,4 +1,138 @@
 /* Victory Church International - site behaviour */
+
+/* ---------------------------------------------------------------------------
+   Shared: assembling a plate out of ink particles.
+
+   The plates are one bit stipple, so point sampling one returns noise. The
+   density map is built by letting the browser downscale the image, which
+   averages the stipple back into real tone, and every cell of that map becomes
+   a particle in one of three ink weights.
+
+   Returns true if it took over the element, false if the caller should just
+   leave the plain <img> alone.
+   --------------------------------------------------------------------------- */
+var VC = (function () {
+  "use strict";
+
+  var LIFE = 0.42;          // share of the run a particle spends in flight
+  var CELL = 7;             // device pixels per particle
+  var ALPHAS = [0.3, 0.62, 1];
+  var INK = "#12151A";
+
+  function assemble(host, img, opts) {
+    opts = opts || {};
+    var duration = opts.duration || 1700;
+
+    if (!host || !img || !img.naturalWidth) return false;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+
+    var w = host.clientWidth, h = host.clientHeight;
+    if (!w || !h) return false;
+
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var cv = document.createElement("canvas");
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    var ctx = cv.getContext("2d");
+    if (!ctx) return false;
+
+    var cols = Math.max(120, Math.min(240, Math.round(cv.width / CELL)));
+    var rows = Math.max(1, Math.round(cols * cv.height / cv.width));
+
+    var off = document.createElement("canvas");
+    off.width = cols; off.height = rows;
+    var octx = off.getContext("2d", { willReadFrequently: true });
+    if (!octx) return false;
+    octx.imageSmoothingEnabled = true;
+    octx.imageSmoothingQuality = "high";
+
+    var d;
+    try {
+      octx.drawImage(img, 0, 0, cols, rows);
+      d = octx.getImageData(0, 0, cols, rows).data;
+    } catch (e) {
+      return false;   // tainted canvas or a decode failure
+    }
+
+    var cw = cv.width / cols, ch = cv.height / rows;
+    var buckets = [[], [], []];
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        var i = (r * cols + c) * 4;
+        if (d[i + 3] < 40) continue;
+        var dark = 1 - (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) / 255;
+        if (dark < 0.14) continue;                       // paper
+        buckets[dark < 0.3 ? 0 : dark < 0.55 ? 1 : 2].push(c * cw, r * ch);
+      }
+    }
+    if (!buckets[0].length && !buckets[1].length && !buckets[2].length) return false;
+
+    // Freeze each flight path so every frame redraws the same trajectory
+    // instead of jittering.
+    var spread = cv.width * 0.15;
+    var flights = buckets.map(function (pts) {
+      var n = pts.length / 2;
+      var f = {
+        tx: new Float32Array(n), ty: new Float32Array(n),
+        sx: new Float32Array(n), sy: new Float32Array(n),
+        dl: new Float32Array(n), n: n
+      };
+      for (var k = 0; k < n; k++) {
+        var px = pts[k * 2], py = pts[k * 2 + 1];
+        var ang = Math.random() * Math.PI * 2;
+        var rr = spread * (0.25 + Math.random() * 0.75);
+        f.tx[k] = px; f.ty[k] = py;
+        f.sx[k] = px + Math.cos(ang) * rr;
+        f.sy[k] = py + Math.sin(ang) * rr - cv.height * 0.12;
+        // sweep left to right, the way a press lays down a sheet
+        f.dl[k] = (px / cv.width) * (1 - LIFE) * 0.8 + Math.random() * (1 - LIFE) * 0.2;
+      }
+      return f;
+    });
+
+    cv.style.width = "100%";
+    cv.style.height = "100%";
+    host.appendChild(cv);
+    host.classList.add("assembling");
+    ctx.fillStyle = INK;
+
+    var t0 = 0;
+    function frame(now) {
+      if (!t0) t0 = now;
+      var t = Math.min(1, (now - t0) / duration);
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      for (var b = 0; b < 3; b++) {
+        var f = flights[b];
+        if (!f.n) continue;
+        ctx.globalAlpha = ALPHAS[b];
+        for (var k = 0; k < f.n; k++) {
+          var local = (t - f.dl[k]) / LIFE;
+          if (local <= 0) continue;
+          if (local >= 1) {
+            ctx.fillRect(f.tx[k], f.ty[k], cw, ch);
+          } else {
+            var e = 1 - Math.pow(1 - local, 3);
+            ctx.fillRect(f.sx[k] + (f.tx[k] - f.sx[k]) * e,
+                         f.sy[k] + (f.ty[k] - f.sy[k]) * e, cw, ch);
+          }
+        }
+      }
+      if (opts.onProgress) opts.onProgress(t);
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        host.classList.remove("assembling");
+        host.classList.add("assembled");
+        setTimeout(function () { cv.remove(); }, 700);
+        if (opts.onDone) opts.onDone();
+      }
+    }
+    requestAnimationFrame(frame);
+    return true;
+  }
+
+  return { assemble: assemble };
+})();
 (function () {
   "use strict";
 
@@ -11,91 +145,35 @@
   var LEAD_ENDPOINT = "";
   var LEAD_TO = "info@victorychurch.ca";
 
-  /* ---------------- loader: through the years ---------------- */
+  /* ---------------- intro: the congregation arrives ----------------
+     The old intro narrated seven dates before letting anyone in, and the page
+     then told the same story twice more. It now does one thing: the
+     congregation assembles out of ink, and the page behind it is already
+     holding that same picture, so the handover has no seam. The dates moved
+     into the scroll, where they belong. */
   var loader = document.getElementById("loader");
+  var introPlayed = false;
+
   if (loader) {
-    var STEPS = [
-      { tag: "33 AD", year: "33 AD", place: "Jerusalem",
-        line: "The Spirit falls at Pentecost. People speak in languages they never learned. The movement takes its name from this day." },
-      { tag: "1856", year: "1856", place: "Weston, Ontario",
-        line: "Anglicans raise a red brick church on Weston Road and set a cross on the gable.",
-        img: "assets/img/ink/building-1856.webp", alt: "The 1856 red brick church on Weston Road" },
-      { tag: "1906", year: "1906", place: "Azusa Street, Los Angeles",
-        line: "William Seymour, son of formerly enslaved parents, leads the revival that carries Pentecost around the world." },
-      { tag: "1925", year: "1925", place: "Southwestern Nigeria",
-        line: "The Aladura rise. In Yoruba the word means the praying people. African founded and African led." },
-      { tag: "2006", year: "2006", place: "Toronto",
-        line: "Five people gather in the living room of Pastor Felix Ayomike." },
-      { tag: "2016", year: "2016", place: "2125 Weston Road",
-        line: "The church built in 1856 becomes theirs. The faith that went out returns home.",
-        img: "assets/img/ink/congregation.webp", alt: "The congregation gathered together" },
-      { tag: "Today", year: "Today", place: "North York, Toronto",
-        line: "Victory Church International. Love God. Love People. Pray.",
-        img: "assets/img/ink/choir.webp", alt: "The choir leading worship" }
-    ];
+    var ldArt = loader.querySelector("[data-ld-art]"),
+        ldImg = ldArt && ldArt.querySelector("img"),
+        ldFill = loader.querySelector("[data-ld-fill]"),
+        ldSkip = loader.querySelector("[data-ld-skip]"),
+        ldDone = false,
+        ldTimer = null;
 
-    var elYear  = loader.querySelector("[data-ld-year]"),
-        elPlace = loader.querySelector("[data-ld-place]"),
-        elLine  = loader.querySelector("[data-ld-line]"),
-        elFill  = loader.querySelector("[data-ld-fill]"),
-        elSegs  = loader.querySelector("[data-ld-segs]"),
-        elMedia = loader.querySelector("[data-ld-media]"),
-        skipBtn = loader.querySelector("[data-ld-skip]"),
-        i = 0, timer = null, finished = false;
-
-    STEPS.forEach(function (s) {
-      var b = document.createElement("span");
-      b.className = "ld-seg";
-      b.textContent = s.tag;
-      elSegs.appendChild(b);
-      if (s.img) { var pre = new Image(); pre.src = s.img; }
-    });
-    var segs = elSegs.children;
-
-    function finish() {
-      if (finished) return;
-      finished = true;
-      clearTimeout(timer);
+    function endIntro() {
+      if (ldDone) return;
+      ldDone = true;
+      clearTimeout(ldTimer);
       loader.classList.add("done");
       document.body.style.overflow = "";
       try { sessionStorage.setItem("vc_intro", "1"); } catch (e) {}
-      setTimeout(function () { loader.hidden = true; }, 750);
+      setTimeout(function () { loader.hidden = true; }, 700);
     }
 
-    function bump(el) { el.classList.remove("ld-step"); void el.offsetWidth; el.classList.add("ld-step"); }
-
-    function render() {
-      var s = STEPS[i];
-      elYear.textContent = s.year;
-      elPlace.textContent = s.place;
-      elLine.textContent = s.line;
-      bump(elYear); bump(elPlace); bump(elLine);
-
-      if (s.img) {
-        elMedia.innerHTML = '<img src="' + s.img + '" alt="' + s.alt + '">';
-      } else {
-        elMedia.innerHTML =
-          '<div class="ld-panel"><span class="ld-ghost">' + s.year +
-          '</span><span class="ld-cap">' + s.place + '</span></div>';
-      }
-
-      elFill.style.width = ((i + 1) / STEPS.length * 100) + "%";
-      for (var n = 0; n < segs.length; n++) {
-        segs[n].classList.toggle("on", n === i);
-        segs[n].classList.toggle("past", n < i);
-      }
-      // keep the active segment visible when the strip has to scroll
-      if (segs[i] && segs[i].scrollIntoView) {
-        try { segs[i].scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" }); } catch (e) {}
-      }
-
-      i++;
-      if (i < STEPS.length) timer = setTimeout(render, i === 1 ? 1900 : 2200);
-      else timer = setTimeout(finish, 2000);
-    }
-
-    // ?intro in the URL always replays it, which is how to show it to somebody
-    // again without hunting through browser storage.
+    // ?intro in the URL always replays it, which is how to show somebody the
+    // sequence again without digging through browser storage.
     var force = /[?&]intro\b/.test(location.search);
     var seen = false;
     try { seen = !force && sessionStorage.getItem("vc_intro") === "1"; } catch (e) {}
@@ -104,12 +182,35 @@
       loader.hidden = true;
       loader.classList.add("done");
     } else {
+      introPlayed = true;
+      document.documentElement.setAttribute("data-intro-played", "1");
       document.body.style.overflow = "hidden";
-      skipBtn.addEventListener("click", finish);
+      ldSkip.addEventListener("click", endIntro);
       document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" || e.key === "Enter" || e.key === " ") finish();
+        if (e.key === "Escape" || e.key === "Enter" || e.key === " ") endIntro();
       });
-      render();
+
+      var runIntro = function () {
+        var ran = VC.assemble(ldArt, ldImg, {
+          duration: 3200,
+          onProgress: function (p) { if (ldFill) ldFill.style.width = (p * 100) + "%"; },
+          onDone: function () { ldTimer = setTimeout(endIntro, 900); }
+        });
+        // No canvas, no particles, no waiting: show the plate and move on.
+        if (!ran) {
+          if (ldFill) ldFill.style.width = "100%";
+          ldTimer = setTimeout(endIntro, 1200);
+        }
+      };
+
+      if (ldImg && ldImg.complete && ldImg.naturalWidth) runIntro();
+      else if (ldImg) {
+        ldImg.addEventListener("load", runIntro, { once: true });
+        ldImg.addEventListener("error", endIntro, { once: true });
+        ldTimer = setTimeout(endIntro, 6000);   // never trap anyone behind a slow image
+      } else {
+        endIntro();
+      }
     }
   }
 
@@ -349,161 +450,139 @@
   if (y) y.textContent = new Date().getFullYear();
 })();
 
-/* --------------------------------------------------------------------------
-   Ink reveal
-   The congregation plate assembles itself out of ink particles, which is the
-   move the reference footer is built on. It is decoration, so it is skipped
-   entirely on small screens, under prefers-reduced-motion, and any time the
-   canvas cannot be read. The plain <img> underneath is always the fallback.
-
-   The plate is a one bit stipple, so point sampling it returns noise. The
-   density map is built by letting the browser downscale the image instead,
-   which averages the stipple back into real tone, and each cell of that map
-   becomes one particle in one of three ink weights.
-   -------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------
+   Hero plate
+   On a return visit there is no intro sequence, so the hero assembles itself
+   instead. On a first visit the intro has just done exactly that, and doing it
+   twice in five seconds is worse than not doing it at all.
+   --------------------------------------------------------------------------- */
 (function () {
   "use strict";
 
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var host = document.querySelector("[data-ink-reveal]");
   if (!host) return;
+  if (document.documentElement.hasAttribute("data-intro-played")) return;
 
   var img = host.querySelector("img");
-  if (!img || reduce || window.innerWidth < 860) return;
-
-  var DURATION = 1700;      // ms, first particle leaving to last one landing
-  var LIFE = 0.42;          // share of the run any one particle spends in flight
-  var CELL = 7;             // device pixels per particle
-  var ALPHAS = [0.3, 0.62, 1];
-
-  function start() {
-    var w = host.clientWidth, h = host.clientHeight;
-    if (!w || !h) return;
-
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var cv = document.createElement("canvas");
-    cv.width = Math.round(w * dpr);
-    cv.height = Math.round(h * dpr);
-    var ctx = cv.getContext("2d");
-    if (!ctx) return;
-
-    var cols = Math.max(120, Math.min(240, Math.round(cv.width / CELL)));
-    var rows = Math.max(1, Math.round(cols * cv.height / cv.width));
-
-    var off = document.createElement("canvas");
-    off.width = cols;
-    off.height = rows;
-    var octx = off.getContext("2d", { willReadFrequently: true });
-    if (!octx) return;
-    octx.imageSmoothingEnabled = true;
-    octx.imageSmoothingQuality = "high";
-
-    var d;
-    try {
-      octx.drawImage(img, 0, 0, cols, rows);
-      d = octx.getImageData(0, 0, cols, rows).data;
-    } catch (e) {
-      return; // tainted canvas or a decode failure: keep the plain image
-    }
-
-    var cw = cv.width / cols, ch = cv.height / rows;
-    var buckets = [[], [], []];
-    for (var r = 0; r < rows; r++) {
-      for (var c = 0; c < cols; c++) {
-        var i = (r * cols + c) * 4;
-        if (d[i + 3] < 40) continue;
-        var dark = 1 - (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) / 255;
-        if (dark < 0.14) continue;   // paper, nothing to draw
-        buckets[dark < 0.3 ? 0 : dark < 0.55 ? 1 : 2].push(c * cw, r * ch);
-      }
-    }
-    if (!buckets[0].length && !buckets[1].length && !buckets[2].length) return;
-
-    // Freeze the flight path per particle so every frame redraws the same
-    // trajectory rather than jittering.
-    var spread = cv.width * 0.15;
-    var flights = buckets.map(function (pts) {
-      var n = pts.length / 2;
-      var f = {
-        tx: new Float32Array(n), ty: new Float32Array(n),
-        sx: new Float32Array(n), sy: new Float32Array(n),
-        dl: new Float32Array(n), n: n
-      };
-      for (var k = 0; k < n; k++) {
-        var px = pts[k * 2], py = pts[k * 2 + 1];
-        var ang = Math.random() * Math.PI * 2;
-        var rr = spread * (0.25 + Math.random() * 0.75);
-        f.tx[k] = px; f.ty[k] = py;
-        f.sx[k] = px + Math.cos(ang) * rr;
-        f.sy[k] = py + Math.sin(ang) * rr - cv.height * 0.12;
-        // sweep left to right, the way a press lays down a sheet
-        f.dl[k] = (px / cv.width) * (1 - LIFE) * 0.8 + Math.random() * (1 - LIFE) * 0.2;
-      }
-      return f;
-    });
-
-    cv.style.width = "100%";
-    cv.style.height = "100%";
-    host.appendChild(cv);
-    host.classList.add("assembling");
-    ctx.fillStyle = "#14140F";
-
-    var t0 = 0;
-    function frame(now) {
-      if (!t0) t0 = now;
-      var t = Math.min(1, (now - t0) / DURATION);
-      ctx.clearRect(0, 0, cv.width, cv.height);
-      for (var b = 0; b < 3; b++) {
-        var f = flights[b];
-        if (!f.n) continue;
-        ctx.globalAlpha = ALPHAS[b];
-        for (var k = 0; k < f.n; k++) {
-          var local = (t - f.dl[k]) / LIFE;
-          if (local <= 0) continue;
-          if (local >= 1) {
-            ctx.fillRect(f.tx[k], f.ty[k], cw, ch);
-          } else {
-            var e = 1 - Math.pow(1 - local, 3);
-            ctx.fillRect(f.sx[k] + (f.tx[k] - f.sx[k]) * e,
-                         f.sy[k] + (f.ty[k] - f.sy[k]) * e, cw, ch);
-          }
-        }
-      }
-      if (t < 1) {
-        requestAnimationFrame(frame);
-      } else {
-        host.classList.remove("assembling");
-        host.classList.add("assembled");
-        setTimeout(function () { cv.remove(); }, 700);
-      }
-    }
-    requestAnimationFrame(frame);
-  }
+  if (!img || window.innerWidth < 860) return;
 
   function watch() {
-    if (!("IntersectionObserver" in window)) { start(); return; }
+    if (!("IntersectionObserver" in window)) { VC.assemble(host, img); return; }
     var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) { io.disconnect(); start(); }
+      if (entries[0].isIntersecting) { io.disconnect(); VC.assemble(host, img); }
     }, { threshold: 0.12 });
     io.observe(host);
   }
 
-  // On a first visit the intro sequence covers the page for several seconds.
-  // The hero is technically in the viewport behind it, so without this the
-  // whole reveal would play to nobody.
-  function ready() {
-    var loader = document.getElementById("loader");
-    var covered = loader && !loader.hidden && !loader.classList.contains("done");
-    if (!covered) { watch(); return; }
-    var mo = new MutationObserver(function () {
-      if (loader.hidden || loader.classList.contains("done")) {
-        mo.disconnect();
-        setTimeout(watch, 500);   // let the loader finish fading out
-      }
+  if (img.complete && img.naturalWidth) watch();
+  else img.addEventListener("load", watch, { once: true });
+})();
+
+/* ---------------------------------------------------------------------------
+   The history, told as a headcount
+
+   This church's story is a number. Five people in a living room in 2006,
+   thirteen ministry leaders now, a full congregation. So the illustration is
+   not decoration here, it is the chart: figures appear as the years advance,
+   growing outward from Pastor Felix at the centre, and the city widens out
+   around them as it becomes home.
+
+   Desktop holds the drawing still and lets the milestones scroll past it.
+   Phones get the same four beats as ordinary blocks, each with its own crop,
+   because scroll scrubbed canvas on a mid range Android is how you make a
+   site feel broken, and this congregation is overwhelmingly on phones.
+   --------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+
+  var story = document.querySelector("[data-story]");
+  if (!story) return;
+
+  var rail = story.querySelector(".story-rail"),
+      art = story.querySelector("[data-story-art]"),
+      beats = [].slice.call(story.querySelectorAll("[data-beat]")),
+      ticks = [].slice.call(story.querySelectorAll("[data-tick]"));
+  if (!art || !beats.length) return;
+
+  var windows = beats.map(function (b) {
+    return { l: parseFloat(b.getAttribute("data-l")), r: parseFloat(b.getAttribute("data-r")) };
+  });
+
+  // Every beat carries its own window, which is all a phone needs: the inline
+  // plate in each block is already cropped correctly by CSS.
+  beats.forEach(function (b, i) {
+    var w = windows[i];
+    b.style.setProperty("--l", w.l + "%");
+    b.style.setProperty("--r", w.r + "%");
+    // and the same window expressed as a zoom, which is what phones use
+    b.style.setProperty("--cx", ((w.l + w.r) / 2).toFixed(2) + "%");
+    b.style.setProperty("--zoom", (100 / Math.max(1, w.r - w.l)).toFixed(3));
+  });
+
+  var pinned = false;
+  function sync() {
+    pinned = window.innerWidth >= 900 &&
+             !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    story.classList.toggle("is-pinned", pinned);
+    if (!pinned) {
+      art.style.removeProperty("--l");
+      art.style.removeProperty("--r");
+    }
+  }
+  sync();
+  window.addEventListener("resize", sync);
+
+  var active = -1;
+  function setActive(i) {
+    if (i === active) return;
+    active = i;
+    beats.forEach(function (b, n) { b.classList.toggle("is-on", n === i); });
+    ticks.forEach(function (t, n) {
+      t.classList.toggle("is-on", n === i);
+      t.classList.toggle("is-past", n < i);
     });
-    mo.observe(loader, { attributes: true, attributeFilter: ["class", "hidden"] });
+  }
+  setActive(0);
+
+  var queued = false;
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function () {
+      queued = false;
+      if (!pinned) return;
+
+      var rect = (rail || story).getBoundingClientRect();
+      var travel = rect.height - window.innerHeight;
+      if (travel <= 0) return;
+      var p = Math.min(1, Math.max(0, -rect.top / travel));
+
+      // spread the four beats across the run, holding on each one briefly
+      var f = p * (windows.length - 1);
+      var i = Math.min(windows.length - 2, Math.floor(f));
+      var t = Math.min(1, Math.max(0, (f - i) * 1.35));   // hold, then move
+      var e = t * t * (3 - 2 * t);
+
+      var l = windows[i].l + (windows[i + 1].l - windows[i].l) * e;
+      var r = windows[i].r + (windows[i + 1].r - windows[i].r) * e;
+      art.style.setProperty("--l", l.toFixed(2) + "%");
+      art.style.setProperty("--r", r.toFixed(2) + "%");
+      setActive(Math.round(f));
+    });
   }
 
-  if (img.complete && img.naturalWidth) ready();
-  else img.addEventListener("load", ready, { once: true });
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
+
+  // Off the pinned path, each block lights up as it arrives.
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      if (pinned) return;
+      entries.forEach(function (en) {
+        if (en.isIntersecting) setActive(beats.indexOf(en.target));
+      });
+    }, { rootMargin: "-45% 0px -45% 0px" });
+    beats.forEach(function (b) { io.observe(b); });
+  }
 })();

@@ -20,8 +20,8 @@ OUT=assets/img/ink
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-INK="#14140F"
-PAPER="#F3F2EE"
+INK="#12151A"
+PAPER="#F2F3F5"
 TARGET=0.74      # mean luminance every plate is levelled towards, 0-1
 
 SCENES="service-wide worship-1 worship-2 worship-team choir congregation congregation-seated
@@ -68,6 +68,34 @@ for n in $SCENES; do plate "$SRC/$n.webp" "$OUT/$n.webp" 1200 2; done
 # apart at point size 2.
 for f in "$SRC"/team/*.webp; do
   plate "$f" "$OUT/team/$(basename "$f" .webp).webp" 520 1
+done
+
+# ---------------------------------------------------------------------------
+# The two plates that are not conversions of a photograph.
+# ---------------------------------------------------------------------------
+
+# The drawn congregation and Toronto skyline. This one is already an engraving,
+# so it is not dithered. It only gets its blacks lifted off pure black onto the
+# site's blue-black ink, and its whites pushed to clean paper so that multiply
+# drops them out of the page.
+if [ -f "$SRC/congregation-skyline-src.jpg" ]; then
+  ffmpeg -v error -y -i "$SRC/congregation-skyline-src.jpg" \
+    -vf "curves=r='0/0.071 1/1':g='0/0.082 1/1':b='0/0.102 1/1',curves=all='0/0 0.86/0.99 1/1',eq=contrast=1.06,scale=1900:-1" \
+    -c:v libwebp -q:v 88 "$OUT/congregation-skyline.webp"
+  echo "  congregation-skyline.webp  (illustration, not dithered)"
+fi
+
+# The church logo, flattened to a single ink silhouette. Their logo is blue on
+# transparent with white gridlines inside the globe, so this keys on luminance
+# rather than alpha, which keeps those gridlines open.
+INK_R=$((16#12)); INK_G=$((16#15)); INK_B=$((16#1A))
+for pair in "logo.png:logo-ink.png" "monogram.png:monogram-ink.png"; do
+  src="$SRC/${pair%%:*}"; dst="$OUT/${pair##*:}"
+  [ -f "$src" ] || continue
+  ffmpeg -v error -y -i "$src" -vf \
+    "format=rgba,geq=r='$INK_R':g='$INK_G':b='$INK_B':a='if(gte(alpha(X,Y),120)*lt(0.299*r(X,Y)+0.587*g(X,Y)+0.114*b(X,Y),205),255,0)'" \
+    "$dst"
+  echo "  $(basename "$dst")  (logo silhouette)"
 done
 
 echo

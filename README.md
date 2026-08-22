@@ -17,32 +17,77 @@ Then open the address it prints. No build step. Plain HTML, CSS and JavaScript.
     assets/js/main.js     Intro sequence, tabs, mobile nav, scroll reveal, ink reveal
     assets/img/           Source photographs, web optimised
     assets/img/ink/       Two colour ink plates, generated (see below)
+    assets/img/congregation-skyline-src.jpg   The drawn congregation, source file
     assets/img/raw/       Originals pulled from victorychurch.ca (gitignored, 151 MB)
-    tools/make-ink.sh     Regenerates every ink plate from the source photographs
+    tools/make-ink.sh     Regenerates every ink plate, the illustration and the logo
     docs/RESEARCH.md      Research brief this design was built from
 
 ## The design
 
-Ink on paper. One warm off white ground, one weight of near black, a single warm gold used
-only for buttons and for the milestones that belong to this church, and a dashed drafting
-grid that runs the full height of every page behind the content.
+Ink on paper. A cool near white ground, one weight of blue black, and a single
+accent drawn from the church's own logo blue, deepened until it holds against the
+paper at 6.8:1. A dashed drafting grid runs the full height of every page behind
+the content.
 
-- **Nothing on the site is a photograph.** Every image is a two colour, error diffused plate
-  that reads as an engraving printed on the sheet. The plates are composited with
-  `mix-blend-mode: multiply`, so the paper shows through the light values instead of each
-  picture sitting on a white rectangle.
-- **Type** is Instrument Sans for everything that is prose, and IBM Plex Mono for labels,
-  numerals, years and section markers. The mono is what makes the page read as a technical
+- **Nothing on the site is a photograph.** Every image is a two colour, error
+  diffused plate that reads as an engraving printed on the sheet. The plates are
+  composited with `mix-blend-mode: multiply`, so the paper shows through the light
+  values instead of each picture sitting on a white rectangle.
+- **Type** is Instrument Sans for prose and IBM Plex Mono for labels, numerals,
+  years and section markers. The mono is what makes the page read as a technical
   drawing rather than a brochure.
-- **One interaction, used everywhere.** Text links do not move on hover. A short dash slides
-  into the margin beside them and the label underlines. Navigation, footer and inline links
-  all behave identically.
-- **The congregation plate** anchors the bottom of the hero and the bottom of the footer.
-  On first sight it assembles itself out of ink particles sweeping left to right, the way a
-  press lays down a sheet. That is decoration and it degrades cleanly: it is skipped under
-  `prefers-reduced-motion`, skipped below 860px, skipped if the canvas cannot be read, and
-  it waits for the intro sequence to clear so it never plays to nobody. The plain image
-  underneath is always the fallback.
+- **One interaction, used everywhere.** Text links do not move on hover. A short
+  dash slides into the margin beside them and the label underlines. Navigation,
+  footer and inline links all behave identically.
+
+### The congregation plate
+
+One drawing does three jobs, and the whole site is built around it.
+
+**The intro** is that drawing assembling itself out of ink particles, and nothing
+else. It used to narrate seven dates over fifteen seconds, which the page then went
+on to tell twice more. Now it runs about four seconds and hands straight over to a
+hero that is already holding the same picture, so there is no seam and nothing to
+re-read. The dates moved into the scroll, where they do actual work.
+
+**The history section** tells the story as a headcount, because that is what this
+church's story is. Five people in a living room in 2006, thirteen ministry leaders
+now, a full congregation. Figures appear as the years advance, growing outward from
+Pastor Felix at the centre, and the city widens out around them as it becomes home.
+
+The whole mechanism is one mask over one image. `--l` and `--r` are the edges of a
+window over the drawing and everything else is scroll arithmetic. The four windows
+are hand set to land on whole figures rather than slicing a face in half, and they
+live on the `data-l` / `data-r` attributes of each beat in `index.html`.
+
+**The footer** carries it a third time, cropped to the waterline.
+
+### Two things that will bite whoever edits this next
+
+**Do not put `overflow-x` on `html` or `body`.** It silently disables
+`position: sticky`, which the history section is built on, and it is not needed:
+`.hero-art`, `.ftr-art` and the story stage are already the full width of the page
+because they are siblings of `.wrap` inside full width sections.
+
+**Do not declare `--l`, `--r`, `--cx` or `--zoom` below `.story`.** A custom
+property set on an element beats the one it would inherit, so declaring a default
+any lower silently shadows the per beat values the script writes, and the mask
+quietly stops doing anything.
+
+### Phones get a different mechanism, not a worse one
+
+The research brief is clear that this congregation is overwhelmingly on phones, and
+scroll scrubbed canvas on a mid range Android is how a site comes to feel broken. So
+below 900px there is no pinning and no scrubbing. The same four beats become ordinary
+blocks, and instead of masking the drawing they zoom into it: the sequence opens
+close on five faces and pulls back to the whole congregation. Same idea, read the
+other way round. A 390px screen showing thirty per cent of a 1900px drawing would
+leave five people about a hundred pixels wide, which is not a picture of anybody.
+
+The particle assemble is skipped entirely under `prefers-reduced-motion`, below
+860px, and any time the canvas cannot be read. The plain `<img>` underneath is
+always the fallback, and if the script never runs at all the history section
+degrades to four captioned blocks that still say the right thing.
 
 ### Regenerating the ink plates
 
@@ -59,11 +104,14 @@ the set look like one printer's run rather than twenty unrelated pictures. Wide 
 coarser stipple than portraits, because a one pixel stipple does not compress and a
 congregation on a phone should not cost 200 KB. The whole set is about 1.3 MB.
 
-Two plates are not generated and must not be overwritten:
+Two of the plates are not conversions of a photograph, and the script treats them
+differently:
 
-- `assets/img/ink/congregation-skyline.webp` - the drawn congregation and Toronto skyline.
-  This one really is an illustration, not a converted photograph.
-- `assets/img/ink/logo-ink.png` - the church logo flattened to a single ink silhouette.
+- `congregation-skyline.webp` is already an engraving, so it is not dithered. It only
+  has its blacks lifted onto the site's blue black and its whites pushed to clean
+  paper. Its source is `assets/img/congregation-skyline-src.jpg`.
+- `logo-ink.png` is the church logo flattened to a single ink silhouette. It keys on
+  luminance rather than alpha, which keeps the white gridlines inside the globe open.
 
 ### Notes for the build
 
