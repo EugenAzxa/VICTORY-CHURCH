@@ -1327,10 +1327,21 @@ svg { fill: none; }
   object-fit: cover;
   object-position: 50% 42%;
   opacity: 0;
-  transition: opacity .7s var(--ease);
-  will-change: opacity;
+  transform: scale(.94);
+  transition: opacity .45s linear, transform 1s cubic-bezier(.2,.7,.3,1);
+  will-change: opacity, transform;
 }
-.saga.is-pinned .saga-plate.is-on { opacity: 1; }
+.saga.is-pinned .saga-plate.is-on { opacity: 1; transform: scale(1); }
+/* Scenes already behind you push past the camera rather than fading in place.
+   That, and the next scene arriving from slightly small, is what makes this
+   read as walking forward instead of paging through a slideshow. */
+.saga.is-pinned .saga-plate.is-past { opacity: 0; transform: scale(1.22); }
+
+@media (prefers-reduced-motion: reduce) {
+  .saga.is-pinned .saga-plate,
+  .saga.is-pinned .saga-plate.is-on,
+  .saga.is-pinned .saga-plate.is-past { transform: none; transition: opacity .3s linear; }
+}
 
 /* The negative margin sits on the beats and not on the stage: a sticky element
    takes its travel from its own margin box, so a -100vh bottom margin on the
@@ -1338,14 +1349,20 @@ svg { fill: none; }
 .saga.is-pinned .saga-beat[data-beat="0"] { margin-top: -100vh; }
 .saga.is-pinned .saga-art-inline { display: none; }
 .saga.is-pinned .saga-beat {
-  min-height: 100vh;
+  min-height: 50vh;
   display: flex;
   align-items: flex-end;
-  padding: 0 0 9vh;
+  padding: 0;
   border-top: 0;
   position: relative;
   z-index: 2;
   pointer-events: none;
+}
+/* Short beats cannot carry a full height sticky wrapper, so the caption sticks
+   to the bottom of the viewport instead and lets the beat pass behind it. */
+.saga.is-pinned .saga-beat > .wrap {
+  position: sticky;
+  bottom: 9vh;
 }
 /* The illustrations are line drawings on white, so type cannot simply sit on
    them. The caption gets its own ground. */
@@ -1751,3 +1768,37 @@ svg { fill: none; }
   mask-repeat: no-repeat;
 }
 .welcome-art img { object-position: 50% 30%; }
+
+/* Where you are in the sequence. Not knowing was most of why nine scenes felt
+   like forever. */
+.saga-count { display: none; }
+.saga.is-pinned .saga-count {
+  display: block;
+  position: absolute;
+  top: calc(76px + 4vh);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(var(--wrap), calc(100vw - var(--gut) * 2));
+  margin: 0;
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .16em;
+  color: var(--ink);
+  pointer-events: none;
+}
+/* The scenes are line drawings with black suits and dark hatching in them, so
+   the counter needs its own ground or it disappears into the picture. */
+.saga-count-in {
+  display: inline-block;
+  padding: 6px 11px;
+  background: var(--paper);
+  color: var(--mute);
+}
+.saga-count b { font-weight: 500; font-size: 14px; letter-spacing: .1em; color: var(--ink); }
+
+/* Gives the pinned stage enough rail to stay stuck until the last scene has had
+   its turn. Without it the final beat sits below the point where the stage
+   unsticks and can never become current. */
+.saga-tail { display: none; }
+.saga.is-pinned .saga-tail { display: block; height: 100vh; }

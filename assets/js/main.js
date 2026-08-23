@@ -517,16 +517,25 @@ var VC = (function () {
   sync();
   window.addEventListener("resize", sync);
 
+  var count = story.querySelector("[data-saga-count] b");
+
   var active = -1;
   function setActive(i) {
     if (i === active || i < 0 || i >= beats.length) return;
     active = i;
     beats.forEach(function (b, n) { b.classList.toggle("is-on", n === i); });
-    plates.forEach(function (p, n) { p.classList.toggle("is-on", n === i); });
+    // Scenes already passed scale up and away rather than simply fading, which
+    // is what reads as moving forward through them instead of flicking through
+    // a slideshow. Scenes still ahead wait a little small.
+    plates.forEach(function (p, n) {
+      p.classList.toggle("is-on", n === i);
+      p.classList.toggle("is-past", n < i);
+    });
     ticks.forEach(function (t, n) {
       t.classList.toggle("is-on", n === i);
       t.classList.toggle("is-past", n < i);
     });
+    if (count) count.textContent = String(i + 1).padStart(2, "0");
   }
   setActive(0);
 
@@ -534,7 +543,10 @@ var VC = (function () {
   // dividing the rail into equal parts. The beats are not all the same height,
   // and this also works when nothing is pinned, so it is the only rule needed.
   function current() {
-    var mid = window.innerHeight * 0.5;
+    // Near the top of the viewport, not the middle. A scene becomes current as
+    // its beat arrives, which is also when its caption reaches the bottom of
+    // the screen, so the picture and the words change together.
+    var mid = window.innerHeight * 0.04;
     var idx = 0;
     for (var i = 0; i < beats.length; i++) {
       var r = beats[i].getBoundingClientRect();

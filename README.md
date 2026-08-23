@@ -119,11 +119,31 @@ living room in 2006, a worship centre of their own in 2007, walking up to the
 1856 church in 2016, the door, the nations in the room, the thirteen leaders,
 the city they serve, and today.
 
-Desktop holds one full bleed scene behind the whole viewport and cross fades it
-while the captions ride over the top in an ink card, because the illustrations
-are line drawings on white and type cannot simply sit on them. Only opacity
-changes on the plates, so the compositor handles the cross fade without
-repainting a full bleed image on every frame.
+Desktop holds one full bleed scene behind the whole viewport while the captions
+ride over the top in an ink card, because the illustrations are line drawings on
+white and type cannot simply sit on them.
+
+Scenes do not merely cross fade. The one you are leaving scales up and past the
+camera while the next arrives from slightly small, which is what makes this read
+as walking forward rather than paging through a slideshow. That is a dolly, the
+way a documentary moves through stills, and it is the honest answer to wanting
+this to feel three dimensional: these are flat illustrations with no depth data,
+so a real fly through would mean rebuilding them as geometry, and a WebGL scene
+is the wrong thing to hand a congregation that is mostly on mid range Androids.
+Only opacity and transform change, so it stays on the compositor.
+
+**Two pieces of geometry hold this together.** The beats are 50vh, and there is
+a 100vh tail spacer at the end of the rail. Without the tail the beats span more
+of the rail than the stage can stay pinned for, by exactly the stage height, so
+the last scene sits below the point where the stage unsticks and can never
+become current. And the current scene is picked at 4% down the viewport rather
+than the middle: at the middle, the first scene was on screen for about seventy
+pixels before the second took over.
+
+The whole sequence is about 4000px of scroll. The first version was 7200, which
+is roughly twenty seconds of scrolling to get through the history and out the
+other side. The counter in the corner is part of that fix: not knowing how much
+was left was most of what made it feel endless.
 
 Phones get the same nine scenes as ordinary blocks with the caption underneath.
 No pinning, no cross fade, nothing to stutter.
