@@ -149,7 +149,7 @@ the faces stay legible, so they are switched off there, along with any device
 that has no hover. Faces sit at 46% of the image height and torsos run to about
 92%; if the illustration is replaced those numbers move.
 
-It is pure CSS with no script, and the whole block is  with the
+It is pure CSS with no script, and the whole block is `aria-hidden` with the
 buttons out of the tab order. That is deliberate: the same professions are
 written out in full in the leadership section and summarised in the note under
 the drawing, so hiding it costs a screen reader nothing and saves a keyboard
