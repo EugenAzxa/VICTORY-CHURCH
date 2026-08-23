@@ -24,27 +24,45 @@ Then open the address it prints. No build step. Plain HTML, CSS and JavaScript.
 
 ## The design
 
-Ink on paper. A cool near white ground, one weight of blue black, and a single
-accent drawn from the church's own logo blue, deepened until it holds against the
-paper at 6.8:1. Sections are divided by plain hairlines.
+Warm editorial layout on a cool near white ground, set in Instrument Sans with
+IBM Plex Mono for labels, numerals, years and section markers. The mono is what
+makes the page read as a drawing office rather than a brochure. Sections are
+divided by plain hairlines.
 
-An earlier version ran a dashed drafting grid down the full height of every page,
-which is the signature of the reference this was drawn from. It was removed at the
-client's request: on a real page, behind real content, it read as ruled notebook
-paper rather than as a technical drawing. If it ever comes back, note that
-`overflow-x` and `position: sticky` do not coexist, and the history section
-depends on sticky.
+An earlier version put every photograph through a two colour error diffusion so
+that nothing on the page was a photograph, and ran a dashed drafting grid down
+the full height of every page. Both came from the reference this was drawn from
+and both were removed at the client's request: the grid read as ruled notebook
+paper, and the dithering flattened the one thing a church website is actually
+for, which is faces. `tools/make-ink.sh` still exists and will regenerate the
+whole plate set if that treatment is ever wanted again.
 
-- **Nothing on the site is a photograph.** Every image is a two colour, error
-  diffused plate that reads as an engraving printed on the sheet. The plates are
-  composited with `mix-blend-mode: multiply`, so the paper shows through the light
-  values instead of each picture sitting on a white rectangle.
-- **Type** is Instrument Sans for prose and IBM Plex Mono for labels, numerals,
-  years and section markers. The mono is what makes the page read as a technical
-  drawing rather than a brochure.
-- **One interaction, used everywhere.** Text links do not move on hover. A short
-  dash slides into the margin beside them and the label underlines. Navigation,
-  footer and inline links all behave identically.
+Two images are still drawings, and they are the only two that still multiply
+into the paper: the congregation illustration and the crop of five people taken
+from it. Put a photograph through multiply and it simply goes dark, so the
+`.is-drawing` class marks the two that should.
+
+### Colour
+
+The palette is the church's own, read off the banner on victorychurch.ca: cyan,
+royal blue, orange and crimson over paper and ink.
+
+Colour is used as a signal rather than a surface. Each section takes one brand
+colour for its number, its labels and its small marks, so the colour tells you
+where you are in the page. The one place colour becomes a surface is the giving
+band, which carries a halftone dot wash in cyan and orange, echoing the dot
+fields their brand already uses. That motif is the one thing their brand and
+this design genuinely had in common.
+
+**Cyan and orange cannot be used for text at full strength.** They measure about
+2.4:1 against the paper, well under the 4.5:1 small text needs. Every brand
+colour therefore has a `-t` variant deepened until it clears that bar, and the
+label styles use the `-t`. The measured ratios are in the comment beside the
+tokens. If you add a new brand colour, do the same.
+
+The one exception to all of this is the leadership grid, which is full colour
+photography. That is deliberate: everything around it is restrained, so thirteen
+faces in colour are the thing your eye goes to.
 
 ### The history section
 
@@ -135,12 +153,15 @@ Needs `ffmpeg` on PATH and the `media-use` dither script (override its location 
 `DITHER=/path/to/dither.mjs`). It reads `assets/img/*.webp` and `assets/img/team/*.webp` and
 writes `assets/img/ink/`.
 
-The church's photographs were taken in a dim hall over about fifteen years and their
-exposures are all over the place. A fixed gamma turned half of them into black rectangles, so
-each plate is levelled to the same mean brightness before it is dithered. That is what makes
-the set look like one printer's run rather than twenty unrelated pictures. Wide scenes get a
-coarser stipple than portraits, because a one pixel stipple does not compress and a
-congregation on a phone should not cost 200 KB. The whole set is about 1.3 MB.
+The site no longer uses the dithered plates. The script is kept because it still
+produces the two files that are in use, and because it will regenerate the whole
+set if the ink treatment is ever wanted back.
+
+If you do bring it back: the church's photographs were taken in a dim hall over
+about fifteen years and their exposures are all over the place, so each plate is
+levelled to a common mean before it is dithered. Gamma alone cannot lift a black
+point, which is why an early version needed a gamma violent enough to destroy the
+midtones it was there to rescue. Levels first, then a gentle gamma.
 
 Two of the plates are not conversions of a photograph, and the script treats them
 differently:
