@@ -530,34 +530,33 @@ var VC = (function () {
   }
   setActive(0);
 
+  // Which beat is on is read from where the beats actually are, rather than by
+  // dividing the rail into equal parts. The beats are not all the same height,
+  // and this also works when nothing is pinned, so it is the only rule needed.
+  function current() {
+    var mid = window.innerHeight * 0.5;
+    var idx = 0;
+    for (var i = 0; i < beats.length; i++) {
+      var r = beats[i].getBoundingClientRect();
+      if (r.top > mid) break;
+      idx = i;
+    }
+    return idx;
+  }
+
   var queued = false;
   function onScroll() {
-    if (queued || !pinned) return;
+    if (queued) return;
     queued = true;
     requestAnimationFrame(function () {
       queued = false;
-      var rect = rail.getBoundingClientRect();
-      var travel = rect.height - window.innerHeight;
-      if (travel <= 0) return;
-      var p = Math.min(1, Math.max(0, -rect.top / travel));
-      setActive(Math.min(beats.length - 1, Math.floor(p * beats.length)));
+      setActive(current());
     });
   }
 
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll);
   onScroll();
-
-  // Off the pinned path, each block lights up as it arrives.
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
-      if (pinned) return;
-      entries.forEach(function (en) {
-        if (en.isIntersecting) setActive(beats.indexOf(en.target));
-      });
-    }, { rootMargin: "-45% 0px -45% 0px" });
-    beats.forEach(function (b) { io.observe(b); });
-  }
 })();
 
 /* ---------------------------------------------------------------------------

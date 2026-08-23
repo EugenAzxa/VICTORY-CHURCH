@@ -70,13 +70,30 @@ Four milestones, four different pictures: five people cut out of the drawing,
 the first worship centre, the red brick church the Anglicans raised in 1856, and
 the whole congregation today.
 
-It began as one drawing with a mask animated on every scroll frame, growing a
+Desktop puts the text on the left and the picture on the right, both holding
+still in one frame while the eras change inside it. An earlier version bled the
+picture across the bottom of the viewport, which worked for the three
+photographs and fell apart on 2006: five people at full height is a squarish
+shape, so it had to be contained while the others were bled, and two treatments
+at wildly different scales left a hole in the middle of the section. One frame
+fixes it. The photographs cover it, the drawing sits inside it, every beat is
+the same size.
+
+Before that it was one drawing with a mask animated on every scroll frame,
+growing a
 window outward from Pastor Felix. That was clever and wrong. It repainted a full
 bleed image continuously to show a change most people never noticed, so scrolling
 felt heavy and the picture looked the same at every year. Four actual photographs
 say the thing the mask was trying to imply, and the only work left on scroll is
 deciding which plate is lit. The plates cross fade on opacity alone, which the
 compositor handles without repainting.
+
+The beats are 128vh against a 100vh caption wrapper, and that 28vh of slack is
+the only reason the caption sticks at all: a sticky element takes its travel
+from its containing block, so a wrapper exactly as tall as its beat can never
+stick and just drifts up the viewport. Which beat is on is read from where the
+beats actually are rather than by dividing the rail into equal parts, so the
+heights can change without breaking the sync.
 
 The 2006 plate is the one exception to the full bleed treatment. Five people at
 full height is a squarish shape that cannot sit in a wide band without either
