@@ -111,42 +111,43 @@ The one exception to all of this is the leadership grid, which is full colour
 photography. That is deliberate: everything around it is restrained, so thirteen
 faces in colour are the thing your eye goes to.
 
-### The history section
+### The history, scene by scene
 
-Four milestones, four different pictures: five people cut out of the drawing,
-the first worship centre, the red brick church the Anglicans raised in 1856, and
-the whole congregation today.
+Nine illustrated scenes of this congregation at their own building, told in the
+order it happened: the Anglicans raising the church in 1856, five people in a
+living room in 2006, a worship centre of their own in 2007, walking up to the
+1856 church in 2016, the door, the nations in the room, the thirteen leaders,
+the city they serve, and today.
 
-Desktop puts the text on the left and the picture on the right, both holding
-still in one frame while the eras change inside it. An earlier version bled the
-picture across the bottom of the viewport, which worked for the three
-photographs and fell apart on 2006: five people at full height is a squarish
-shape, so it had to be contained while the others were bled, and two treatments
-at wildly different scales left a hole in the middle of the section. One frame
-fixes it. The photographs cover it, the drawing sits inside it, every beat is
-the same size.
+Desktop holds one full bleed scene behind the whole viewport and cross fades it
+while the captions ride over the top in an ink card, because the illustrations
+are line drawings on white and type cannot simply sit on them. Only opacity
+changes on the plates, so the compositor handles the cross fade without
+repainting a full bleed image on every frame.
 
-Before that it was one drawing with a mask animated on every scroll frame,
-growing a
-window outward from Pastor Felix. That was clever and wrong. It repainted a full
-bleed image continuously to show a change most people never noticed, so scrolling
-felt heavy and the picture looked the same at every year. Four actual photographs
-say the thing the mask was trying to imply, and the only work left on scroll is
-deciding which plate is lit. The plates cross fade on opacity alone, which the
-compositor handles without repainting.
+Phones get the same nine scenes as ordinary blocks with the caption underneath.
+No pinning, no cross fade, nothing to stutter.
 
-The beats are 128vh against a 100vh caption wrapper, and that 28vh of slack is
-the only reason the caption sticks at all: a sticky element takes its travel
-from its containing block, so a wrapper exactly as tall as its beat can never
-stick and just drifts up the viewport. Which beat is on is read from where the
-beats actually are rather than by dividing the rail into equal parts, so the
-heights can change without breaking the sync.
+The scenes live in `assets/img/scenes/`, sliced from a single 3x3 sheet. Each
+one ships at two sizes and is served through `srcset`: nine full bleed
+illustrations at full size would be about 2.7 MB on a phone, and this
+congregation is overwhelmingly on phones.
 
-The 2006 plate is the one exception to the full bleed treatment. Five people at
-full height is a squarish shape that cannot sit in a wide band without either
-cropping their heads off or showing nine of them, so it is shown contained: a
-small drawing standing on the bottom edge of a large sheet. `make-ink.sh` cuts
-it out of the illustration.
+Every line of the copy comes from the church's own History page or from
+`docs/RESEARCH.md`. As with the hero, no figure in any scene is identified by
+name, because these are illustrations of a congregation rather than portraits of
+particular people.
+
+### The hero
+
+The congregation standing in front of their own 1856 building with Toronto
+behind it, which is the whole reverse mission story in one frame. The previous
+illustration had the skyline but no church, so it could only carry half of it.
+
+Hovering a figure says what this church is made of. See the note below on why it
+names nobody. The thirteen hotspot positions are read off this specific
+illustration and are in `--x` on each `.hero-spot`; replace the picture and
+every one of them has to be measured again.
 
 ### The intro
 
@@ -171,11 +172,11 @@ faces would mean inventing who is who, about real people, on their own church
 site. If the drawing is ever redone from an actual leadership photograph, naming
 them becomes straightforward and this is the place to do it.
 
-The hotspots are positioned as a percentage of the image width and height, which
-only holds while the illustration is shown whole. Below 700px it is cropped so
+The hotspots are positioned as a percentage of the current hero illustration's
+width and height, which only holds while it is shown whole. Below 700px it is cropped so
 the faces stay legible, so they are switched off there, along with any device
-that has no hover. Faces sit at 46% of the image height and torsos run to about
-92%; if the illustration is replaced those numbers move.
+that has no hover. Faces sit at about 47% of the image height and figures run to about 94%; if the
+illustration is replaced those numbers move, and so does every --x.
 
 It is pure CSS with no script, and the whole block is `aria-hidden` with the
 buttons out of the tab order. That is deliberate: the same professions are

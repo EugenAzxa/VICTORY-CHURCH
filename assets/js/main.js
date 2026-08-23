@@ -479,7 +479,7 @@ var VC = (function () {
 })();
 
 /* ---------------------------------------------------------------------------
-   The history, one picture per era
+   The history, scene by scene
 
    Four milestones, four different pictures: a crop of the drawing for the five
    people in a living room, the first worship centre, the red brick church the
@@ -502,7 +502,7 @@ var VC = (function () {
   var story = document.querySelector("[data-story]");
   if (!story) return;
 
-  var rail = story.querySelector(".story-rail"),
+  var rail = story.querySelector("[data-rail]"),
       beats = [].slice.call(story.querySelectorAll("[data-beat]")),
       plates = [].slice.call(story.querySelectorAll("[data-plate]")),
       ticks = [].slice.call(story.querySelectorAll("[data-tick]"));

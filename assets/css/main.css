@@ -1261,175 +1261,107 @@ svg { fill: none; }
 }
 .ld-fill { height: 100%; width: 0; background: var(--ink); }
 
-/* ---------------------------------------------------------------- story */
-/* One picture per era, cross faded. This used to be a single drawing with a
-   mask animated on every scroll frame, which meant repainting a full bleed
-   image continuously for a change most people could not see. Four different
-   photographs say the thing the mask was trying to imply, and the only work
-   left on scroll is deciding which one is on. */
-.story-head { max-width: 74ch; margin-bottom: clamp(28px, 4vw, 48px); }
-.story-head .h-lg { margin: 16px 0 18px; }
+/* ----------------------------------------------------------------- saga */
+/* The history told as a sequence of scenes. Desktop holds one full bleed
+   illustration behind the whole viewport and cross fades it as the captions
+   scroll over the top. Phones get the same nine scenes as ordinary blocks,
+   because a pinned full screen cross fade on a mid range Android is how a site
+   comes to feel broken and this congregation is overwhelmingly on phones.
 
-.story-art {
-  position: relative;
-  overflow: hidden;
-  background: var(--paper);
-}
-.story-art img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 42%;
-}
+   Only opacity changes on the plates, so the compositor handles the cross fade
+   without repainting a full bleed image on every frame. */
+.saga-head { max-width: 74ch; margin-bottom: clamp(28px, 4vw, 48px); }
+.saga-head .h-lg { margin: 16px 0 18px; }
+.saga-rail { position: relative; }
 
-/* 2006 is five people, and five people at full height is a squarish shape that
-   cannot sit in a wide band without either cropping their heads off or showing
-   nine of them. So this one plate is contained rather than bled: a small
-   drawing standing on the bottom edge of a large sheet, which is closer to what
-   a living room with five people in it should look like anyway. */
-.story-art img.is-contained {
-  object-fit: contain;
-  object-position: 50% 50%;
-}
-
-.story-ticks {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.story-tick {
-  padding: 5px 11px;
-  border: 1px solid var(--rule-2);
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--faint);
-  transition: color .3s, border-color .3s, background .3s;
-}
-.story-tick.is-past { color: var(--mute); border-color: var(--rule); }
-.story-tick.is-on { background: var(--accent-t); border-color: var(--accent-t); color: #fff; }
-
-.story-cap { max-width: 48ch; }
-.story-when { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
-.story-year {
-  font-family: var(--mono);
-  font-size: clamp(26px, 3.2vw, 42px);
-  letter-spacing: -.03em;
+.saga-cap { max-width: 46ch; }
+.saga-when { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.saga-year {
+  font-family: var(--serif);
+  font-size: clamp(30px, 4vw, 52px);
   line-height: 1;
+  letter-spacing: -.014em;
 }
-.story-place {
+.saga-place {
   font-family: var(--mono);
   font-size: 10.5px;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent-t);
+  color: var(--royal-t);
 }
-.story-cap p {
+.saga-cap p {
   margin: 14px 0 0;
   font-size: 16px;
   line-height: 1.58;
   color: var(--ink-2);
 }
+.saga-close { margin-top: clamp(32px, 4vw, 56px); }
 
-.story-close {
-  margin-top: clamp(34px, 5vw, 60px);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 26px;
-}
-
-/* Default shape, which is also what phones and a failed script get: four
-   ordinary blocks, each with its own picture. No pinning, nothing to stutter. */
-.story-stage { display: none; }
-.story-art-inline {
-  height: clamp(220px, 52vw, 320px);
+/* Default shape, which is also what phones and a failed script get: nine
+   ordinary blocks, each with its own scene. Nothing pinned. */
+.saga-stage { display: none; }
+.saga-art-inline {
+  background: var(--paper-d);
   margin-bottom: 20px;
 }
-.story-beat { padding-block: clamp(24px, 4vw, 40px); }
-.story-beat + .story-beat { border-top: 1px solid var(--rule-2); }
+.saga-art-inline img { width: 100%; height: auto; display: block; }
+.saga-beat { padding-block: clamp(24px, 4vw, 40px); }
+.saga-beat + .saga-beat { border-top: 1px solid var(--rule-2); }
 
-/* Desktop: one frame, text on the left, picture on the right, both holding
-   still while the eras change inside them.
-
-   This used to bleed the picture across the bottom of the viewport, which
-   worked for the three photographs and fell apart on 2006. Five people at full
-   height is a squarish shape, so it had to be contained while the others were
-   bled, and the two treatments at wildly different scales left a hole in the
-   middle of the section. One frame fixes it: the photographs cover it, the
-   drawing sits inside it, and every beat is the same size. */
-.story.is-pinned .story-stage {
-  display: flex;
-  align-items: center;
+/* Desktop: the scene fills the viewport and the caption rides over it. */
+.saga.is-pinned .saga-stage {
+  display: block;
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow: hidden;
   z-index: 1;
+  background: var(--paper);
 }
-.story.is-pinned .story-ticks-wrap {
+.saga.is-pinned .saga-art { position: absolute; inset: 0; }
+.saga.is-pinned .saga-plate {
   position: absolute;
-  top: 13vh;
-  left: 50%;
-  transform: translateX(-50%);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 42%;
+  opacity: 0;
+  transition: opacity .7s var(--ease);
+  will-change: opacity;
 }
-.story.is-pinned .story-cols {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(30px, 5vw, 72px);
-}
-.story.is-pinned .story-art-pinned {
-  grid-column: 2;
-  height: min(60vh, 540px);
-}
-/* The negative margin has to sit on the beats and not on the stage: a sticky
-   element takes its travel from its own margin box, so a -100vh bottom margin
-   on the stage collapses that travel and it never sticks at all. */
-.story.is-pinned .story-beat[data-beat="0"] { margin-top: -100vh; }
-.story.is-pinned .story-art-inline { display: none; }
-.story.is-pinned .story-beat {
-  min-height: 128vh;
-  padding: 0;
+.saga.is-pinned .saga-plate.is-on { opacity: 1; }
+
+/* The negative margin sits on the beats and not on the stage: a sticky element
+   takes its travel from its own margin box, so a -100vh bottom margin on the
+   stage collapses that travel and it never sticks at all. */
+.saga.is-pinned .saga-beat[data-beat="0"] { margin-top: -100vh; }
+.saga.is-pinned .saga-art-inline { display: none; }
+.saga.is-pinned .saga-beat {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 0 9vh;
   border-top: 0;
   position: relative;
   z-index: 2;
   pointer-events: none;
 }
-/* The caption sits on the same two column grid as the picture, and holds its
-   place for the length of its own beat before handing over. */
-/* 100vh inside a 128vh beat leaves 28vh of travel, which is what lets this
-   stick at all. */
-.story.is-pinned .story-beat > .wrap {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(30px, 5vw, 72px);
-  align-content: center;
-}
-.story.is-pinned .story-cap {
-  grid-column: 1;
-  max-width: none;
+/* The illustrations are line drawings on white, so type cannot simply sit on
+   them. The caption gets its own ground. */
+.saga.is-pinned .saga-cap {
+  background: var(--ink);
+  color: var(--paper);
+  padding: clamp(22px, 2.6vw, 34px) clamp(24px, 2.8vw, 38px);
+  max-width: 44ch;
   opacity: 0;
-  transform: translateY(12px);
-  transition: opacity .45s var(--ease), transform .45s var(--ease);
+  transform: translateY(14px);
+  transition: opacity .5s var(--ease), transform .5s var(--ease);
 }
-.story.is-pinned .story-beat.is-on .story-cap { opacity: 1; transform: none; }
-
-/* The plates are stacked and only one is ever lit. Opacity is the only thing
-   that changes, so the browser can composite it without repainting. */
-.story-art-pinned .story-plate {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity .5s var(--ease);
-  will-change: opacity;
-}
-.story-art-pinned .story-plate.is-on { opacity: 1; }
+.saga.is-pinned .saga-beat.is-on .saga-cap { opacity: 1; transform: none; }
+.saga.is-pinned .saga-year { color: var(--paper); }
+.saga.is-pinned .saga-place { color: var(--blue-lt); }
+.saga.is-pinned .saga-cap p { color: rgba(244,243,240,.76); }
 
 /* ------------------------------------------------------- history page */
 .tl { position: relative; display: grid; gap: 0; }
