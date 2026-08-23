@@ -1261,125 +1261,6 @@ svg { fill: none; }
 }
 .ld-fill { height: 100%; width: 0; background: var(--ink); }
 
-/* ----------------------------------------------------------------- saga */
-/* The history told as a sequence of scenes. Desktop holds one full bleed
-   illustration behind the whole viewport and cross fades it as the captions
-   scroll over the top. Phones get the same nine scenes as ordinary blocks,
-   because a pinned full screen cross fade on a mid range Android is how a site
-   comes to feel broken and this congregation is overwhelmingly on phones.
-
-   Only opacity changes on the plates, so the compositor handles the cross fade
-   without repainting a full bleed image on every frame. */
-.saga-head { max-width: 74ch; margin-bottom: clamp(28px, 4vw, 48px); }
-.saga-head .h-lg { margin: 16px 0 18px; }
-.saga-rail { position: relative; }
-
-.saga-cap { max-width: 46ch; }
-.saga-when { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
-.saga-year {
-  font-family: var(--serif);
-  font-size: clamp(30px, 4vw, 52px);
-  line-height: 1;
-  letter-spacing: -.014em;
-}
-.saga-place {
-  font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--royal-t);
-}
-.saga-cap p {
-  margin: 14px 0 0;
-  font-size: 16px;
-  line-height: 1.58;
-  color: var(--ink-2);
-}
-.saga-close { margin-top: clamp(32px, 4vw, 56px); }
-
-/* Default shape, which is also what phones and a failed script get: nine
-   ordinary blocks, each with its own scene. Nothing pinned. */
-.saga-stage { display: none; }
-.saga-art-inline {
-  background: var(--paper-d);
-  margin-bottom: 20px;
-}
-.saga-art-inline img { width: 100%; height: auto; display: block; }
-.saga-beat { padding-block: clamp(24px, 4vw, 40px); }
-.saga-beat + .saga-beat { border-top: 1px solid var(--rule-2); }
-
-/* Desktop: the scene fills the viewport and the caption rides over it. */
-.saga.is-pinned .saga-stage {
-  display: block;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: hidden;
-  z-index: 1;
-  background: var(--paper);
-}
-.saga.is-pinned .saga-art { position: absolute; inset: 0; }
-.saga.is-pinned .saga-plate {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 42%;
-  opacity: 0;
-  transform: scale(.94);
-  transition: opacity .45s linear, transform 1s cubic-bezier(.2,.7,.3,1);
-  will-change: opacity, transform;
-}
-.saga.is-pinned .saga-plate.is-on { opacity: 1; transform: scale(1); }
-/* Scenes already behind you push past the camera rather than fading in place.
-   That, and the next scene arriving from slightly small, is what makes this
-   read as walking forward instead of paging through a slideshow. */
-.saga.is-pinned .saga-plate.is-past { opacity: 0; transform: scale(1.22); }
-
-@media (prefers-reduced-motion: reduce) {
-  .saga.is-pinned .saga-plate,
-  .saga.is-pinned .saga-plate.is-on,
-  .saga.is-pinned .saga-plate.is-past { transform: none; transition: opacity .3s linear; }
-}
-
-/* The negative margin sits on the beats and not on the stage: a sticky element
-   takes its travel from its own margin box, so a -100vh bottom margin on the
-   stage collapses that travel and it never sticks at all. */
-.saga.is-pinned .saga-beat[data-beat="0"] { margin-top: -100vh; }
-.saga.is-pinned .saga-art-inline { display: none; }
-.saga.is-pinned .saga-beat {
-  min-height: 50vh;
-  display: flex;
-  align-items: flex-end;
-  padding: 0;
-  border-top: 0;
-  position: relative;
-  z-index: 2;
-  pointer-events: none;
-}
-/* Short beats cannot carry a full height sticky wrapper, so the caption sticks
-   to the bottom of the viewport instead and lets the beat pass behind it. */
-.saga.is-pinned .saga-beat > .wrap {
-  position: sticky;
-  bottom: 9vh;
-}
-/* The illustrations are line drawings on white, so type cannot simply sit on
-   them. The caption gets its own ground. */
-.saga.is-pinned .saga-cap {
-  background: var(--ink);
-  color: var(--paper);
-  padding: clamp(22px, 2.6vw, 34px) clamp(24px, 2.8vw, 38px);
-  max-width: 44ch;
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity .5s var(--ease), transform .5s var(--ease);
-}
-.saga.is-pinned .saga-beat.is-on .saga-cap { opacity: 1; transform: none; }
-.saga.is-pinned .saga-year { color: var(--paper); }
-.saga.is-pinned .saga-place { color: var(--blue-lt); }
-.saga.is-pinned .saga-cap p { color: rgba(244,243,240,.76); }
-
 /* ------------------------------------------------------- history page */
 .tl { position: relative; display: grid; gap: 0; }
 .tl-item {
@@ -1769,36 +1650,168 @@ svg { fill: none; }
 }
 .welcome-art img { object-position: 50% 30%; }
 
-/* Where you are in the sequence. Not knowing was most of why nine scenes felt
-   like forever. */
-.saga-count { display: none; }
-.saga.is-pinned .saga-count {
-  display: block;
+/* ------------------------------------------------------------- turntable */
+/* Nine scenes on a carousel you turn by dragging, in place of nine screens of
+   scrolling. The whole history now costs one section instead of four thousand
+   pixels, and you can go straight to any scene.
+
+   CSS 3D transforms rather than WebGL. The faces sit on the sides of a nonagon,
+   so the radius is fixed by the face width and the angle between faces:
+   r = (width / 2) / tan(180deg / 9). That is where the 1.3737 comes from. */
+.rot { --faces: 9; --step: 40deg; }
+.rot-head { max-width: 74ch; margin-bottom: clamp(26px, 3.4vw, 44px); }
+.rot-head .h-lg { margin: 16px 0 18px; }
+
+.rot-stage {
+  --fw: min(76vw, 760px);
+  --r: calc(var(--fw) * 1.3737);
+  position: relative;
+  height: calc(var(--fw) / 1.8 + 40px);
+  perspective: 1600px;
+  perspective-origin: 50% 45%;
+  touch-action: pan-y;          /* vertical scroll still belongs to the page */
+  cursor: grab;
+  overflow: hidden;
+}
+.rot-stage.is-dragging { cursor: grabbing; }
+
+.rot-ring {
   position: absolute;
-  top: calc(76px + 4vh);
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(calc(var(--r) * -1)) rotateY(var(--rot, 0deg));
+  transition: transform .62s cubic-bezier(.22,.61,.36,1);
+}
+.rot-stage.is-dragging .rot-ring { transition: none; }
+
+.rot-face {
+  position: absolute;
+  top: 20px;
   left: 50%;
-  transform: translateX(-50%);
-  width: min(var(--wrap), calc(100vw - var(--gut) * 2));
-  margin: 0;
-  z-index: 3;
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: .16em;
-  color: var(--ink);
+  width: var(--fw);
+  margin: 0 0 0 calc(var(--fw) / -2);
+  transform: rotateY(calc(var(--i) * var(--step))) translateZ(var(--r));
+  transition: opacity .4s var(--ease);
+  opacity: .32;
+  backface-visibility: hidden;
+}
+.rot-face.is-on { opacity: 1; }
+.rot-face img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.rot-face.is-on img { border-color: var(--ink); }
+
+/* ---- what the scene says ---- */
+.rot-below {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 60px);
+  align-items: start;
+  margin-top: clamp(26px, 3.4vw, 44px);
+}
+.rot-caps { position: relative; min-height: 150px; }
+.rot-cap {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .35s var(--ease), transform .35s var(--ease);
   pointer-events: none;
 }
-/* The scenes are line drawings with black suits and dark hatching in them, so
-   the counter needs its own ground or it disappears into the picture. */
-.saga-count-in {
-  display: inline-block;
-  padding: 6px 11px;
-  background: var(--paper);
+.rot-cap.is-on { opacity: 1; transform: none; position: relative; pointer-events: auto; }
+.rot-when { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.rot-year {
+  font-family: var(--serif);
+  font-size: clamp(30px, 4vw, 50px);
+  line-height: 1;
+  letter-spacing: -.014em;
+}
+.rot-place {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--royal-t);
+}
+.rot-cap p {
+  margin: 14px 0 0;
+  font-size: 16px;
+  line-height: 1.58;
+  color: var(--ink-2);
+  max-width: 46ch;
+}
+
+/* ---- the controls ---- */
+.rot-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 14px;
+}
+.rot-arrow {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--rule);
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
+}
+.rot-arrow:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.rot-arrow svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+.rot-count {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .14em;
   color: var(--mute);
 }
-.saga-count b { font-weight: 500; font-size: 14px; letter-spacing: .1em; color: var(--ink); }
+.rot-count b { color: var(--ink); font-weight: 500; font-size: 15px; }
 
-/* Gives the pinned stage enough rail to stay stuck until the last scene has had
-   its turn. Without it the final beat sits below the point where the stage
-   unsticks and can never become current. */
-.saga-tail { display: none; }
-.saga.is-pinned .saga-tail { display: block; height: 100vh; }
+.rot-dots { display: flex; gap: 7px; flex-basis: 100%; order: 3; }
+.rot-dot {
+  width: 26px;
+  height: 3px;
+  padding: 0;
+  border: 0;
+  background: var(--rule);
+  cursor: pointer;
+  transition: background .25s var(--ease);
+}
+.rot-dot:hover { background: var(--mute); }
+.rot-dot.is-on { background: var(--ink); }
+
+.rot-hint {
+  margin: 0 0 0 auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.rot-more { margin-top: clamp(24px, 3vw, 38px); }
+
+@media (max-width: 860px) {
+  .rot-stage { --fw: 88vw; perspective: 900px; }
+  .rot-below { grid-template-columns: 1fr; }
+  .rot-caps { min-height: 190px; }
+  .rot-hint { margin-left: 0; flex-basis: 100%; }
+}
+
+/* Flat and instant, with the neighbours out of the way entirely. */
+@media (prefers-reduced-motion: reduce) {
+  .rot-ring { transition: none; }
+  .rot-face { transition: none; opacity: 0; }
+  .rot-face.is-on { opacity: 1; }
+  .rot-cap { transition: none; transform: none; }
+}

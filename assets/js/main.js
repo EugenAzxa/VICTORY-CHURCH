@@ -479,174 +479,119 @@ var VC = (function () {
 })();
 
 /* ---------------------------------------------------------------------------
-   The history, scene by scene
+   The history, on a turntable
 
-   Four milestones, four different pictures: a crop of the drawing for the five
-   people in a living room, the first worship centre, the red brick church the
-   Anglicans raised in 1856, and the whole congregation today.
+   Nine scenes on the faces of a nonagon that you turn by dragging, instead of
+   nine screens of scrolling. The whole history costs one section now, and any
+   scene is one drag or one click away.
 
-   This used to be one drawing with a mask animated on every scroll frame. It
-   repainted a full bleed image continuously to show a change most people never
-   noticed, and it was the reason scrolling felt heavy. Now the only work on
-   scroll is deciding which plate is lit, and the plates cross fade on opacity
-   alone, which the compositor handles without repainting anything.
-
-   Desktop holds the frame still and changes the era inside it. Phones get the
-   same four beats as ordinary blocks, because scroll pinning on a mid range
-   Android is how a site comes to feel broken, and this congregation is
-   overwhelmingly on phones.
+   CSS 3D transforms, not WebGL. That matters: a real 3D scene would mean
+   rebuilding flat illustrations as geometry, and shipping a WebGL runtime to a
+   congregation that is mostly on mid range Androids. This is a handful of
+   transforms the compositor already knows how to do.
    --------------------------------------------------------------------------- */
 (function () {
   "use strict";
 
-  var story = document.querySelector("[data-story]");
-  if (!story) return;
+  var stage = document.querySelector("[data-rot]");
+  if (!stage) return;
 
-  var rail = story.querySelector("[data-rail]"),
-      beats = [].slice.call(story.querySelectorAll("[data-beat]")),
-      plates = [].slice.call(story.querySelectorAll("[data-plate]")),
-      ticks = [].slice.call(story.querySelectorAll("[data-tick]"));
-  if (!rail || !beats.length) return;
+  var ring = stage.querySelector("[data-ring]"),
+      faces = [].slice.call(stage.querySelectorAll("[data-face]")),
+      caps = [].slice.call(document.querySelectorAll("[data-rcap]")),
+      dots = [].slice.call(document.querySelectorAll("[data-dot]")),
+      count = document.querySelector("[data-rcount] b"),
+      prev = document.querySelector("[data-prev]"),
+      next = document.querySelector("[data-next]");
+  if (!ring || !faces.length) return;
 
-  var pinned = false;
-  function sync() {
-    pinned = window.innerWidth >= 900 &&
-             !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    story.classList.toggle("is-pinned", pinned);
-  }
-  sync();
-  window.addEventListener("resize", sync);
+  var N = faces.length,
+      STEP = 360 / N,
+      idx = 0,
+      turns = 0;          // whole revolutions, so dragging never snaps backwards
 
-  var count = story.querySelector("[data-saga-count] b");
-
-  var active = -1;
-  function setActive(i) {
-    if (i === active || i < 0 || i >= beats.length) return;
-    active = i;
-    beats.forEach(function (b, n) { b.classList.toggle("is-on", n === i); });
-    // Scenes already passed scale up and away rather than simply fading, which
-    // is what reads as moving forward through them instead of flicking through
-    // a slideshow. Scenes still ahead wait a little small.
-    plates.forEach(function (p, n) {
-      p.classList.toggle("is-on", n === i);
-      p.classList.toggle("is-past", n < i);
+  function render() {
+    ring.style.setProperty("--rot", (-(idx + turns * N) * STEP) + "deg");
+    var live = ((idx % N) + N) % N;
+    faces.forEach(function (f, n) { f.classList.toggle("is-on", n === live); });
+    caps.forEach(function (c, n) {
+      var on = n === live;
+      c.classList.toggle("is-on", on);
+      if (on) c.removeAttribute("aria-hidden"); else c.setAttribute("aria-hidden", "true");
     });
-    ticks.forEach(function (t, n) {
-      t.classList.toggle("is-on", n === i);
-      t.classList.toggle("is-past", n < i);
-    });
-    if (count) count.textContent = String(i + 1).padStart(2, "0");
-  }
-  setActive(0);
-
-  // Which beat is on is read from where the beats actually are, rather than by
-  // dividing the rail into equal parts. The beats are not all the same height,
-  // and this also works when nothing is pinned, so it is the only rule needed.
-  function current() {
-    // Near the top of the viewport, not the middle. A scene becomes current as
-    // its beat arrives, which is also when its caption reaches the bottom of
-    // the screen, so the picture and the words change together.
-    var mid = window.innerHeight * 0.04;
-    var idx = 0;
-    for (var i = 0; i < beats.length; i++) {
-      var r = beats[i].getBoundingClientRect();
-      if (r.top > mid) break;
-      idx = i;
-    }
-    return idx;
+    dots.forEach(function (d, n) { d.classList.toggle("is-on", n === live); });
+    if (count) count.textContent = String(live + 1).padStart(2, "0");
   }
 
-  var queued = false;
-  function onScroll() {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(function () {
-      queued = false;
-      setActive(current());
-    });
+  function go(delta) {
+    idx += delta;
+    while (idx < 0) { idx += N; turns -= 1; }
+    while (idx >= N) { idx -= N; turns += 1; }
+    render();
   }
 
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
-  onScroll();
-})();
-
-/* ---------------------------------------------------------------------------
-   Leader panel
-
-   The church has never published contact details for its ministry leaders, and
-   the live site still reads "For more information contact: ???" where they
-   should be. Publishing thirteen people's personal addresses would not be the
-   fix even if we had them, so every message is addressed to the church office
-   with the leader's name already in the subject line. If the church would
-   rather route these somewhere else, change OFFICE below.
-   --------------------------------------------------------------------------- */
-(function () {
-  "use strict";
-
-  var OFFICE = "info@victorychurch.ca";
-
-  var dlg = document.getElementById("leader-dialog");
-  var opens = [].slice.call(document.querySelectorAll(".person-open"));
-  if (!dlg || !opens.length) return;
-
-  // No <dialog> support: leave the cards as plain, inert markup rather than
-  // wiring up a half broken modal.
-  if (typeof dlg.showModal !== "function") {
-    opens.forEach(function (b) {
-      b.setAttribute("aria-haspopup", "false");
-      var more = b.querySelector(".person-more");
-      if (more) more.remove();
-    });
-    return;
+  function jumpTo(n) {
+    var live = ((idx % N) + N) % N;
+    var d = n - live;
+    // take the short way round
+    if (d > N / 2) d -= N;
+    if (d < -N / 2) d += N;
+    go(d);
   }
 
-  var elImg  = dlg.querySelector("[data-pd-img]"),
-      elRole = dlg.querySelector("[data-pd-role]"),
-      elName = dlg.querySelector("[data-pd-name]"),
-      elJob  = dlg.querySelector("[data-pd-job]"),
-      elText = dlg.querySelector("[data-pd-text]"),
-      elMail = dlg.querySelector("[data-pd-mail]"),
-      elClose = dlg.querySelector("[data-pd-close]"),
-      last = null;
+  render();
 
-  function open(btn) {
-    var name = btn.getAttribute("data-name"),
-        role = btn.getAttribute("data-role"),
-        job  = btn.getAttribute("data-job"),
-        img  = btn.getAttribute("data-img");
-    var body = btn.parentNode.querySelector(".person-text");
+  if (prev) prev.addEventListener("click", function () { go(-1); });
+  if (next) next.addEventListener("click", function () { go(1); });
+  dots.forEach(function (d, n) { d.addEventListener("click", function () { jumpTo(n); }); });
 
-    elImg.src = img;
-    elImg.alt = name;
-    elRole.textContent = role;
-    elName.textContent = name;
-    elJob.textContent = job;
-    elText.innerHTML = body ? body.innerHTML : "";
-
-    elMail.href = "mailto:" + OFFICE
-      + "?subject=" + encodeURIComponent("For " + name + ", " + role)
-      + "&body=" + encodeURIComponent(
-          "This message is for " + name + " (" + role + ").\n\n");
-    elMail.setAttribute("aria-label", "Get in touch with " + name + " through the church office");
-
-    last = btn;
-    dlg.showModal();
-    elClose.focus();
-  }
-
-  opens.forEach(function (b) {
-    b.addEventListener("click", function () { open(b); });
+  stage.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); go(-1); }
   });
 
-  elClose.addEventListener("click", function () { dlg.close(); });
+  /* ---- drag ----------------------------------------------------------- */
+  var down = false, startX = 0, startRot = 0, moved = 0, id = null;
+  var PER_STEP = 120;   // pixels of drag that equal one scene
 
-  // clicking the backdrop closes it, clicking the panel does not
-  dlg.addEventListener("click", function (e) {
-    if (e.target === dlg) dlg.close();
+  stage.addEventListener("pointerdown", function (e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    down = true;
+    moved = 0;
+    startX = e.clientX;
+    startRot = -(idx + turns * N) * STEP;
+    id = e.pointerId;
+    stage.classList.add("is-dragging");
+    // Capture can throw if the pointer has already gone, and losing the ring
+    // to an exception mid drag is worse than losing the capture.
+    try { stage.setPointerCapture(id); } catch (err) {}
   });
 
-  dlg.addEventListener("close", function () {
-    if (last) { last.focus(); last = null; }
+  stage.addEventListener("pointermove", function (e) {
+    if (!down) return;
+    moved = e.clientX - startX;
+    ring.style.setProperty("--rot", (startRot + (moved / PER_STEP) * STEP) + "deg");
   });
+
+  function release() {
+    if (!down) return;
+    down = false;
+    stage.classList.remove("is-dragging");
+    try {
+      if (id !== null && stage.hasPointerCapture && stage.hasPointerCapture(id)) {
+        stage.releasePointerCapture(id);
+      }
+    } catch (err) {}
+    id = null;
+    go(-Math.round(moved / PER_STEP));
+  }
+
+  stage.addEventListener("pointerup", release);
+  stage.addEventListener("pointercancel", release);
+  stage.addEventListener("lostpointercapture", release);
+
+  // a drag should not also fire a click on whatever was underneath
+  stage.addEventListener("click", function (e) {
+    if (Math.abs(moved) > 6) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
 })();
