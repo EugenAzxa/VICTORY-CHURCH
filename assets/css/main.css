@@ -1650,3 +1650,109 @@ svg { fill: none; }
 
 /* the new section takes the first accent, and the rest shift along */
 #welcome { --accent: var(--royal); --accent-t: var(--royal-t); }
+
+/* --------------------------------------------------- who is in the drawing */
+/* The illustration is a picture of a congregation, not a portrait of the
+   thirteen leaders: only the central figure is a clear likeness, and the drawing
+   does not even carry the right split of men to women. So pointing at a figure
+   says what this church is made of rather than naming anybody. Every line is a
+   profession somebody here actually holds. No JavaScript, so there is nothing
+   in it to break.
+
+   Hotspots are positioned as a percentage of the image width, which only holds
+   while the illustration is shown whole. Below 700px it is cropped to keep the
+   faces legible, so they are switched off there, and hover is not a thing on a
+   phone anyway. */
+.hero-people { display: none; }
+
+@media (min-width: 701px) and (hover: hover) {
+  .hero-people {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+  }
+  .hero-spot {
+    position: absolute;
+    /* Faces start at 46% of the image height, torsos run to about 92%. */
+    top: 46%;
+    height: 46%;
+    left: var(--x);
+    width: 6.4%;
+    transform: translateX(-50%);
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: help;
+  }
+  .hero-spot::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--cyan-t);
+    opacity: 0;
+    transition: opacity .18s var(--ease);
+  }
+  .hero-spot:hover::before,
+  .hero-spot:focus-visible::before { opacity: .85; }
+  .hero-spot:focus { outline: none; }
+  .hero-spot:focus-visible { outline: none; }
+
+  .hero-tag {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 12px);
+    transform: translateX(-50%) translateY(6px);
+    display: block;
+    width: max-content;
+    max-width: 210px;
+    padding: 9px 13px;
+    background: var(--ink);
+    color: var(--paper);
+    text-align: left;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s var(--ease), transform .22s var(--ease);
+  }
+  .hero-tag b {
+    display: block;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -.01em;
+  }
+  .hero-tag i {
+    display: block;
+    margin-top: 3px;
+    font-family: var(--mono);
+    font-style: normal;
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--blue-lt);
+  }
+  .hero-spot:hover .hero-tag,
+  .hero-spot:focus-visible .hero-tag {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+.hero-note {
+  margin: clamp(18px, 2.4vw, 30px) 0 0;
+  max-width: 62ch;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--mute);
+}
+.hero-note-hint {
+  display: none;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--cyan-t);
+}
+@media (min-width: 701px) and (hover: hover) {
+  .hero-note-hint { display: inline; }
+}

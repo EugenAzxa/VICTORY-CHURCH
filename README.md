@@ -127,6 +127,34 @@ seven dates over fifteen seconds, which the page then went on to tell twice
 more. Now it runs about four seconds and hands straight over to a hero already
 holding that same picture, so there is no seam and nothing to re-read.
 
+### Pointing at the drawing
+
+Hovering a figure in the hero illustration brings up a line about what this
+church is made of: a registered nurse, a community pharmacist, a college
+professor. Every line is a profession somebody here actually holds.
+
+**It deliberately names nobody.** The illustration is a picture of a
+congregation, not a portrait of the thirteen leaders. Only the central figure is
+a clear likeness of Pastor Felix, and the woman in the headwrap plausibly matches
+Foluke Ogunro. After that it does not hold up: Okyere Baffour has a distinctive
+white beard and no figure in the drawing has one, and the drawing runs roughly
+seven men to six women where the roster is six to seven. Putting names on those
+faces would mean inventing who is who, about real people, on their own church
+site. If the drawing is ever redone from an actual leadership photograph, naming
+them becomes straightforward and this is the place to do it.
+
+The hotspots are positioned as a percentage of the image width and height, which
+only holds while the illustration is shown whole. Below 700px it is cropped so
+the faces stay legible, so they are switched off there, along with any device
+that has no hover. Faces sit at 46% of the image height and torsos run to about
+92%; if the illustration is replaced those numbers move.
+
+It is pure CSS with no script, and the whole block is  with the
+buttons out of the tab order. That is deliberate: the same professions are
+written out in full in the leadership section and summarised in the note under
+the drawing, so hiding it costs a screen reader nothing and saves a keyboard
+user thirteen dead tab stops in front of the page.
+
 ### The leadership section
 
 The only place on the site that uses photographs rather than ink plates, and the
