@@ -24,6 +24,25 @@ Then open the address it prints. No build step. Plain HTML, CSS and JavaScript.
 
 ## The design
 
+Headings are set in Newsreader, a serif. The research brief asked for one to
+carry the 1856 building and the weight of the subject, and the church sets its
+own headings in a serif too. It went missing when this was first drawn from a
+tech reference and it is back, on display sizes only: labels, buttons and small
+headings stay in Instrument Sans so the interface still reads crisply. IBM Plex
+Mono carries the labels, numerals and section markers.
+
+The homepage opens on a word from Pastor Felix over a blue duotone, which is
+what their own site leads with and the warmest thing on it. The duotone is done
+in the browser rather than baked into a file, so the source photograph stays
+untouched: the shadows take the royal underneath and the highlights take the
+cyan on top. If you swap the portrait, expect to retune the brightness on
+.duo img, because the effect depends entirely on where the source photograph
+sits tonally.
+
+**The welcome copy is the church's own, transcribed from their site**, with two
+changes: a typo fixed ("getting though life") and an en dash replaced with a
+comma to match the house rule on dashes. Worth confirming with them.
+
 Warm editorial layout on a cool near white ground, set in Instrument Sans with
 IBM Plex Mono for labels, numerals, years and section markers. The mono is what
 makes the page read as a drawing office rather than a brochure. Sections are
