@@ -61,6 +61,34 @@ into the paper: the congregation illustration and the crop of five people taken
 from it. Put a photograph through multiply and it simply goes dark, so the
 `.is-drawing` class marks the two that should.
 
+### Scripture, and the arch
+
+There was not a single verse anywhere on this site, which is most of why it read
+as a nonprofit rather than a church. Matthew 22:37-39 now sits between the
+welcome and the Sunday section, in the King James Version. It is not an
+arbitrary choice: it is where "Love God. Love People." comes from, so the hero
+headline and the church's own motto both land on it. **Check the wording and the
+translation with the church before launch.** They may prefer a different version,
+and it is their book.
+
+The other move is the pointed arch. Their 1856 building has pointed arch windows
+and a rose window over the door, so the welcome portrait is cut to that shape and
+a small arch sits above the verse. This is the one ecclesiastical gesture on the
+site that is specific to this church rather than to churches in general, which is
+the difference between it working and it being clip art.
+
+Two notes if you touch the arch. It is an SVG mask rather than `border-radius`,
+because a pointed arch is two circular arcs meeting at an angle and
+`border-radius` cannot make a corner. And the geometry matters: a radius near the
+chord's half length just draws a dome, which is what my first attempt did. The
+arcs have to be struck from centres on the opposite springing side so each one
+arrives at the apex steeply. The ornament above the verse is the equilateral
+form, where the radius equals the span.
+
+The ground moved a couple of points warm at the same time, from a cool near white
+to something that still reads as white but no longer reads as clinical. That is
+the `--paper` token and one line puts it back.
+
 ### Colour
 
 The palette is the church's own, read off the banner on victorychurch.ca: cyan,
@@ -306,3 +334,5 @@ church's legal or privacy questions before the first send.
 8. **Where should leader enquiries land?** They currently go to info@victorychurch.ca
    with the leader's name in the subject. If the office would rather they went
    somewhere else, change OFFICE in assets/js/main.js.
+9. **The scripture.** Matthew 22:37-39 is quoted in the King James Version. Confirm
+   the church is happy with that passage and that translation. It is their book.
