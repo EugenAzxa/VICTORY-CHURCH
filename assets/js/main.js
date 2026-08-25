@@ -595,3 +595,19 @@ var VC = (function () {
     if (Math.abs(moved) > 6) { e.preventDefault(); e.stopPropagation(); }
   }, true);
 })();
+
+/* ---------------------------------------------------------------------------
+   TV ministry reveal
+   Pastor first, then the programme title, then the screen. Staged with CSS
+   delays; all this does is decide when to start.
+   --------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+  var tv = document.querySelector("[data-tv]");
+  if (!tv) return;
+  if (!("IntersectionObserver" in window)) { tv.classList.add("is-live"); return; }
+  var io = new IntersectionObserver(function (entries) {
+    if (entries[0].isIntersecting) { tv.classList.add("is-live"); io.disconnect(); }
+  }, { threshold: 0.18 });
+  io.observe(tv);
+})();

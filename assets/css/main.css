@@ -1817,68 +1817,71 @@ svg { fill: none; }
 }
 
 /* ------------------------------------------------------------ tv ministry */
-/* Ink, because it is television. It is also the only dark section above the
-   giving band, which gives the lower half of the page some rhythm. The title
-   card is the church's own broadcast graphic, so its purple is left alone
-   rather than dragged into the site palette. */
-.tv {
-  background: var(--ink);
-  color: var(--paper);
-  padding-block: clamp(64px, 8vw, 108px);
-  border-top: 0;
-}
-.tv::before { display: none; }   /* the section rule would be invisible on ink */
+/* Their own page stands the pastor on white beside the programme title, and
+   that is the character of it. There is no way to cut him out here: luma keying
+   a photograph takes his forehead and skin highlights with the background, and
+   there is no segmentation model on this machine. So the section is light, like
+   their page, and the photograph is feathered into it. His background is
+   near white and the ground is near white, so the edge simply is not there.
+   Replace the portrait and the feather will need retuning to suit it. */
+.tv { padding-block: clamp(60px, 7.5vw, 100px); }
 
-.tv-grid {
+.tv-top {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  gap: clamp(32px, 5vw, 72px);
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: clamp(20px, 3vw, 48px);
   align-items: center;
+  margin-bottom: clamp(34px, 4.5vw, 64px);
 }
-@media (max-width: 860px) { .tv-grid { grid-template-columns: 1fr; } }
+.tv-pastor {
+  margin: 0;
+  -webkit-mask-image: radial-gradient(ellipse 64% 74% at 52% 46%, #000 52%, transparent 86%);
+  mask-image: radial-gradient(ellipse 64% 74% at 52% 46%, #000 52%, transparent 86%);
+}
+.tv-pastor img { width: 100%; height: auto; display: block; }
 
-.tv .eyebrow { color: rgba(244,243,240,.5); }
-.tv .eyebrow .num { color: var(--blue-lt); border-bottom-color: var(--blue-lt); }
-.tv .h-lg { color: var(--paper); margin: 16px 0 20px; }
-.tv .lede { color: rgba(244,243,240,.82); }
-.tv-p {
-  margin: 16px 0 0;
-  font-size: 15.5px;
-  line-height: 1.62;
-  color: rgba(244,243,240,.6);
-  max-width: 54ch;
+.tv-title .h-lg { margin: 14px 0 10px; }
+.tv-with {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(19px, 2.1vw, 26px);
+  color: var(--royal-t);
+  letter-spacing: -.01em;
 }
-.tv-credit {
-  margin: 26px 0 0;
+.tv-net {
+  margin: 10px 0 0;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: var(--blue-lt);
+  color: var(--mute);
 }
-.tv .hero-btns { margin-top: 28px; }
-.tv .btn-ghost { border-color: rgba(244,243,240,.32); color: var(--paper); }
-.tv .btn-ghost:hover { border-color: var(--paper); background: var(--paper); color: var(--ink); }
-.tv-note {
-  display: flex;
-  gap: 10px;
-  margin: 28px 0 0;
-  padding-top: 22px;
-  border-top: 1px solid rgba(244,243,240,.14);
-  font-size: 13px;
-  line-height: 1.55;
-  color: rgba(244,243,240,.45);
-  max-width: 52ch;
-}
-.tv-note svg { width: 15px; height: 15px; flex: none; margin-top: 2px; stroke: var(--blue-lt); }
+.tv-net b { color: var(--ink); font-weight: 500; }
 
-/* the screen */
+.tv-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  gap: clamp(30px, 4.5vw, 68px);
+  align-items: start;
+  border-top: 1px solid var(--rule-2);
+  padding-top: clamp(28px, 3.6vw, 48px);
+}
+.tv-copy .h-md { margin-bottom: 18px; }
+.tv-copy p {
+  font-size: 15.5px;
+  line-height: 1.66;
+  color: var(--ink-2);
+  max-width: 58ch;
+  margin-bottom: 14px;
+}
+
+/* The one dark object in the section, so it still reads as a screen. */
 .tv-screen {
   position: relative;
   display: block;
   overflow: hidden;
-  background: #000;
-  border: 1px solid rgba(244,243,240,.18);
+  background: var(--ink);
+  border: 1px solid var(--ink);
   text-decoration: none;
 }
 .tv-screen img {
@@ -1887,31 +1890,33 @@ svg { fill: none; }
   display: block;
   transition: transform .6s var(--ease), opacity .3s var(--ease);
 }
-.tv-screen:hover img { transform: scale(1.02); opacity: .88; }
+.tv-screen:hover img { transform: scale(1.03); opacity: .9; }
 
 .tv-play {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: clamp(56px, 6vw, 74px);
+  width: clamp(54px, 5.5vw, 70px);
   aspect-ratio: 1;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255,255,255,.7);
+  border: 1px solid rgba(255,255,255,.75);
   border-radius: 50%;
-  background: rgba(18,21,26,.35);
-  backdrop-filter: blur(2px);
-  transition: background .25s var(--ease), border-color .25s var(--ease);
+  background: rgba(18,21,26,.32);
+  transition: background .25s var(--ease), border-color .25s var(--ease), transform .3s var(--ease);
 }
-.tv-screen:hover .tv-play { background: var(--paper); border-color: var(--paper); }
+.tv-screen:hover .tv-play { background: var(--paper); border-color: var(--paper); transform: translate(-50%,-50%) scale(1.06); }
 .tv-play svg { width: 40%; height: 40%; fill: #fff; stroke: none; margin-left: 8%; }
 .tv-screen:hover .tv-play svg { fill: var(--ink); }
 
-.tv-chip {
+.tv-air {
   position: absolute;
-  left: 14px;
-  bottom: 14px;
+  left: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 7px 11px;
   background: var(--ink);
   color: var(--paper);
@@ -1920,11 +1925,46 @@ svg { fill: none; }
   letter-spacing: .12em;
   text-transform: uppercase;
 }
-
-/* An ink button on an ink ground is not a button. Inverted here. */
-.tv .btn-primary {
-  background: var(--paper);
-  border-color: var(--paper);
-  color: var(--ink);
+.tv-air i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--crimson);
+  animation: pulse 2.4s infinite;
 }
-.tv .btn-primary:hover { background: var(--blue-lt); border-color: var(--blue-lt); color: var(--ink); }
+
+.tv-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+
+@media (max-width: 900px) {
+  .tv-top { grid-template-columns: 1fr; gap: 8px; text-align: left; }
+  .tv-pastor { max-width: 320px; }
+  .tv-body { grid-template-columns: 1fr; }
+}
+
+/* ---- the reveal ---------------------------------------------------------
+   He rises into the frame first, then the programme title, then the screen.
+   Staged rather than everything at once, so it reads as him arriving and then
+   showing you what to watch. */
+.tv-pastor,
+.tv-title,
+.tv-watch { --d: 0ms; }
+.tv-title { --d: 140ms; }
+.tv-watch { --d: 280ms; }
+
+.tv[data-tv] .tv-pastor,
+.tv[data-tv] .tv-title,
+.tv[data-tv] .tv-watch {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .7s var(--ease) var(--d), transform .8s var(--ease) var(--d);
+}
+.tv.is-live .tv-pastor,
+.tv.is-live .tv-title,
+.tv.is-live .tv-watch { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tv[data-tv] .tv-pastor,
+  .tv[data-tv] .tv-title,
+  .tv[data-tv] .tv-watch { opacity: 1; transform: none; transition: none; }
+  .tv-air i { animation: none; }
+}

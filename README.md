@@ -205,27 +205,28 @@ user thirteen dead tab stops in front of the page.
 
 ### TV Ministry
 
-Victory Life has its own section now, built from the copy on their tv-ministry
-page. It is the one dark section above the giving band, which is fitting for
-television and gives the lower half of the page some rhythm.
+Built to match their own tv-ministry page: the pastor standing beside the
+programme title, then the Television Ministry copy in full, then the screen.
+Pastor, title and screen fade up in that order when the section comes into view,
+so it reads as him arriving and then showing you what to watch.
 
-The title card is the church's own broadcast graphic, cropped to remove the
-YouTube player chrome that was baked into the still. Its purple is left alone
-rather than dragged into the site palette, because it is their broadcast
-identity and not a site colour.
+**The portrait is not a cut-out, it is feathered.** Their page stands him on
+white. There is no way to cut him out here: luma keying a photograph takes his
+forehead and skin highlights along with the background, and there is no
+segmentation model on this machine. So the section is light like their page and
+the photograph is masked with a soft radial edge. His background is near white
+and the ground is near white, so there is no edge to see. Replace the portrait
+and that feather will need retuning to suit it. If the church can supply a
+properly cut out PNG, drop it in and remove the mask.
 
-Victory Life used to be the fourth tab under "what happens here". That tab is
-gone, and not only to avoid saying the same thing twice: it was the one answer
-in that set that does not happen here. Sunday, ministries and outreach all
-happen at or through the building. Television is broadcast.
+**The copy is the church's own, in full**, including the two paragraphs and the
+closing call to action that the first pass missed. Changes, all worth confirming
+with them: a doubled "the the", four en dashes turned into commas and a colon,
+"It's" to "It has", "a hurting world who needs" to "who need", and two
+exclamation marks dropped because nothing else on the site carries one and
+mixing would read as a mistake rather than as their voice.
 
-**The copy is the church's own**, with three changes: a doubled "the the", two
-en dashes turned into a colon and a comma to match the house rule on dashes, and
-"a hurting world who needs" to "who need". Worth confirming with them.
-
-**No broadcast time is shown**, because their page does not give one. If Victory
-Life airs on a particular day and hour on yesTV, that is the single most useful
-thing this section could add.
+**Still no broadcast time**, because their page does not give one.
 
 ### The leadership section
 
