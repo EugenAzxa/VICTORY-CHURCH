@@ -3,6 +3,22 @@
 The site is static. No build step, no server, no environment variables. Whatever
 is on `main` is the site.
 
+## Where it is now
+
+**https://victory-church-kappa.vercel.app**
+
+Live, public, and safe to send round. Deployed from the CLI as the project
+`victory-church` under `eugenazxas-projects`.
+
+Two Vercel URLs for this project are traps:
+
+- The per-deployment URL, the long one ending `-eugenazxas-projects.vercel.app`,
+  sits behind Vercel Authentication and serves a **Vercel login page** to anyone
+  who is not signed in to the account. It looks like a working link and is not.
+  Always share the short alias above.
+- `victory-church.vercel.app`, without the suffix, belongs to a different
+  project owned by somebody else. Do not assume it.
+
 ## Vercel
 
 Same arrangement as the Heritage project.
