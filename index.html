@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Parisienne&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css?v=41">
+<link rel="stylesheet" href="assets/css/main.css?v=42">
 </head>
 <body>
 
@@ -38,6 +38,8 @@
 <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
 <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 8h20v4H2zM12 21V8M12 8H7.5a2.5 2.5 0 1 1 0-5C11 3 12 8 12 8ZM12 8h4.5a2.5 2.5 0 1 0 0-5C13 3 12 8 12 8Z"/></symbol>
 <symbol id="i-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4.2"/><path d="M17.8 6.4h.01"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.5 20v-6h5v6"/></symbol>
+<symbol id="i-pray" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v7"/><path d="M8.5 6.5h7"/><path d="M6 21c0-4 2.7-7 6-7s6 3 6 7"/></symbol>
 </defs></svg>
 
 <!-- ============ intro ============ -->
@@ -899,6 +901,151 @@
 
 <div class="dots" aria-hidden="true"></div>
 
+<!-- ============ the app concept ============ -->
+<section class="app sec-rule" id="app">
+  <div class="wrap app-grid">
+    <div class="app-body rv">
+      <span class="eyebrow"><i class="num">10</i> An idea</span>
+      <h2 class="h-lg">The church in your pocket</h2>
+      <p class="lede">A concept for a Victory Church app. This is not built yet and it is not in any
+        store. It is a working prototype, running right here on this page, so the church can see
+        what it would actually feel like before anyone commits to building it.</p>
+
+      <ul class="app-feats">
+        <li><svg><use href="#i-clock"/></svg><div><b>Sunday, at a glance</b>
+          Service time, the address, and how far away it is, on the first screen.</div></li>
+        <li><svg><use href="#i-play"/></svg><div><b>Every Victory Life episode</b>
+          The TV ministry in the pocket of anyone who cannot get to Weston Road.</div></li>
+        <li><svg><use href="#i-heart"/></svg><div><b>Giving in three taps</b>
+          Tithes, StepUp, or the work in Nigeria and the Philippines.</div></li>
+        <li><svg><use href="#i-pray"/></svg><div><b>Prayer requests</b>
+          Sent straight to the prayer team, privately, without needing to phone the office.</div></li>
+        <li><svg><use href="#i-users"/></svg><div><b>Who to ask</b>
+          The thirteen leaders and what each of them looks after.</div></li>
+      </ul>
+
+      <p class="app-note"><svg><use href="#i-info"/></svg><span>Try it. The tabs work, the screens
+        are real, and nothing in it sends anywhere.</span></p>
+    </div>
+
+    <div class="app-stage rv">
+      <div class="phone" data-app>
+        <div class="phone-body">
+          <div class="phone-bar">
+            <span>10:28</span>
+            <span class="phone-bar-r"><i></i><i></i><i></i></span>
+          </div>
+
+          <div class="phone-head">
+            <img src="assets/img/logo.png" alt="" width="740" height="183">
+            <span class="phone-badge">Concept</span>
+          </div>
+
+          <div class="phone-screens" data-screens>
+
+            <section class="ap is-on" data-ap="home" aria-label="Home">
+              <div class="ap-hero">
+                <span class="ap-kicker">Next service</span>
+                <h3>Sunday, 10:30 a.m.</h3>
+                <p>Unit 8, 2400 Finch Ave West</p>
+                <button class="ap-btn" type="button" data-go="church">Get directions</button>
+              </div>
+              <div class="ap-verse">
+                <span class="ap-kicker">Today</span>
+                <p>Thou shalt love the Lord thy God with all thy heart.</p>
+                <cite>Matthew 22:37</cite>
+              </div>
+              <div class="ap-quick">
+                <button class="ap-tile" type="button" data-go="watch"><svg><use href="#i-play"/></svg>Watch</button>
+                <button class="ap-tile" type="button" data-go="give"><svg><use href="#i-heart"/></svg>Give</button>
+                <button class="ap-tile" type="button" data-go="pray"><svg><use href="#i-pray"/></svg>Pray</button>
+              </div>
+            </section>
+
+            <section class="ap" data-ap="watch" aria-label="Watch" hidden>
+              <div class="ap-live"><i></i> Victory Life on yesTV</div>
+              <h4 class="ap-h">Recent episodes</h4>
+              <ol class="ap-list">
+              <li><button class="ap-row" type="button" data-open="https://www.youtube.com/watch?v=fhxWRksA2bM">
+                <span class="ap-row-n">01</span>
+                <span class="ap-row-t">Faithfulness for Breakthrough</span>
+                <svg class="ap-row-go"><use href="#i-play"/></svg>
+              </button></li>
+              <li><button class="ap-row" type="button" data-open="https://www.youtube.com/watch?v=su1Dgju1lkM">
+                <span class="ap-row-n">02</span>
+                <span class="ap-row-t">Beware Of Materialism</span>
+                <svg class="ap-row-go"><use href="#i-play"/></svg>
+              </button></li>
+              <li><button class="ap-row" type="button" data-open="https://www.youtube.com/watch?v=mcTOf5DzLxE">
+                <span class="ap-row-n">03</span>
+                <span class="ap-row-t">Entry Point Into Signs &amp; Wonders Part 1</span>
+                <svg class="ap-row-go"><use href="#i-play"/></svg>
+              </button></li>
+              <li><button class="ap-row" type="button" data-open="https://www.youtube.com/watch?v=ufWCG5a6W-4">
+                <span class="ap-row-n">04</span>
+                <span class="ap-row-t">Possessing your possession Supernaturally</span>
+                <svg class="ap-row-go"><use href="#i-play"/></svg>
+              </button></li>
+              </ol>
+            </section>
+
+            <section class="ap" data-ap="give" aria-label="Give" hidden>
+              <h4 class="ap-h">Give</h4>
+              <div class="ap-amts" data-amts>
+                <button class="ap-amt is-on" type="button" data-amt="20">$20</button>
+                <button class="ap-amt" type="button" data-amt="50">$50</button>
+                <button class="ap-amt" type="button" data-amt="100">$100</button>
+                <button class="ap-amt" type="button" data-amt="other">Other</button>
+              </div>
+              <h4 class="ap-h">Where it goes</h4>
+              <div class="ap-funds" data-funds>
+                <button class="ap-fund is-on" type="button">Tithes and offerings</button>
+                <button class="ap-fund" type="button">StepUp Community Support</button>
+                <button class="ap-fund" type="button">Nigeria and the Philippines</button>
+              </div>
+              <button class="ap-btn ap-btn-wide" type="button" data-demo>Give <b data-amt-out>$20</b></button>
+              <p class="ap-fine">Preview only. Real giving goes through the church's own page.</p>
+            </section>
+
+            <section class="ap" data-ap="pray" aria-label="Prayer request" hidden>
+              <h4 class="ap-h">Prayer request</h4>
+              <label class="ap-label" for="ap-pray">What can we pray for?</label>
+              <textarea class="ap-text" id="ap-pray" rows="4" placeholder="You can keep it short."></textarea>
+              <div class="ap-check">
+                <input type="checkbox" id="ap-anon"><label for="ap-anon">Keep this private to the prayer team</label>
+              </div>
+              <button class="ap-btn ap-btn-wide" type="button" data-demo>Send to the prayer team</button>
+              <p class="ap-fine">Preview only. Nothing typed here is sent or stored.</p>
+            </section>
+
+            <section class="ap" data-ap="church" aria-label="The church" hidden>
+              <h4 class="ap-h">Victory Church International</h4>
+              <ul class="ap-info">
+                <li><svg><use href="#i-clock"/></svg><div><b>Sundays</b>10:30 a.m. to 12:30 p.m.</div></li>
+                <li><svg><use href="#i-pin"/></svg><div><b>Address</b>Unit 8, 2400 Finch Ave West<br>North York, ON M9M 2C8</div></li>
+                <li><svg><use href="#i-phone"/></svg><div><b>Phone</b>647-679-3184</div></li>
+                <li><svg><use href="#i-mail"/></svg><div><b>Email</b>info@victorychurch.ca</div></li>
+              </ul>
+              <p class="ap-fine">Parking in the complex is difficult. Use the plaza by the Shell station.</p>
+            </section>
+
+          </div>
+
+          <nav class="phone-tabs" data-tabs-app aria-label="App sections">
+            <button class="ph-tab is-on" type="button" data-go="home"><svg><use href="#i-home"/></svg>Home</button>
+            <button class="ph-tab" type="button" data-go="watch"><svg><use href="#i-play"/></svg>Watch</button>
+            <button class="ph-tab" type="button" data-go="give"><svg><use href="#i-heart"/></svg>Give</button>
+            <button class="ph-tab" type="button" data-go="pray"><svg><use href="#i-pray"/></svg>Pray</button>
+            <button class="ph-tab" type="button" data-go="church"><svg><use href="#i-pin"/></svg>Church</button>
+          </nav>
+
+          <div class="phone-toast" data-toast role="status" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ cta band ============ -->
 <section class="band rv">
   <div class="wrap">
@@ -985,6 +1132,6 @@
   </div>
 </dialog>
 
-<script src="assets/js/main.js?v=41"></script>
+<script src="assets/js/main.js?v=42"></script>
 </body>
 </html>

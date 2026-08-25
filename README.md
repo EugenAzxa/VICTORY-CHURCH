@@ -316,6 +316,34 @@ To change the line-up, edit the four `data-id` and `data-title` attributes in
 
 **Still no broadcast time**, because their page does not give one.
 
+### The app concept
+
+Section 10 is a working prototype of an app the church does not have, running
+inside the page. Five screens, five tabs, all of it real markup and real
+behaviour: the tabs switch, the quick tiles jump between screens, the giving
+amounts and funds select and the button updates, the episode list opens the real
+videos on YouTube.
+
+**It is labelled Concept in the frame and the copy says plainly that it is not
+built and not in any store.** Leave that in. A church site implying an app you
+can download is a straight lie to whoever then goes looking for it, and the
+people most likely to go looking are the ones least able to shrug it off.
+
+**Nothing in it sends anywhere, and it says so on screen.** The giving button
+and the prayer box both raise a toast reading "This is a preview. Nothing was
+sent", and both screens carry a line of fine print. That matters most on the
+prayer screen: a request box that looked real and quietly swallowed what
+somebody typed would be the worst thing on this site. If any of it is ever
+wired up for real, take those lines out in the same commit.
+
+The content is all drawn from the site: real service time, real address, the
+four real Victory Life episodes, and giving funds that exist (tithes, StepUp,
+and the work in Nigeria and the Philippines). No invented ministries, no
+invented amounts of money raised, no fake member count.
+
+If the church decides not to build an app, delete the whole `#app` section and
+renumber. Nothing else depends on it.
+
 ### The leadership section
 
 The only place on the site that uses photographs rather than ink plates, and the
@@ -474,3 +502,6 @@ church's legal or privacy questions before the first send.
 11. **Are these still the four episodes they want featured?** They are the four
     embedded on their own TV Ministry page today. Someone should own that list,
     because it will go stale.
+12. **Is the app a real plan or only a pitch?** Section 10 is a prototype of an app
+    that does not exist. If it is never going to be built, that section should come
+    off the public site rather than sit there promising something.

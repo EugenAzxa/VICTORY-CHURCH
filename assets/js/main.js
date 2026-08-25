@@ -776,3 +776,71 @@ var VC = (function () {
     });
   });
 })();
+
+/* ---------------------------------------------------------------------------
+   The app concept
+
+   A prototype of an app that does not exist, running inside the page. The tabs
+   work and the screens are real markup, but nothing here sends anywhere: the
+   giving button and the prayer box both say so on screen and both only raise a
+   toast. A prayer request box that looked real and quietly swallowed what
+   somebody typed would be the worst thing on this site.
+   --------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+
+  var root = document.querySelector("[data-app]");
+  if (!root) return;
+
+  var screens = [].slice.call(root.querySelectorAll("[data-ap]")),
+      tabs = [].slice.call(root.querySelectorAll(".ph-tab")),
+      pane = root.querySelector("[data-screens]"),
+      toast = root.querySelector("[data-toast]"),
+      toastTimer = null;
+
+  function show(name) {
+    screens.forEach(function (s) { s.hidden = s.getAttribute("data-ap") !== name; });
+    tabs.forEach(function (t) { t.classList.toggle("is-on", t.getAttribute("data-go") === name); });
+    if (pane) pane.scrollTop = 0;
+  }
+
+  function say(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("is-on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove("is-on"); }, 2600);
+  }
+
+  // every control that names a screen moves to it, tabs and in-screen alike
+  root.addEventListener("click", function (e) {
+    var go = e.target.closest("[data-go]");
+    if (go) { show(go.getAttribute("data-go")); return; }
+
+    var open = e.target.closest("[data-open]");
+    if (open) { window.open(open.getAttribute("data-open"), "_blank", "noopener"); return; }
+
+    var demo = e.target.closest("[data-demo]");
+    if (demo) { say("This is a preview. Nothing was sent."); return; }
+
+    var amt = e.target.closest("[data-amt]");
+    if (amt) {
+      [].slice.call(root.querySelectorAll("[data-amt]")).forEach(function (b) {
+        b.classList.toggle("is-on", b === amt);
+      });
+      var out = root.querySelector("[data-amt-out]");
+      var v = amt.getAttribute("data-amt");
+      if (out) out.textContent = v === "other" ? "" : "$" + v;
+      return;
+    }
+
+    var fund = e.target.closest(".ap-fund");
+    if (fund) {
+      [].slice.call(root.querySelectorAll(".ap-fund")).forEach(function (b) {
+        b.classList.toggle("is-on", b === fund);
+      });
+    }
+  });
+
+  show("home");
+})();
