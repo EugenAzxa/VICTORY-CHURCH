@@ -611,3 +611,54 @@ var VC = (function () {
   }, { threshold: 0.18 });
   io.observe(tv);
 })();
+
+/* ---------------------------------------------------------------------------
+   Victory Life episodes
+
+   Four sermons, played in place. The embed is only built when somebody presses
+   play, so a visitor who never touches it makes no request to YouTube and picks
+   up none of its cookies. That is the reason for the facade rather than four
+   iframes on the page, and it is also why the site is quicker than their own.
+   youtube-nocookie is the privacy preserving host.
+   --------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+
+  var screen = document.querySelector("[data-screen]");
+  var eps = [].slice.call(document.querySelectorAll("[data-ep]"));
+  if (!screen || !eps.length) return;
+
+  var now = screen.querySelector("[data-now]"),
+      play = screen.querySelector("[data-play]"),
+      current = eps[0];
+
+  function select(btn) {
+    current = btn;
+    eps.forEach(function (b) { b.classList.toggle("is-on", b === btn); });
+    var title = btn.getAttribute("data-title");
+    if (now) now.textContent = title;
+    if (play) play.setAttribute("aria-label", "Play " + title);
+  }
+
+  function start(btn) {
+    select(btn);
+    var id = btn.getAttribute("data-id");
+    var title = btn.getAttribute("data-title");
+    var frame = document.createElement("iframe");
+    frame.src = "https://www.youtube-nocookie.com/embed/" + id +
+                "?autoplay=1&rel=0&modestbranding=1";
+    frame.title = title;
+    frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    frame.referrerPolicy = "strict-origin-when-cross-origin";
+    frame.allowFullscreen = true;
+    screen.innerHTML = "";
+    screen.appendChild(frame);
+  }
+
+  eps.forEach(function (b) {
+    b.addEventListener("click", function () { start(b); });
+  });
+  if (play) play.addEventListener("click", function () { start(current); });
+
+  select(eps[0]);
+})();

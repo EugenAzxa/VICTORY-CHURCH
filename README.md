@@ -226,6 +226,31 @@ with them: a doubled "the the", four en dashes turned into commas and a colon,
 exclamation marks dropped because nothing else on the site carries one and
 mixing would read as a mistake rather than as their voice.
 
+### The four episodes
+
+The same four sermons their own page embeds, with the titles verbatim so they
+match the videos as published. Pick one from the list and it plays in the screen
+above.
+
+**The embed is only built when somebody presses play.** A visitor who never
+touches it makes no request to YouTube at all and picks up none of its cookies,
+which is worth having on a site that carries a privacy notice. Their own page
+loads four YouTube players whether you watch anything or not. The line under the
+list says so, and it is true: I checked the resource log, and the only
+third-party requests before play are Google Fonts and the map embed. If you ever
+put a real iframe on this page, take that line down.
+
+Playback uses `youtube-nocookie.com`, which is the privacy-preserving host.
+
+**There are no thumbnails, on purpose.** All four videos open on the same channel
+bumper, so YouTube returns an identical image for every one of them. Four
+identical pictures pretending to be four different sermons is worse than none,
+so the titles carry the list and the Victory Life card holds the screen until you
+choose.
+
+To change the line-up, edit the four `data-id` and `data-title` attributes in
+`index.html`. Nothing else needs touching.
+
 **Still no broadcast time**, because their page does not give one.
 
 ### The leadership section
@@ -383,5 +408,6 @@ church's legal or privacy questions before the first send.
    the church is happy with that passage and that translation. It is their book.
 10. **When does Victory Life air?** Their own TV Ministry page names yesTV but gives
     no day or time. A schedule would make that section far more useful.
-11. **Is there an episode archive worth linking?** The section currently points at
-    the YouTube channel as a whole.
+11. **Are these still the four episodes they want featured?** They are the four
+    embedded on their own TV Ministry page today. Someone should own that list,
+    because it will go stale.

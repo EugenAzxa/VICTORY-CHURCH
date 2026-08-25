@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Parisienne&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css?v=37">
+<link rel="stylesheet" href="assets/css/main.css?v=38">
 </head>
 <body>
 
@@ -729,17 +729,54 @@
       </div>
 
       <div class="tv-watch">
-        <a class="tv-screen" href="https://www.youtube.com/channel/UCb4YFQl6l15EN2SBdt_mBlg" target="_blank" rel="noopener"
-           aria-label="Watch Victory Life on YouTube">
-          <img src="assets/img/victory-life-card.webp"
+        <div class="tv-screen" data-screen>
+          <img class="tv-poster" src="assets/img/victory-life-card.webp"
                srcset="assets/img/victory-life-card-800.webp 800w, assets/img/victory-life-card.webp 1400w"
-               sizes="(max-width: 900px) 92vw, 520px"
+               sizes="(max-width: 900px) 92vw, 560px"
                alt="The Victory Life International title card" loading="lazy" width="1400" height="708">
-          <span class="tv-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5 19 12 8 18.5Z"/></svg></span>
+          <button class="tv-play" type="button" data-play aria-label="Play Faithfulness for Breakthrough">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5 19 12 8 18.5Z"/></svg>
+          </button>
           <span class="tv-air"><i></i> On yesTV</span>
-        </a>
+          <span class="tv-now" data-now>Faithfulness for Breakthrough</span>
+        </div>
+
+        <ol class="tv-list" data-eps aria-label="Recent episodes">
+        <li>
+          <button class="tv-ep is-on" type="button" data-ep data-id="fhxWRksA2bM" data-title="Faithfulness for Breakthrough">
+            <span class="tv-ep-n">01</span>
+            <span class="tv-ep-t">Faithfulness for Breakthrough</span>
+            <span class="tv-ep-go"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5 19 12 8 18.5Z"/></svg></span>
+          </button>
+        </li>
+        <li>
+          <button class="tv-ep" type="button" data-ep data-id="su1Dgju1lkM" data-title="Beware Of Materialism">
+            <span class="tv-ep-n">02</span>
+            <span class="tv-ep-t">Beware Of Materialism</span>
+            <span class="tv-ep-go"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5 19 12 8 18.5Z"/></svg></span>
+          </button>
+        </li>
+        <li>
+          <button class="tv-ep" type="button" data-ep data-id="mcTOf5DzLxE" data-title="Entry Point Into Signs &amp; Wonders Part 1">
+            <span class="tv-ep-n">03</span>
+            <span class="tv-ep-t">Entry Point Into Signs &amp; Wonders Part 1</span>
+            <span class="tv-ep-go"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5 19 12 8 18.5Z"/></svg></span>
+          </button>
+        </li>
+        <li>
+          <button class="tv-ep" type="button" data-ep data-id="ufWCG5a6W-4" data-title="Possessing your possession Supernaturally">
+            <span class="tv-ep-n">04</span>
+            <span class="tv-ep-t">Possessing your possession Supernaturally</span>
+            <span class="tv-ep-go"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5 19 12 8 18.5Z"/></svg></span>
+          </button>
+        </li>
+        </ol>
+
+        <p class="tv-privacy"><svg><use href="#i-lock"/></svg><span>Nothing is requested from
+          YouTube until you press play.</span></p>
+
         <div class="tv-cta">
-          <a class="btn btn-primary" href="https://www.youtube.com/channel/UCb4YFQl6l15EN2SBdt_mBlg" target="_blank" rel="noopener"><svg><use href="#i-play"/></svg> Watch on YouTube</a>
+          <a class="btn btn-primary" href="https://www.youtube.com/channel/UCb4YFQl6l15EN2SBdt_mBlg" target="_blank" rel="noopener"><svg><use href="#i-play"/></svg> All episodes on YouTube</a>
           <a class="btn btn-ghost" href="https://www.victorychurch.ca/donate/" target="_blank" rel="noopener"><svg><use href="#i-heart"/></svg> Support this ministry</a>
         </div>
       </div>
@@ -927,6 +964,6 @@
   </div>
 </dialog>
 
-<script src="assets/js/main.js?v=37"></script>
+<script src="assets/js/main.js?v=38"></script>
 </body>
 </html>
