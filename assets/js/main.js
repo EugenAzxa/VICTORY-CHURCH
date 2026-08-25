@@ -662,3 +662,117 @@ var VC = (function () {
 
   select(eps[0]);
 })();
+
+/* ---------------------------------------------------------------------------
+   Leader panel
+
+   The church has never published contact details for its ministry leaders, and
+   the live site still reads "For more information contact: ???" where they
+   should be. Publishing thirteen people's personal addresses would not be the
+   fix even if we had them, so every message is addressed to the church office
+   with the leader's name already in the subject line. If the church would
+   rather route these somewhere else, change OFFICE below.
+   --------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+
+  var OFFICE = "info@victorychurch.ca";
+
+  var dlg = document.getElementById("leader-dialog");
+  var opens = [].slice.call(document.querySelectorAll(".person-open"));
+  if (!dlg || !opens.length) return;
+
+  // No <dialog> support: leave the cards as plain, inert markup rather than
+  // wiring up a half broken modal.
+  if (typeof dlg.showModal !== "function") {
+    opens.forEach(function (b) {
+      b.setAttribute("aria-haspopup", "false");
+      var more = b.querySelector(".person-more");
+      if (more) more.remove();
+    });
+    return;
+  }
+
+  var elImg  = dlg.querySelector("[data-pd-img]"),
+      elRole = dlg.querySelector("[data-pd-role]"),
+      elName = dlg.querySelector("[data-pd-name]"),
+      elJob  = dlg.querySelector("[data-pd-job]"),
+      elText = dlg.querySelector("[data-pd-text]"),
+      elMail = dlg.querySelector("[data-pd-mail]"),
+      elClose = dlg.querySelector("[data-pd-close]"),
+      last = null;
+
+  // Exposed so the hero drawing can open the same panel. One dialog, one
+  // definition of what a profile says.
+  VC.openLeader = function (slug, focusBack) {
+    var btn = document.querySelector('.person-open[data-slug="' + slug + '"]');
+    if (!btn) return false;
+    open(btn, focusBack || null);
+    return true;
+  };
+
+  function open(btn, focusBack) {
+    var name = btn.getAttribute("data-name"),
+        role = btn.getAttribute("data-role"),
+        job  = btn.getAttribute("data-job"),
+        img  = btn.getAttribute("data-img");
+    var body = btn.parentNode.querySelector(".person-text");
+
+    elImg.src = img;
+    elImg.alt = name;
+    elRole.textContent = role;
+    elName.textContent = name;
+    elJob.textContent = job;
+    elText.innerHTML = body ? body.innerHTML : "";
+
+    elMail.href = "mailto:" + OFFICE
+      + "?subject=" + encodeURIComponent("For " + name + ", " + role)
+      + "&body=" + encodeURIComponent(
+          "This message is for " + name + " (" + role + ").\n\n");
+    elMail.setAttribute("aria-label", "Get in touch with " + name + " through the church office");
+
+    last = focusBack || btn;
+    dlg.showModal();
+    elClose.focus();
+  }
+
+  opens.forEach(function (b) {
+    b.addEventListener("click", function () { open(b); });
+  });
+
+  elClose.addEventListener("click", function () { dlg.close(); });
+
+  // clicking the backdrop closes it, clicking the panel does not
+  dlg.addEventListener("click", function (e) {
+    if (e.target === dlg) dlg.close();
+  });
+
+  dlg.addEventListener("close", function () {
+    if (last) { last.focus(); last = null; }
+  });
+})();
+
+/* ---------------------------------------------------------------------------
+   The thirteen, in the drawing
+
+   Every figure in the hero illustration is one of the thirteen leaders. That
+   was checked figure by figure against their photographs before a single name
+   was attached: the men match one to one in order, and the women carry across
+   by pearls, headwrap, green dress, coral jacket, bob, braids and print.
+
+   An earlier illustration was NOT a portrait of these people, and this same
+   interaction deliberately named nobody. If the picture is changed again, check
+   before trusting these names.
+   --------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+
+  var spots = [].slice.call(document.querySelectorAll(".hero-spot[data-person]"));
+  if (!spots.length || typeof VC === "undefined" || typeof VC.openLeader !== "function") return;
+
+  spots.forEach(function (b) {
+    b.addEventListener("click", function () {
+      VC.openLeader(b.getAttribute("data-person"), b);
+    });
+  });
+})();

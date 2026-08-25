@@ -175,6 +175,69 @@ seven dates over fifteen seconds, which the page then went on to tell twice
 more. Now it runs about four seconds and hands straight over to a hero already
 holding that same picture, so there is no seam and nothing to re-read.
 
+### Clicking the drawing
+
+Every figure in the hero illustration is one of the thirteen leaders. Hovering
+one names them, clicking one opens their profile: the same panel the leadership
+grid uses, so there is one definition of what a profile says and no second copy
+to drift.
+
+**This was verified before a single name was attached, and the check matters.**
+An earlier illustration was *not* a portrait of these people, and this same
+interaction deliberately named nobody, because getting it wrong would have meant
+inventing who is who about real people on their own church site. The current
+picture is different. Figure by figure against the thirteen headshots:
+
+- The six men match one to one, left to right, glasses and all. Okyere Baffour's
+  white beard is present, which is exactly the marker the old illustration was
+  missing.
+- The seven women carry across by Monica's pearls and cardigan, Oluwabukola's
+  green dress and hoop earrings, Foluke's headwrap and glasses, Otaghogho's coral
+  jacket, Teresita's bob, Olukemi's braids and Loleta's geometric print.
+- The split is six men to seven women, which is the actual roster. The old
+  drawing was seven to six.
+
+**If the illustration is ever replaced, redo that check before trusting the
+names.** The mapping lives in `data-person` on each `.hero-spot`, and the
+positions in `--x` beside it. Both are specific to this picture.
+
+The hotspots are real controls now, so they are keyboard reachable and no longer
+`aria-hidden`; thirteen tab stops are justified when each one opens something.
+Focus returns to the figure you came from when the panel closes. The two figures
+at each end anchor their name tag to the edge of the drawing, because a centred
+tag on someone standing at 7% of the width hangs off the page.
+
+### On adding a component library
+
+The cloth component at canvasui.dev was suggested for this. It is good work and
+it is the wrong fit here, for three reasons worth writing down so the question
+does not have to be reopened: it needs React and this site has no build step, it
+depends on the HTML-in-Canvas API which is experimental and Chrome only so most
+of this congregation would see nothing, and it is a fabric ripple rather than a
+navigation device, so it would not have shortened anything.
+
+The same test applies to anything else offered up. Does it work on a mid range
+Android, does it survive without JavaScript, and does it do a job the page
+actually needs.
+
+### The hero
+
+The congregation standing in front of their own 1856 building with Toronto
+behind it, which is the whole reverse mission story in one frame. The previous
+illustration had the skyline but no church, so it could only carry half of it.
+
+Hovering a figure says what this church is made of. See the note below on why it
+names nobody. The thirteen hotspot positions are read off this specific
+illustration and are in `--x` on each `.hero-spot`; replace the picture and
+every one of them has to be measured again.
+
+### The intro
+
+The congregation assembling out of ink, and nothing else. It used to narrate
+seven dates over fifteen seconds, which the page then went on to tell twice
+more. Now it runs about four seconds and hands straight over to a hero already
+holding that same picture, so there is no seam and nothing to re-read.
+
 ### Pointing at the drawing
 
 Hovering a figure in the hero illustration brings up a line about what this

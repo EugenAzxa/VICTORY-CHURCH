@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Parisienne&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css?v=38">
+<link rel="stylesheet" href="assets/css/main.css?v=40">
 </head>
 <body>
 
@@ -120,57 +120,82 @@
     <img class="is-drawing" src="assets/img/scenes/hero-wide.webp"
          alt="The congregation of Victory Church International standing before their church on Weston Road, with the Toronto skyline behind"
          width="1818" height="1008" fetchpriority="high">
-    <!-- Purely a visual aside: every profession below is also written out in the
-         leadership section and summarised in the note under the drawing, so this
-         is hidden from assistive tech rather than adding thirteen dead tab stops
-         in front of the page. -->
-    <div class="hero-people" aria-hidden="true">
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:6.8%">
-        <span class="hero-tag"><b>An educator</b><i>Arrived from Nigeria in 2018</i></span>
+    <!-- Each figure is one of the thirteen leaders, verified against their
+         photographs one by one. Clicking opens that person's profile, which is
+         the same panel the leadership grid uses, so there is one source of
+         truth for what a profile says. -->
+    <div class="hero-people">
+      <button class="hero-spot is-edge-l" type="button" style="--x:6.8%"
+              data-person="okyere-baffour" aria-haspopup="dialog"
+              aria-label="Okyere Baffour, Leadership and Men's Ministry">
+        <span class="hero-tag"><b>Okyere Baffour</b><i>Leadership and Men's Ministry</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:13.2%">
-        <span class="hero-tag"><b>A healthcare worker</b><i>Serving since 2011</i></span>
+      <button class="hero-spot is-edge-l" type="button" style="--x:13.2%"
+              data-person="john-okunimah" aria-haspopup="dialog"
+              aria-label="John Okunimah, Church Administrator">
+        <span class="hero-tag"><b>John Okunimah</b><i>Church Administrator</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:17.9%">
-        <span class="hero-tag"><b>A community pharmacist</b><i>Serving since 2007</i></span>
+      <button class="hero-spot" type="button" style="--x:17.9%"
+              data-person="ayodele-ogunro" aria-haspopup="dialog"
+              aria-label="Ayodele Ogunro, Media Technology and Youth">
+        <span class="hero-tag"><b>Ayodele Ogunro</b><i>Media Technology and Youth</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:24.9%">
-        <span class="hero-tag"><b>A supply chain planner</b><i>Food processing</i></span>
+      <button class="hero-spot" type="button" style="--x:24.9%"
+              data-person="monica-baffour" aria-haspopup="dialog"
+              aria-label="Monica Baffour, Women's Ministry">
+        <span class="hero-tag"><b>Monica Baffour</b><i>Women's Ministry</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:31.6%">
-        <span class="hero-tag"><b>A registered nurse</b><i>Clinical care coordinator</i></span>
+      <button class="hero-spot" type="button" style="--x:31.6%"
+              data-person="oluwabukola-omodara" aria-haspopup="dialog"
+              aria-label="Oluwabukola Omodara, Music Ministry">
+        <span class="hero-tag"><b>Oluwabukola Omodara</b><i>Music Ministry</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:38.6%">
-        <span class="hero-tag"><b>A medical doctor</b><i>Media technology and youth</i></span>
+      <button class="hero-spot" type="button" style="--x:38.6%"
+              data-person="foluke-ogunro" aria-haspopup="dialog"
+              aria-label="Foluke Ogunro, Women's Ministry">
+        <span class="hero-tag"><b>Foluke Ogunro</b><i>Women's Ministry</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:51.6%">
-        <span class="hero-tag"><b>A pharmacist</b><i>Business owner, inventor, preacher</i></span>
+      <button class="hero-spot" type="button" style="--x:51.6%"
+              data-person="felix-ayomike" aria-haspopup="dialog"
+              aria-label="Felix Ayomike, Lead Pastor">
+        <span class="hero-tag"><b>Felix Ayomike</b><i>Lead Pastor</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:62.4%">
-        <span class="hero-tag"><b>An IT consultant</b><i>And a college professor</i></span>
+      <button class="hero-spot" type="button" style="--x:62.4%"
+              data-person="richard-solomon" aria-haspopup="dialog"
+              aria-label="Richard Solomon, Business Growth and Fellowship">
+        <span class="hero-tag"><b>Richard Solomon</b><i>Business Growth and Fellowship</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:68.8%">
-        <span class="hero-tag"><b>A logistics owner</b><i>Owner and president</i></span>
+      <button class="hero-spot" type="button" style="--x:68.8%"
+              data-person="otaghogho-dittimi" aria-haspopup="dialog"
+              aria-label="Otaghogho Dittimi, Community Outreach and Evangelism">
+        <span class="hero-tag"><b>Otaghogho Dittimi</b><i>Community Outreach and Evangelism</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:75.6%">
-        <span class="hero-tag"><b>A childcare supervisor</b><i>RECE, ten years of service</i></span>
+      <button class="hero-spot" type="button" style="--x:75.6%"
+              data-person="wisdom-salami" aria-haspopup="dialog"
+              aria-label="Wisdom Salami, Innovation and Media Technology">
+        <span class="hero-tag"><b>Wisdom Salami</b><i>Innovation and Media Technology</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:81.4%">
-        <span class="hero-tag"><b>A lawyer</b><i>Serving since 2018</i></span>
+      <button class="hero-spot" type="button" style="--x:81.4%"
+              data-person="teresita-roxas" aria-haspopup="dialog"
+              aria-label="Teresita Roxas, Children's Ministry">
+        <span class="hero-tag"><b>Teresita Roxas</b><i>Children's Ministry</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:87.5%">
-        <span class="hero-tag"><b>An educator</b><i>Children's ministry since 2017</i></span>
+      <button class="hero-spot is-edge-r" type="button" style="--x:87.5%"
+              data-person="olukemi-oparinde" aria-haspopup="dialog"
+              aria-label="Olukemi Oparinde, Program Coordinator">
+        <span class="hero-tag"><b>Olukemi Oparinde</b><i>Program Coordinator</i></span>
       </button>
-      <button class="hero-spot" type="button" tabindex="-1" style="--x:93.6%">
-        <span class="hero-tag"><b>Retail</b><i>Hudson's Bay Company</i></span>
+      <button class="hero-spot is-edge-r" type="button" style="--x:93.6%"
+              data-person="loleta-welch" aria-haspopup="dialog"
+              aria-label="Loleta Welch, Events Coordinator">
+        <span class="hero-tag"><b>Loleta Welch</b><i>Events Coordinator</i></span>
       </button>
     </div>
   </div>
 
   <div class="wrap">
-    <p class="hero-note">A drawing of our congregation. The people in it stand for the nurses,
-      pharmacists, doctors, teachers and lawyers who fill this church on a Sunday.
-      <span class="hero-note-hint">Point at any of them.</span></p>
+    <p class="hero-note">Every one of the thirteen leaders is in this drawing.
+      <span class="hero-note-hint">Point at anyone to see who they are, and click to read more.</span></p>
   </div>
 </section>
 
@@ -495,7 +520,7 @@
     </div>
     <div class="people rv">
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="felix-ayomike"
                 data-name="Felix Ayomike" data-role="Lead Pastor"
                 data-job="Pharmacist, business owner. Raised in Nigeria, came to Canada at 21." data-img="assets/img/team/felix-ayomike.webp">
           <span class="person-img"><img src="assets/img/team/felix-ayomike.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -507,7 +532,7 @@
         <div class="person-text" hidden><p>Pastor Felix founded Victory Church International in 2006, with five people in his living room. He is a licensed and ordained preacher, and he hosts Victory Life TV, which is broadcast on yesTV and archived on the church's YouTube channel. He was raised and educated in Nigeria and came to Canada at twenty one.</p></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="okyere-baffour"
                 data-name="Okyere Baffour" data-role="Leadership and Men's Ministry"
                 data-job="Hudson's Bay Company" data-img="assets/img/team/okyere-baffour.webp">
           <span class="person-img"><img src="assets/img/team/okyere-baffour.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -519,7 +544,7 @@
         <div class="person-text" hidden><p>The Men's Ministry meets for purposeful friendship and accountability, alongside the work of the church leadership team.</p></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="john-okunimah"
                 data-name="John Okunimah" data-role="Church Administrator"
                 data-job="Supply chain planner, food processing" data-img="assets/img/team/john-okunimah.webp">
           <span class="person-img"><img src="assets/img/team/john-okunimah.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -531,7 +556,7 @@
         <div class="person-text" hidden><p>Handles the day to day administration of the church.</p></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="ayodele-ogunro"
                 data-name="Ayodele Ogunro" data-role="Media Technology and Youth"
                 data-job="Medical doctor" data-img="assets/img/team/ayodele-ogunro.webp">
           <span class="person-img"><img src="assets/img/team/ayodele-ogunro.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -543,7 +568,7 @@
         <div class="person-text" hidden><p>Media Technology looks after recording, streaming and the church's YouTube channel. The Youth ministry runs Bible study on Sundays and Wednesdays, along with retreats, service projects and summer mission trips.</p></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="monica-baffour"
                 data-name="Monica Baffour" data-role="Women's Ministry"
                 data-job="Healthcare worker. Serving since 2011." data-img="assets/img/team/monica-baffour.webp">
           <span class="person-img"><img src="assets/img/team/monica-baffour.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -555,7 +580,7 @@
         <div class="person-text" hidden><p>The Women's Ministry meets for study, service and discipleship.</p></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="oluwabukola-omodara"
                 data-name="Oluwabukola Omodara" data-role="Music Ministry"
                 data-job="Registered nurse and clinical care coordinator" data-img="assets/img/team/oluwabukola-omodara.webp">
           <span class="person-img"><img src="assets/img/team/oluwabukola-omodara.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -567,7 +592,7 @@
         <div class="person-text" hidden><p>The Music Ministry leads the singing on a Sunday morning, through the choir and the worship team.</p></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="foluke-ogunro"
                 data-name="Foluke Ogunro" data-role="Women's Ministry"
                 data-job="Community pharmacist. Serving since 2007." data-img="assets/img/team/foluke-ogunro.webp">
           <span class="person-img"><img src="assets/img/team/foluke-ogunro.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -579,7 +604,7 @@
         <div class="person-text" hidden><p>The Women's Ministry meets for study, service and discipleship.</p></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="richard-solomon"
                 data-name="Richard Solomon" data-role="Business Growth and Fellowship"
                 data-job="Owner and president of a logistics company" data-img="assets/img/team/richard-solomon.webp">
           <span class="person-img"><img src="assets/img/team/richard-solomon.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -591,7 +616,7 @@
         <div class="person-text" hidden></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="otaghogho-dittimi"
                 data-name="Otaghogho Dittimi" data-role="Community Outreach and Evangelism"
                 data-job="Educator. Came from Nigeria in 2018." data-img="assets/img/team/otaghogho-dittimi.webp">
           <span class="person-img"><img src="assets/img/team/otaghogho-dittimi.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -603,7 +628,7 @@
         <div class="person-text" hidden><p>Outreach runs StepUp Community Support: weekly distribution of food and household supplies across the Greater Toronto Area, with counselling and mentorship offered alongside.</p></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="wisdom-salami"
                 data-name="Wisdom Salami" data-role="Innovation and Media Technology"
                 data-job="College professor and IT consultant" data-img="assets/img/team/wisdom-salami.webp">
           <span class="person-img"><img src="assets/img/team/wisdom-salami.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -615,7 +640,7 @@
         <div class="person-text" hidden><p>Media Technology looks after recording, streaming and the church's YouTube channel.</p></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="teresita-roxas"
                 data-name="Teresita Roxas" data-role="Children's Ministry"
                 data-job="Educator. Serving since 2017." data-img="assets/img/team/teresita-roxas.webp">
           <span class="person-img"><img src="assets/img/team/teresita-roxas.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -627,7 +652,7 @@
         <div class="person-text" hidden><p>Children's church runs for ages 3 to 12 during the Sunday service, with lessons, music and games.</p></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="olukemi-oparinde"
                 data-name="Olukemi Oparinde" data-role="Program Coordinator"
                 data-job="Lawyer. Serving since 2018." data-img="assets/img/team/olukemi-oparinde.webp">
           <span class="person-img"><img src="assets/img/team/olukemi-oparinde.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -639,7 +664,7 @@
         <div class="person-text" hidden></div>
       </article>
       <article class="person">
-        <button class="person-open" type="button" aria-haspopup="dialog"
+        <button class="person-open" type="button" aria-haspopup="dialog" data-slug="loleta-welch"
                 data-name="Loleta Welch" data-role="Events Coordinator"
                 data-job="RECE and childcare centre supervisor. Ten years of service." data-img="assets/img/team/loleta-welch.webp">
           <span class="person-img"><img src="assets/img/team/loleta-welch.webp" alt="" loading="lazy" width="560" height="560"></span>
@@ -964,6 +989,6 @@
   </div>
 </dialog>
 
-<script src="assets/js/main.js?v=38"></script>
+<script src="assets/js/main.js?v=40"></script>
 </body>
 </html>

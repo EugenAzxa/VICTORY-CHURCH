@@ -1495,7 +1495,7 @@ svg { fill: none; }
    phone anyway. */
 .hero-people { display: none; }
 
-@media (min-width: 701px) and (hover: hover) {
+@media (min-width: 701px) {
   .hero-people {
     display: block;
     position: absolute;
@@ -1513,7 +1513,7 @@ svg { fill: none; }
     padding: 0;
     border: 0;
     background: none;
-    cursor: help;
+    cursor: pointer;
   }
   .hero-spot::before {
     content: "";
@@ -1524,7 +1524,8 @@ svg { fill: none; }
     transition: opacity .18s var(--ease);
   }
   .hero-spot:hover::before,
-  .hero-spot:focus-visible::before { opacity: .85; }
+  .hero-spot:focus-visible::before { opacity: 1; }
+  .hero-spot:focus-visible::before { border-width: 2px; border-color: var(--royal-t); }
   .hero-spot:focus { outline: none; }
   .hero-spot:focus-visible { outline: none; }
 
@@ -1566,6 +1567,15 @@ svg { fill: none; }
     opacity: 1;
     transform: translateX(-50%);
   }
+
+  /* The figures at either end cannot have a centred tag without it hanging off
+     the page, so theirs anchor to the edge of the drawing instead. */
+  .hero-spot.is-edge-l .hero-tag { left: 0; transform: translateX(-6px) translateY(6px); }
+  .hero-spot.is-edge-r .hero-tag { left: auto; right: 0; transform: translateX(6px) translateY(6px); }
+  .hero-spot.is-edge-l:hover .hero-tag,
+  .hero-spot.is-edge-l:focus-visible .hero-tag { transform: translateX(-6px); }
+  .hero-spot.is-edge-r:hover .hero-tag,
+  .hero-spot.is-edge-r:focus-visible .hero-tag { transform: translateX(6px); }
 }
 
 .hero-note {
@@ -1583,7 +1593,7 @@ svg { fill: none; }
   text-transform: uppercase;
   color: var(--cyan-t);
 }
-@media (min-width: 701px) and (hover: hover) {
+@media (min-width: 701px) {
   .hero-note-hint { display: inline; }
 }
 
