@@ -203,6 +203,30 @@ written out in full in the leadership section and summarised in the note under
 the drawing, so hiding it costs a screen reader nothing and saves a keyboard
 user thirteen dead tab stops in front of the page.
 
+### TV Ministry
+
+Victory Life has its own section now, built from the copy on their tv-ministry
+page. It is the one dark section above the giving band, which is fitting for
+television and gives the lower half of the page some rhythm.
+
+The title card is the church's own broadcast graphic, cropped to remove the
+YouTube player chrome that was baked into the still. Its purple is left alone
+rather than dragged into the site palette, because it is their broadcast
+identity and not a site colour.
+
+Victory Life used to be the fourth tab under "what happens here". That tab is
+gone, and not only to avoid saying the same thing twice: it was the one answer
+in that set that does not happen here. Sunday, ministries and outreach all
+happen at or through the building. Television is broadcast.
+
+**The copy is the church's own**, with three changes: a doubled "the the", two
+en dashes turned into a colon and a comma to match the house rule on dashes, and
+"a hurting world who needs" to "who need". Worth confirming with them.
+
+**No broadcast time is shown**, because their page does not give one. If Victory
+Life airs on a particular day and hour on yesTV, that is the single most useful
+thing this section could add.
+
 ### The leadership section
 
 The only place on the site that uses photographs rather than ink plates, and the
@@ -356,3 +380,7 @@ church's legal or privacy questions before the first send.
    somewhere else, change OFFICE in assets/js/main.js.
 9. **The scripture.** Matthew 22:37-39 is quoted in the King James Version. Confirm
    the church is happy with that passage and that translation. It is their book.
+10. **When does Victory Life air?** Their own TV Ministry page names yesTV but gives
+    no day or time. A schedule would make that section far more useful.
+11. **Is there an episode archive worth linking?** The section currently points at
+    the YouTube channel as a whole.
