@@ -923,3 +923,43 @@ var VC = (function () {
     });
   });
 })();
+
+/* ---------------------------------------------------------------------------
+   Centre the congregation on a phone
+
+   The drawing sits on a track wider than the screen so the figures stay big
+   enough to tap. A scroll container opens at its left edge, which meant a phone
+   opened on the three men at the far end instead of on the church and the
+   pastor in the middle of the group. Starts centred now.
+
+   It stops interfering the moment somebody scrolls it themselves, so a resize
+   or an orientation change never yanks the picture back from wherever they
+   left it.
+   --------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+
+  var art = document.querySelector("[data-ink-reveal]");
+  if (!art) return;
+
+  var touched = false, programmatic = false;
+
+  function centre() {
+    var max = art.scrollWidth - art.clientWidth;
+    if (max <= 2 || touched) return;      // not scrollable, or theirs to control now
+    programmatic = true;
+    art.scrollLeft = max / 2;
+    requestAnimationFrame(function () { programmatic = false; });
+  }
+
+  art.addEventListener("scroll", function () {
+    if (!programmatic) touched = true;
+  }, { passive: true });
+
+  var img = art.querySelector("img");
+  if (img && !img.complete) img.addEventListener("load", centre, { once: true });
+  centre();
+  window.addEventListener("load", centre);
+  window.addEventListener("resize", centre);
+  art.setAttribute("data-hero-centred", "");
+})();
