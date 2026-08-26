@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Parisienne&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css?v=44">
+<link rel="stylesheet" href="assets/css/main.css?v=47">
 </head>
 <body>
 
@@ -40,6 +40,7 @@
 <symbol id="i-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4.2"/><path d="M17.8 6.4h.01"/></symbol>
 <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.5 20v-6h5v6"/></symbol>
 <symbol id="i-pray" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v7"/><path d="M8.5 6.5h7"/><path d="M6 21c0-4 2.7-7 6-7s6 3 6 7"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></symbol>
 </defs></svg>
 
 <!-- ============ intro ============ -->
@@ -967,25 +968,30 @@
             </section>
 
             <section class="ap" data-ap="watch" aria-label="Watch" hidden>
-              <div class="ap-live"><i></i> Victory Life on yesTV</div>
+              <div class="ap-player" data-ap-player>
+                <div class="ap-player-idle">
+                  <span class="ap-live"><i></i> Victory Life on yesTV</span>
+                  <p>Pick an episode and it plays here.</p>
+                </div>
+              </div>
               <h4 class="ap-h">Recent episodes</h4>
               <ol class="ap-list">
-              <li><button class="ap-row" type="button" data-open="https://www.youtube.com/watch?v=fhxWRksA2bM">
+              <li><button class="ap-row" type="button" data-play-ep="fhxWRksA2bM" data-ep-title="Faithfulness for Breakthrough">
                 <span class="ap-row-n">01</span>
                 <span class="ap-row-t">Faithfulness for Breakthrough</span>
                 <svg class="ap-row-go"><use href="#i-play"/></svg>
               </button></li>
-              <li><button class="ap-row" type="button" data-open="https://www.youtube.com/watch?v=su1Dgju1lkM">
+              <li><button class="ap-row" type="button" data-play-ep="su1Dgju1lkM" data-ep-title="Beware Of Materialism">
                 <span class="ap-row-n">02</span>
                 <span class="ap-row-t">Beware Of Materialism</span>
                 <svg class="ap-row-go"><use href="#i-play"/></svg>
               </button></li>
-              <li><button class="ap-row" type="button" data-open="https://www.youtube.com/watch?v=mcTOf5DzLxE">
+              <li><button class="ap-row" type="button" data-play-ep="mcTOf5DzLxE" data-ep-title="Entry Point Into Signs &amp; Wonders Part 1">
                 <span class="ap-row-n">03</span>
                 <span class="ap-row-t">Entry Point Into Signs &amp; Wonders Part 1</span>
                 <svg class="ap-row-go"><use href="#i-play"/></svg>
               </button></li>
-              <li><button class="ap-row" type="button" data-open="https://www.youtube.com/watch?v=ufWCG5a6W-4">
+              <li><button class="ap-row" type="button" data-play-ep="ufWCG5a6W-4" data-ep-title="Possessing your possession Supernaturally">
                 <span class="ap-row-n">04</span>
                 <span class="ap-row-t">Possessing your possession Supernaturally</span>
                 <svg class="ap-row-go"><use href="#i-play"/></svg>
@@ -1013,13 +1019,22 @@
 
             <section class="ap" data-ap="pray" aria-label="Prayer request" hidden>
               <h4 class="ap-h">Prayer request</h4>
-              <label class="ap-label" for="ap-pray">What can we pray for?</label>
-              <textarea class="ap-text" id="ap-pray" rows="4" placeholder="You can keep it short."></textarea>
-              <div class="ap-check">
-                <input type="checkbox" id="ap-anon"><label for="ap-anon">Keep this private to the prayer team</label>
+              <div class="ap-prayform" data-pray-form>
+                <label class="ap-label" for="ap-pray">What can we pray for?</label>
+                <textarea class="ap-text" id="ap-pray" rows="4" placeholder="You can keep it short."></textarea>
+                <div class="ap-check">
+                  <input type="checkbox" id="ap-anon"><label for="ap-anon">Keep this private to the prayer team</label>
+                </div>
+                <button class="ap-btn ap-btn-wide" type="button" data-pray-send>Send to the prayer team</button>
+                <p class="ap-fine">Preview only. Nothing typed here is sent or stored.</p>
               </div>
-              <button class="ap-btn ap-btn-wide" type="button" data-demo>Send to the prayer team</button>
-              <p class="ap-fine">Preview only. Nothing typed here is sent or stored.</p>
+              <div class="ap-done" data-pray-done hidden>
+                <span class="ap-done-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12.5 5 5L20 6.5"/></svg></span>
+                <h5>We are praying</h5>
+                <p>In the real app this would reach the prayer team, and nobody else.
+                  Nothing was sent just now.</p>
+                <button class="ap-btn" type="button" data-pray-again>Write another</button>
+              </div>
             </section>
 
             <section class="ap" data-ap="church" aria-label="The church" hidden>
@@ -1046,6 +1061,143 @@
           <div class="phone-toast" data-toast role="status" aria-live="polite"></div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ saylavy ============ -->
+<section class="say sec-rule" id="saylavy">
+  <div class="wrap">
+    <div class="say-head rv">
+      <span class="eyebrow"><i class="num">11</i> Saylavy</span>
+      <h2 class="h-lg">Memory that remains</h2>
+      <p class="lede">Saylavy helps a church keep two things: the memory of its people, and the
+        teaching of its faith. The church writes and approves everything on it, so the faith stays
+        exactly as it is taught here.</p>
+    </div>
+
+    <div class="say-cards rv">
+      <article class="say-card">
+        <span class="say-ico"><svg><use href="#i-heart"/></svg></span>
+        <h3>Pages of remembrance</h3>
+        <p>A page of its own for everyone the church remembers: a name, the years, a few lines
+          about a life. Family can light a candle and add a word. The wall grows with the
+          congregation.</p>
+      </article>
+      <article class="say-card">
+        <span class="say-ico"><svg><use href="#i-play"/></svg></span>
+        <h3>Learning you can talk to</h3>
+        <p>Bible stories, verses to learn by heart and the foundations of the faith, in a living
+          voice. Ask a question and hear an answer. A QR code in the hall opens the page in a
+          second.</p>
+      </article>
+      <article class="say-card">
+        <span class="say-ico"><svg><use href="#i-globe"/></svg></span>
+        <h3>Your own address</h3>
+        <p>The church's pages live at the church's own web address, not on a shared page belonging
+          to somebody else's service.</p>
+      </article>
+      <article class="say-card">
+        <span class="say-ico"><svg><use href="#i-check"/></svg></span>
+        <h3>The pastor has the last word</h3>
+        <p>Not one line appears without the church agreeing to it. The pastor approves every
+          word.</p>
+      </article>
+    </div>
+
+    <div class="say-notice rv">
+      <svg><use href="#i-info"/></svg>
+      <div>
+        <b>This shows the layout, nothing more.</b>
+        <p>The six entries below are not people. There are no names, no photographs and no real
+          dates, because a wall of remembrance is the last place to invent anybody. Victory Church
+          would write every entry itself.</p>
+      </div>
+    </div>
+
+    <div class="say-wall rv">
+      <h3 class="h-md">The wall of remembrance</h3>
+      <p class="lede">This is the shape of a page of remembrance: a name, the years, a few lines
+        about a life, and a candle that anyone who remembers can light.</p>
+      <ul class="mem-grid">
+        <li class="mem-card">
+          <div class="mem-face"><span>A</span>
+            <button class="mem-candle" type="button" data-candle aria-label="Light a candle">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2.5 3 4 5 4 7a4 4 0 0 1-8 0c0-2 1.5-4 4-7Z"/></svg>
+              <b>214</b>
+            </button>
+          </div>
+          <p class="mem-name mem-slot">Name</p>
+          <p class="mem-years">1931 - 2014</p>
+          <p class="mem-line">Cooked the meal after the service for thirty years</p>
+        </li>
+        <li class="mem-card">
+          <div class="mem-face"><span>B</span>
+            <button class="mem-candle" type="button" data-candle aria-label="Light a candle">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2.5 3 4 5 4 7a4 4 0 0 1-8 0c0-2 1.5-4 4-7Z"/></svg>
+              <b>168</b>
+            </button>
+          </div>
+          <p class="mem-name mem-slot">Name</p>
+          <p class="mem-years">1927 - 2009</p>
+          <p class="mem-line">A carpenter. Built the first benches in the hall</p>
+        </li>
+        <li class="mem-card">
+          <div class="mem-face"><span>C</span>
+            <button class="mem-candle" type="button" data-candle aria-label="Light a candle">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2.5 3 4 5 4 7a4 4 0 0 1-8 0c0-2 1.5-4 4-7Z"/></svg>
+              <b>301</b>
+            </button>
+          </div>
+          <p class="mem-name mem-slot">Name</p>
+          <p class="mem-years">1944 - 2020</p>
+          <p class="mem-line">Led the choir for twenty eight years</p>
+        </li>
+        <li class="mem-card">
+          <div class="mem-face"><span>D</span>
+            <button class="mem-candle" type="button" data-candle aria-label="Light a candle">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2.5 3 4 5 4 7a4 4 0 0 1-8 0c0-2 1.5-4 4-7Z"/></svg>
+              <b>97</b>
+            </button>
+          </div>
+          <p class="mem-name mem-slot">Name</p>
+          <p class="mem-years">1938 - 2017</p>
+          <p class="mem-line">Drove people to the service every Sunday</p>
+        </li>
+        <li class="mem-card">
+          <div class="mem-face"><span>E</span>
+            <button class="mem-candle" type="button" data-candle aria-label="Light a candle">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2.5 3 4 5 4 7a4 4 0 0 1-8 0c0-2 1.5-4 4-7Z"/></svg>
+              <b>142</b>
+            </button>
+          </div>
+          <p class="mem-name mem-slot">Name</p>
+          <p class="mem-years">1950 - 2022</p>
+          <p class="mem-line">Taught the children on a Sunday morning</p>
+        </li>
+        <li class="mem-card">
+          <div class="mem-face"><span>F</span>
+            <button class="mem-candle" type="button" data-candle aria-label="Light a candle">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2.5 3 4 5 4 7a4 4 0 0 1-8 0c0-2 1.5-4 4-7Z"/></svg>
+              <b>58</b>
+            </button>
+          </div>
+          <p class="mem-name mem-slot">Name</p>
+          <p class="mem-years">1925 - 2011</p>
+          <p class="mem-line">One of the five who began in the living room</p>
+        </li>
+        <li class="mem-card mem-add">
+          <div class="mem-face mem-face-empty"><span aria-hidden="true">+</span></div>
+          <p class="mem-name">Add a page</p>
+          <p class="mem-line">The church adds the names itself</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="say-foot rv">
+      <a class="btn btn-primary" href="https://saylavy.world" target="_blank" rel="noopener">See Saylavy <svg><use href="#i-arrow"/></svg></a>
+      <p class="say-fine">Saylavy is a separate service. Nothing on this page is connected to it
+        yet, and no page of remembrance exists for this church.</p>
     </div>
   </div>
 </section>
@@ -1138,6 +1290,6 @@
   </div>
 </dialog>
 
-<script src="assets/js/main.js?v=44"></script>
+<script src="assets/js/main.js?v=47"></script>
 </body>
 </html>

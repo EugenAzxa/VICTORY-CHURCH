@@ -799,6 +799,19 @@ var VC = (function () {
       toastTimer = null;
 
   function show(name) {
+    // Walking away from Watch should stop the sound. An app that keeps playing
+    // a sermon while you are on the giving screen is nobody's idea of good.
+    if (name !== "watch") {
+      var slot = root.querySelector("[data-ap-player]");
+      if (slot && slot.classList.contains("is-playing")) {
+        slot.classList.remove("is-playing");
+        slot.innerHTML = '<div class="ap-player-idle"><span class="ap-live"><i></i> Victory Life on yesTV</span>' +
+                         '<p>Pick an episode and it plays here.</p></div>';
+        [].slice.call(root.querySelectorAll("[data-play-ep]")).forEach(function (b) {
+          b.classList.remove("is-on");
+        });
+      }
+    }
     screens.forEach(function (s) { s.hidden = s.getAttribute("data-ap") !== name; });
     tabs.forEach(function (t) { t.classList.toggle("is-on", t.getAttribute("data-go") === name); });
     if (pane) pane.scrollTop = 0;
@@ -816,6 +829,50 @@ var VC = (function () {
   root.addEventListener("click", function (e) {
     var go = e.target.closest("[data-go]");
     if (go) { show(go.getAttribute("data-go")); return; }
+
+    // Episodes play inside the handset. Sending someone to another tab from a
+    // demo of an app rather defeats the demo.
+    var ep = e.target.closest("[data-play-ep]");
+    if (ep) {
+      var slot = root.querySelector("[data-ap-player]");
+      if (slot) {
+        var f = document.createElement("iframe");
+        f.src = "https://www.youtube-nocookie.com/embed/" + ep.getAttribute("data-play-ep") +
+                "?autoplay=1&rel=0&modestbranding=1";
+        f.title = ep.getAttribute("data-ep-title") || "Victory Life";
+        f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        f.referrerPolicy = "strict-origin-when-cross-origin";
+        f.allowFullscreen = true;
+        slot.innerHTML = "";
+        slot.appendChild(f);
+        slot.classList.add("is-playing");
+      }
+      [].slice.call(root.querySelectorAll("[data-play-ep]")).forEach(function (b) {
+        b.classList.toggle("is-on", b === ep);
+      });
+      return;
+    }
+
+    var send = e.target.closest("[data-pray-send]");
+    if (send) {
+      var form = root.querySelector("[data-pray-form]"),
+          done = root.querySelector("[data-pray-done]");
+      if (form && done) { form.hidden = true; done.hidden = false; }
+      return;
+    }
+
+    var again = e.target.closest("[data-pray-again]");
+    if (again) {
+      var f2 = root.querySelector("[data-pray-form]"),
+          d2 = root.querySelector("[data-pray-done]");
+      if (f2 && d2) {
+        d2.hidden = true;
+        f2.hidden = false;
+        var t = f2.querySelector(".ap-text");
+        if (t) { t.value = ""; t.focus(); }
+      }
+      return;
+    }
 
     var open = e.target.closest("[data-open]");
     if (open) { window.open(open.getAttribute("data-open"), "_blank", "noopener"); return; }
@@ -843,4 +900,26 @@ var VC = (function () {
   });
 
   show("home");
+})();
+
+/* ---------------------------------------------------------------------------
+   Candles on the wall of remembrance
+
+   Local only. Nothing is stored and nothing is sent, because there is no wall
+   yet and no one to remember on it. It is here so the gesture is visible: you
+   press it, a light comes on, the number goes up by one.
+   --------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+  var candles = [].slice.call(document.querySelectorAll("[data-candle]"));
+  if (!candles.length) return;
+  candles.forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (b.classList.contains("is-lit")) return;
+      b.classList.add("is-lit");
+      var n = b.querySelector("b");
+      if (n) n.textContent = String((parseInt(n.textContent, 10) || 0) + 1);
+      b.setAttribute("aria-label", "Candle lit");
+    });
+  });
 })();

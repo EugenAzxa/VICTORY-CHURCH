@@ -344,6 +344,39 @@ invented amounts of money raised, no fake member count.
 If the church decides not to build an app, delete the whole `#app` section and
 renumber. Nothing else depends on it.
 
+### The Saylavy section
+
+Section 11 shows what Saylavy would look like for this church: the four things it
+does, and a wall of remembrance built out of the same pointed arch as the welcome
+portrait and the scripture mark, because that is the shape of their own windows.
+
+**Nobody on that wall is a person, and that is deliberate.** There are no names,
+no photographs and no real dates. The six cards carry a letter, an empty name
+slot and a line about a life, and a notice above them says so plainly. A wall of
+remembrance is the last place on earth to invent somebody, and the risk is not
+theoretical: a visitor who recognised a fictional name as almost-their-mother
+would not forgive it, and neither would the church. If real entries ever go on,
+they come from the church and from nowhere else.
+
+The candle lights and counts up locally, so the gesture is visible. Nothing is
+stored and nothing is sent.
+
+Saylavy is a separate service. The section says as much, and links out rather
+than implying the church is already on it.
+
+### The app: what actually runs
+
+Both of the interactive screens work inside the handset rather than sending you
+somewhere else, which is the whole point of demonstrating an app.
+
+- **Watch** builds a YouTube embed inside the phone when you pick an episode,
+  and tears it down again when you leave the tab. An app that keeps playing a
+  sermon while you are on the giving screen is nobody's idea of good.
+- **Pray** answers you: the form is replaced by a confirmation that says, in as
+  many words, that nothing was sent. There is a Write another button to get back.
+
+Giving is still selection only, and still says Preview.
+
 ### The leadership section
 
 The only place on the site that uses photographs rather than ink plates, and the
@@ -505,3 +538,6 @@ church's legal or privacy questions before the first send.
 12. **Is the app a real plan or only a pitch?** Section 10 is a prototype of an app
     that does not exist. If it is never going to be built, that section should come
     off the public site rather than sit there promising something.
+13. **Does the church want Saylavy at all?** Section 11 pitches a separate service on
+    the church's own site. That is a conversation to have with them before it is
+    public, not after.
