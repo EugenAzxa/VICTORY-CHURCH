@@ -373,8 +373,10 @@ register for a memorial portrait and also stops three unrelated sources from
 clashing. **Their licensing is still unverified.** Before this page is shown to
 the church, either confirm they are licensed for this use or replace them.
 
-The candle lights and counts up locally, so the gesture is visible. Nothing is
-stored and nothing is sent.
+The gesture is a prayer, not a candle. Lighting one for the dead is an Orthodox
+and Catholic practice, and Victory is non denominational charismatic, so a
+candle would have been the wrong rite on their own memorial wall. It counts up
+locally so the gesture is visible, and stores nothing.
 
 Saylavy is a separate service. The section says as much, and links out rather
 than implying the church is already on it.

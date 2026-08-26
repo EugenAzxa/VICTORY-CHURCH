@@ -903,23 +903,27 @@ var VC = (function () {
 })();
 
 /* ---------------------------------------------------------------------------
-   Candles on the wall of remembrance
+   Prayers on the wall of remembrance
+
+   Not candles. Lighting one for the dead is an Orthodox and Catholic practice,
+   and this is a non denominational charismatic church: the gesture their people
+   would actually make is to pray.
 
    Local only. Nothing is stored and nothing is sent, because there is no wall
-   yet and no one to remember on it. It is here so the gesture is visible: you
-   press it, a light comes on, the number goes up by one.
+   yet and nobody real on it. It is here so the gesture is visible: you press
+   it, and the number goes up by one.
    --------------------------------------------------------------------------- */
 (function () {
   "use strict";
-  var candles = [].slice.call(document.querySelectorAll("[data-candle]"));
-  if (!candles.length) return;
-  candles.forEach(function (b) {
+  var buttons = [].slice.call(document.querySelectorAll("[data-pray]"));
+  if (!buttons.length) return;
+  buttons.forEach(function (b) {
     b.addEventListener("click", function () {
-      if (b.classList.contains("is-lit")) return;
-      b.classList.add("is-lit");
+      if (b.classList.contains("is-prayed")) return;
+      b.classList.add("is-prayed");
       var n = b.querySelector("b");
       if (n) n.textContent = String((parseInt(n.textContent, 10) || 0) + 1);
-      b.setAttribute("aria-label", "Candle lit");
+      b.setAttribute("aria-label", "Prayer offered");
     });
   });
 })();

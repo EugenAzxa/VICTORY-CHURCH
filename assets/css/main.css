@@ -2521,7 +2521,7 @@ svg { fill: none; }
   user-select: none;
 }
 
-.mem-candle {
+.mem-pray {
   position: absolute;
   left: 50%;
   bottom: 12px;
@@ -2540,9 +2540,10 @@ svg { fill: none; }
   cursor: pointer;
   transition: background .2s var(--ease);
 }
-.mem-candle svg { width: 11px; height: 12px; fill: none; stroke: var(--blue-lt); stroke-width: 1.6; }
-.mem-candle:hover { background: var(--royal-t); }
-.mem-candle.is-lit svg { fill: var(--orange); stroke: var(--orange); }
+.mem-pray svg { width: 12px; height: 12px; fill: none; stroke: var(--blue-lt); stroke-width: 1.7; }
+.mem-pray:hover { background: var(--royal-t); }
+.mem-pray.is-prayed { background: var(--royal-t); }
+.mem-pray.is-prayed svg { stroke: #fff; }
 
 .mem-name { margin: 14px 0 0; font-size: 15px; letter-spacing: -.015em; }
 .mem-years {
