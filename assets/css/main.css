@@ -2316,3 +2316,78 @@ svg { fill: none; }
   .phone-toast { transition: none; }
   .ap-live i { animation: none; }
 }
+
+/* ------------------------------------------------- phones: two real bugs */
+
+/* 1. Tapping the congregation did nothing on a phone.
+   The hotspots were switched off below 701px because the hero is cropped there
+   and percentage positions stop mapping. That was a reasonable reason to give
+   up and the wrong conclusion: it left the best thing on the page unavailable
+   to most of this congregation, who are on phones.
+   The drawing now sits on a track wider than the screen and scrolls sideways,
+   so it is shown whole, the percentages hold, and each figure is a target of
+   about 45px instead of 25px. */
+.hero-art-in { position: relative; width: 100%; }
+
+@media (max-width: 700px) {
+  .hero-art {
+    height: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .hero-art::-webkit-scrollbar { display: none; }
+  .hero-art-in { width: 180%; }
+  .hero-art img { height: auto; object-fit: fill; object-position: center; }
+
+  .hero-people { display: block; position: absolute; inset: 0; z-index: 3; }
+  .hero-spot {
+    position: absolute;
+    top: 46%;
+    height: 46%;
+    left: var(--x);
+    width: 6.4%;
+    transform: translateX(-50%);
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .hero-spot::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--cyan-t);
+    opacity: 0;
+  }
+  .hero-spot:active::before { opacity: 1; }
+  /* No hover on a touch screen, so the name tag would only ever get in the way.
+     Tapping opens the profile, which carries the name anyway. */
+  .hero-tag { display: none; }
+  .hero-note-hint { display: inline; }
+}
+
+/* 2. On a 667px tall phone the Get in touch button sat 96px BELOW the bottom of
+   the panel, with 244px of content hidden behind a scroll nothing signposted.
+   The contact route was simply unreachable on the commonest small phone.
+   The button and its privacy line are now pinned to the bottom of the panel,
+   so they are visible whatever the screen height and wherever you have
+   scrolled to. */
+.pdlg-foot {
+  position: sticky;
+  bottom: 0;
+  background: var(--paper);
+  padding-top: 14px;
+  margin-top: 4px;
+}
+.pdlg-foot .btn { width: 100%; justify-content: center; }
+.pdlg-note { margin-bottom: 0; padding-bottom: 4px; }
+
+@media (max-width: 700px) {
+  .pdlg { max-height: 92vh; }
+  /* a shorter portrait leaves room for the words */
+  .pdlg-media img { aspect-ratio: 16 / 10; }
+  .pdlg-body { padding: 20px 20px 16px; }
+  .pdlg-text p { margin-bottom: 16px; }
+}
