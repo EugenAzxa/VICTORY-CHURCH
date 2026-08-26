@@ -350,13 +350,28 @@ Section 11 shows what Saylavy would look like for this church: the four things i
 does, and a wall of remembrance built out of the same pointed arch as the welcome
 portrait and the scripture mark, because that is the shape of their own windows.
 
-**Nobody on that wall is a person, and that is deliberate.** There are no names,
-no photographs and no real dates. The six cards carry a letter, an empty name
-slot and a line about a life, and a notice above them says so plainly. A wall of
+**Nobody on that wall is a member of this church.** Names are left blank, dates
+are invented, and three of the six carry a stock photograph of a stranger while
+three carry a letter. The notice above the wall says all of that. A wall of
 remembrance is the last place on earth to invent somebody, and the risk is not
-theoretical: a visitor who recognised a fictional name as almost-their-mother
-would not forgive it, and neither would the church. If real entries ever go on,
-they come from the church and from nowhere else.
+theoretical: a visitor who half recognised a name as almost-their-mother would
+not forgive it, and nor would the church. Real entries come from the church and
+from nowhere else.
+
+**Three of the six supplied pictures were not used, and should not be.**
+
+- One carried a visible **Alamy watermark**. Unlicensed stock, and the watermark
+  would have shipped with it.
+- One was **Tsutomu Yamaguchi**, a real and widely photographed man who survived
+  both Hiroshima and Nagasaki and died in 2010. Putting a named person with a
+  living family onto a fictional church memorial is not a thing to do.
+- One showed a frail elderly person wearing a novelty tie, from what looked like
+  a private snapshot. Wrong on tone for a memorial and wrong on provenance.
+
+The three that are in use are converted to grayscale, which is the conventional
+register for a memorial portrait and also stops three unrelated sources from
+clashing. **Their licensing is still unverified.** Before this page is shown to
+the church, either confirm they are licensed for this use or replace them.
 
 The candle lights and counts up locally, so the gesture is visible. Nothing is
 stored and nothing is sent.
@@ -541,3 +556,6 @@ church's legal or privacy questions before the first send.
 13. **Does the church want Saylavy at all?** Section 11 pitches a separate service on
     the church's own site. That is a conversation to have with them before it is
     public, not after.
+14. **Are the three memorial photographs licensed?** They are stock pictures of
+    strangers with unverified provenance, standing in for a layout. Confirm the
+    licence or swap them before this goes in front of anybody.

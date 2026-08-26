@@ -2580,3 +2580,16 @@ svg { fill: none; }
   display: inline-block;
   padding-bottom: 2px;
 }
+
+/* Three of the six carry a portrait, three carry a letter. A real wall would
+   look like that: some families send a photograph, some do not. Grayscale
+   because it is the conventional register for a memorial and because three
+   different stock sources otherwise clash. */
+.mem-face-photo { background: var(--paper-d); }
+.mem-face-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+  display: block;
+}
