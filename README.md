@@ -1,5 +1,8 @@
 # Victory Church International
 
+> Picking this up cold? Read **HANDOFF.md** first. It has the live URL, what is
+> unfinished, and the mistakes already made here once.
+
 Website for Victory Church International, a non denominational multicultural church in
 North York, Toronto. Founded 2006. Sundays 10:30 a.m.
 
