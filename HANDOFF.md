@@ -4,6 +4,11 @@ Read this first. `README.md` explains how the site is built and why; this is the
 shorter thing: where everything lives, what state it is in, and the handful of
 mistakes that are easy to repeat.
 
+> **More than one session has worked in this repository.** Commits have arrived
+> on `main` from elsewhere between one push and the next. **Always `git pull`
+> before you start and before you push**, and expect the page to have moved since
+> you last looked at it. Rebase onto what is there; never force.
+
 ---
 
 ## Where things are
@@ -102,6 +107,19 @@ asking.
 
 ---
 
+## The palette, as of now
+
+Four colours read off a wax print: cyan `#22A8DE`, royal `#1F5FBF`, crimson
+`#C4243C`, orchid `#8E4FB0`. **Orange was removed and orchid took its place.**
+Every section carries one of the four, the rule opening each section takes that
+section's colour, and the stats row runs all four at once.
+
+Each colour has a `-t` variant deepened to clear 4.5:1 against the paper.
+**Label and body text must use the `-t`.** At full strength cyan measures about
+2.4:1 and is unreadable at label sizes; that is the whole reason the pairs exist.
+
+---
+
 ## Mistakes already made here once
 
 - **`overflow-x` on `html` or `body` silently disables `position: sticky`.** The
@@ -117,9 +135,20 @@ asking.
   `srcset` meant for the hero landed on the intro image this way and went
   unnoticed for several commits, so every phone downloaded the full size hero.
   Check which occurrence you hit.
-- **Bump `?v=` on `main.css` and `main.js` in both HTML files whenever you edit
+- **Bump `?v=` on `main.css` and `main.js` in BOTH HTML files whenever you edit
   either.** They are cached for a year on Vercel and the query is what busts it.
-  Currently **v=50**.
+  Currently **v=53**.
+  This has already gone wrong once. A session bumped `index.html` to v=53 and
+  left `history.html` on v=50. The server ignores the query and serves the same
+  file either way, so a new visitor saw nothing wrong, but anyone who had already
+  opened the history page stayed pinned to the old stylesheet, on the old
+  palette, for up to a year while the homepage moved on. Before pushing, run
+  `grep -o "main\.\(css\|js\)?v=[0-9]*" index.html history.html | sort -u`
+  and check it prints exactly two distinct versions, both the same number.
+- **Git checks files out with CRLF here.** A multi-line search string written
+  with `\n` will match nothing and a scripted `replace()` will silently do
+  nothing while reporting success. Normalise line endings before editing files
+  with a script, and verify the edit actually landed.
 - **Test at 375 x 667, not just 390 wide.** Two real bugs only appeared at that
   height: the leader panel's contact button sat 96px below the panel and was
   unreachable, and the hero hotspots were switched off on phones entirely.
